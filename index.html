@@ -30,7 +30,7 @@
 </head>
 <body>
 <div class="app">
-<header class="top"><div class="brand"><div class="logo">📚</div><div><h1>The Reading Shelf</h1><small>A personal library for the books you own and the ideas you keep.</small></div></div><button class="primary" onclick="openAdd()">＋ Add a book</button></header>
+<header class="top"><div class="brand"><div class="logo">📚</div><div><h1>The Reading Shelf</h1><small>A personal library for the books you own and the ideas you keep.</small></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" type="button" onclick="exportExcel()">↓ Export Excel</button><button class="primary" onclick="openAdd()">＋ Add a book</button></div></header>
 <section class="auth-panel" id="authPanel">
 <div id="authSignedOut"><div style="font-weight:bold;margin-bottom:10px;color:var(--green)">Save your shelf across devices</div><form id="authForm"><div class="auth-row"><div class="auth-field"><label for="authEmail">EMAIL</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div><div class="auth-field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div><div class="auth-actions"><button class="primary" type="submit" id="signInButton">Sign in</button><button class="secondary" type="button" id="signUpButton">Create account</button></div></div></form></div>
 <div id="authSignedIn" hidden><div class="auth-account"><span>Cloud sync enabled · Signed in as <strong id="signedInEmail"></strong></span><button class="secondary" type="button" id="signOutButton">Sign out</button></div></div>
@@ -54,6 +54,7 @@
 </div>
 <div class="modal" id="modal"><div class="dialog"><button class="close" onclick="closeModal()">×</button><h3 id="modalTitle">Add a book</h3><form id="bookForm" onsubmit="saveBook(event)"><input type="hidden" id="bookId"><label class="field"><span>BOOK TITLE</span><input id="title" required placeholder="e.g. The Culture Map"></label><label class="field"><span>AUTHOR</span><input id="author" placeholder="Author's name"></label><div class="field"><span>CATEGORIES (SELECT ALL THAT APPLY)</span><div class="category-options" id="categoryOptions"></div></div><label class="field"><span>TOTAL PAGES (optional)</span><input id="totalPages" type="number" min="1" placeholder="e.g. 280"></label><label class="field"><span>STATUS</span><select id="status"><option value="want">Want to read</option><option value="reading">Currently reading</option><option value="completed">Completed</option></select></label><label class="field"><span>CURRENT PAGE</span><input id="currentPage" type="number" min="0" value="0"></label><div class="dialog-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button class="primary" type="submit">Save book</button></div></form></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const SUPABASE_URL='https://vanuwjequjzvwdofcuyx.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_SQmckVEfTJy0Qt5EG_HhKg_b96WV8Xp';
@@ -124,8 +125,55 @@ function editBook(id){let b=books.find(x=>x.id===id);if(!b)return;$('bookId').va
 async function saveBook(e){e.preventDefault();let id=$('bookId').value;let b={id:id||String(Date.now()),title:$('title').value.trim(),author:$('author').value.trim(),categories:selectedCategories(),totalPages:Number($('totalPages').value)||0,currentPage:Number($('currentPage').value)||0,status:$('status').value};if(!b.categories.length){alert('Please select at least one category.');return}b.currentPage=Math.max(0,b.currentPage);if(b.totalPages)b.currentPage=Math.min(b.currentPage,b.totalPages);if(b.status==='completed'&&b.totalPages)b.currentPage=b.totalPages;if(b.status==='reading')books.forEach(x=>{if(x.id!==id&&x.status==='reading')x.status='want'});let i=books.findIndex(x=>x.id===id);if(i>=0)books[i]=b;else books.unshift(b);closeModal();await persist()}
 async function startBook(id){books.forEach(b=>{if(b.status==='reading')b.status='want'});let b=books.find(x=>x.id===id);b.status='reading';await persist()}
 async function removeBook(id){if(confirm('Remove this book from your shelf?')){books=books.filter(b=>b.id!==id);if(currentUser){const {error}=await db.from('books').delete().eq('id',id);if(error)message('Could not remove from cloud: '+error.message,true)}await persist()}}
+
+function exportExcel(){
+ if(!books.length){alert('Your bookshelf is empty. Add a book before exporting.');return}
+ if(!window.XLSX){alert('The Excel export library did not load. Check your internet connection and try again.');return}
+ const statusLabels={want:'Want to read',reading:'Currently reading',completed:'Completed'};
+ const rows=books.map(b=>{
+  const categories=parseCategories(b.categories??b.category);
+  const total=Number(b.totalPages)||0,current=Number(b.currentPage)||0;
+  return {
+   'Book Title':b.title||'',
+   'Author':b.author||'',
+   'Categories':categories.join('; '),
+   'Status':statusLabels[b.status]||b.status||'',
+   'Total Pages':total||'',
+   'Current Page':current,
+   'Pages Remaining':total?Math.max(0,total-current):'',
+   'Progress':total?Math.min(1,current/total):'',
+   'Notes':b.notes||''
+  };
+ });
+ const bookSheet=XLSX.utils.json_to_sheet(rows);
+ bookSheet['!cols']=[{wch:34},{wch:24},{wch:42},{wch:19},{wch:14},{wch:14},{wch:17},{wch:13},{wch:45}];
+ rows.forEach((row,index)=>{if(row.Progress!==''){const cell=XLSX.utils.encode_cell({r:index+1,c:7});if(bookSheet[cell])bookSheet[cell].z='0%'}});
+ const categoryRows=CATEGORIES.map(category=>{
+  const matching=books.filter(b=>parseCategories(b.categories??b.category).includes(category));
+  return {'Category':category,'Book Count':matching.length,'Completed':matching.filter(b=>b.status==='completed').length,'Currently Reading':matching.filter(b=>b.status==='reading').length,'Want to Read':matching.filter(b=>b.status==='want').length};
+ }).filter(row=>row['Book Count']>0);
+ const categorySheet=XLSX.utils.json_to_sheet(categoryRows);
+ categorySheet['!cols']=[{wch:34},{wch:14},{wch:14},{wch:19},{wch:15}];
+ const summary=[
+  {'Metric':'Books Owned','Value':books.length},
+  {'Metric':'Currently Reading','Value':books.filter(b=>b.status==='reading').length},
+  {'Metric':'Books Completed','Value':books.filter(b=>b.status==='completed').length},
+  {'Metric':'Pages Read','Value':books.reduce((sum,b)=>sum+(Number(b.currentPage)||0),0)},
+  {'Metric':'Known Total Pages','Value':books.reduce((sum,b)=>sum+(Number(b.totalPages)||0),0)},
+  {'Metric':'Pages Remaining (where total pages are known)','Value':books.reduce((sum,b)=>sum+Math.max(0,(Number(b.totalPages)||0)-(Number(b.currentPage)||0)),0)}
+ ];
+ const summarySheet=XLSX.utils.json_to_sheet(summary);
+ summarySheet['!cols']=[{wch:48},{wch:18}];
+ const workbook=XLSX.utils.book_new();
+ XLSX.utils.book_append_sheet(workbook,bookSheet,'Books');
+ XLSX.utils.book_append_sheet(workbook,categorySheet,'Category Summary');
+ XLSX.utils.book_append_sheet(workbook,summarySheet,'Library Overview');
+ const date=new Date().toISOString().slice(0,10);
+ XLSX.writeFile(workbook,`reading-shelf-export-${date}.xlsx`);
+}
+
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,saveGoal,editBook,startBook,removeBook,setFilter,setCategoryFilter});
+Object.assign(window,{openAdd,closeModal,saveBook,saveGoal,editBook,startBook,removeBook,setFilter,setCategoryFilter,exportExcel});
 async function init(){const {data:{session}}=await db.auth.getSession();setAuthUI(session?.user||null);if(session?.user)await loadCloudData();else render();db.auth.onAuthStateChange((_event,session)=>{if(session?.user){setAuthUI(session.user);setTimeout(()=>loadCloudData(),0)}else setAuthUI(null)})}
 init();
 </script>
