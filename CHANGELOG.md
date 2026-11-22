@@ -138,6 +138,18 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 **How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
 
+## Fix 21 — One page, Sign in button, white text on the dark popup (Ronnie's request)
+
+**Files:** `index.html` (CHANGELOG only).
+
+**What changed:** the sign-in is only a popup over the one shelf page — there is no separate login page or screen anywhere in the app. The popup's backdrop is lighter now (`rgba(20,15,5,.35)` instead of `.55`) so the shelf stays visible behind it and it reads as a popup, not a separate page. The popup card is dark brown (`var(--ink)`) with white text, so the writing is visible against the dark background: the title line, the status message, and the signed-in name are white; the field labels and notes are a light cream; the Forgot password link is gold. The email and password fields stay white with dark text so what he types is readable, and the Sign in button stays dark green with white text.
+
+**How it was found:** Ronnie asked to remove the separate login page, keep one page with a Sign in button, and make the font white to be visible against the background.
+
+**Why it is believed to be true:** verified by reading the code — the new card and descendant rules are present, the backdrop is lighter, `node --check` is clean, and the live file already serves the modal (Fix 20). The popup still opens only from the header Sign in button and closes with Close, tapping outside it, or Escape.
+
+**After deploying:** the shelf is the one page, with a Sign in button in the top corner; tapping it opens a dark popup with white writing over the shelf; the shelf is visible behind it.
+
 ## Fix 20 — Sign-in is a modal overlay (Ronnie's request, replaces Fix 18)
 
 **Files:** `index.html` (CHANGELOG only).
