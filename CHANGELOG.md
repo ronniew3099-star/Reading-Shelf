@@ -130,6 +130,14 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 - **Finding 5 (two daily goals):** fixed as part of fix 12 above.
 - **Finding 6 (completed books show "Start reading"):** fixed as part of fix 5 above ("Read again").
 
+## Fix 14 — Undo toast was always visible
+
+**File/line (fixed file):** CSS for `.undo-toast` (line 245).
+
+**Cause:** the toast element carries the `hidden` attribute and should only appear after a book is removed, but its CSS sets `display:flex`, and an author's `display` beats the browser's built-in `display:none` for `hidden`. So the empty toast (with its Undo button) sat at the bottom of the screen on every load.
+
+**Fix:** added `.undo-toast[hidden]{display:none}`. The toast now only appears after a removal, as intended. The other views and the dialogs were checked: `.app-view` sets no `display`, and `.modal` defaults to `display:none` (shown by the `.show` class), so `hidden`/`.show` work correctly there.
+
 ## Fix 13 — Sign-in failed silently (page reloaded) when the sign-in library did not load
 
 **Files/lines (fixed file):** `window.supabase.createClient` guarded (top of the script); `const $` moved before it; sign-in submit guard; `init()` guards; `sw.js` fetch handler.
