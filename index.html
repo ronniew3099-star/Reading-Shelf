@@ -469,10 +469,15 @@ function renderCategoryOptions(selected=[]){
  $('categoryOptions').innerHTML=CATEGORIES.map(c=>`<label class="category-option"><input type="checkbox" name="bookCategory" value="${esc(c)}" ${chosen.has(c)?'checked':''}><span>${esc(c)}</span></label>`).join('');
 }
 function selectedCategories(){return [...document.querySelectorAll('input[name="bookCategory"]:checked')].map(x=>x.value)}
-let bookKnowledge=JSON.parse(localStorage.getItem('readingShelfKnowledgeV1')||'{}'), knowledgeQuotes=JSON.parse(localStorage.getItem('readingShelfQuotesV1')||'[]'), selectedKnowledgeBook='', knowledgeSaveTimer=null;
-let books=JSON.parse(localStorage.getItem(KEY)||'[]').map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=JSON.parse(localStorage.getItem('readingShelfSessionsV1')||'[]'), filter='all', selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
-let readingPlans=JSON.parse(localStorage.getItem('readingShelfPlansV1')||'[]'), readingPlanBooks=JSON.parse(localStorage.getItem('readingShelfPlanBooksV1')||'[]'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', plansCloudReady=false;
-let planDayRecords=JSON.parse(localStorage.getItem('readingShelfPlanDaysV1')||'{}'), selectedPlanDay=localDateString(), planCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+// A corrupt or unexpected saved value must never kill the whole app
+// (it used to throw here, before the sign-in form was wired up, so the
+// form reloaded the page instead of signing in). Fall back to empty data.
+function safeParseArray(key){try{const v=JSON.parse(localStorage.getItem(key));return Array.isArray(v)?v:[];}catch(e){return[];}}
+function safeParseObject(key){try{const v=JSON.parse(localStorage.getItem(key));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch(e){return{};}}
+let bookKnowledge=safeParseObject('readingShelfKnowledgeV1'), knowledgeQuotes=safeParseArray('readingShelfQuotesV1'), selectedKnowledgeBook='', knowledgeSaveTimer=null;
+let books=safeParseArray(KEY).map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=safeParseArray('readingShelfSessionsV1'), filter='all', selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
+let readingPlans=safeParseArray('readingShelfPlansV1'), readingPlanBooks=safeParseArray('readingShelfPlanBooksV1'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', plansCloudReady=false;
+let planDayRecords=safeParseObject('readingShelfPlanDaysV1'), selectedPlanDay=localDateString(), planCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 $('goalInput').value=goal;
 if($('settingsGoalInput'))$('settingsGoalInput').value=goal;
 if($('annualBookGoal'))$('annualBookGoal').value=annualBookGoal;

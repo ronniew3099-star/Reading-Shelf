@@ -130,6 +130,14 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 - **Finding 5 (two daily goals):** fixed as part of fix 12 above.
 - **Finding 6 (completed books show "Start reading"):** fixed as part of fix 5 above ("Read again").
 
+## Fix 15 — A corrupt saved value could kill the app before sign-in
+
+**File/line (fixed file):** the saved-data loading at the top of the script (`safeParseArray` / `safeParseObject`).
+
+**Cause:** the app loaded its saved books, sessions, plans and notes with bare `JSON.parse(localStorage.getItem(...))` calls at the top of the script. If any stored value on the device was corrupt or in an unexpected shape, the parse threw and the whole script died before the sign-in form was wired up — so tapping Sign in reloaded the page with no message, exactly the symptom still seen after the sign-in library guard (Fix 13), which only covers the library failing to load.
+
+**Fix:** all seven stored values now load through `safeParseArray` / `safeParseObject`, which return empty data (and, for a bad read, ignore the stored value) instead of throwing. The app now starts on empty local data and can sign in and re-sync from the cloud, rather than dying on one bad saved value.
+
 ## Fix 14 — Undo toast was always visible
 
 **File/line (fixed file):** CSS for `.undo-toast` (line 245).
