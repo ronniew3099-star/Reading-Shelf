@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#294b3b">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-512.png">
 <title>The Reading Shelf 3.0 · Stage 3.5</title>
 <style>
 :root{--bg:#eee7d9;--paper:#fffaf0;--ink:#30291f;--muted:#827766;--green:#294b3b;--green2:#e6ece5;--line:#e3d7c4;--gold:#b18a4e;--burgundy:#7b3f45;--shadow:0 9px 28px rgba(65,48,29,.09)}
@@ -1426,6 +1428,10 @@ async function init(){
  if(session?.user)await loadCloudData();
 }
 init();
+
+// Register the service worker so the app can be installed and opened offline.
+// A failed registration is swallowed so it can never break the app.
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
 </script>
 </body>
 </html>

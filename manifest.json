@@ -1,0 +1,1 @@
+{"background_color":"#1e0e03","description":"Your personal book tracker.","display":"standalone","icons":[{"purpose":"any","sizes":"192x192","src":"icon-192.png","type":"image/png"},{"purpose":"any","sizes":"512x512","src":"icon-512.png","type":"image/png"}],"name":"The Reading Shelf","scope":"/","short_name":"Reading Shelf","start_url":"/","theme_color":"#294b3b"}

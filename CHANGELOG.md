@@ -130,6 +130,15 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 - **Finding 5 (two daily goals):** fixed as part of fix 12 above.
 - **Finding 6 (completed books show "Start reading"):** fixed as part of fix 5 above ("Read again").
 
+## App icon, manifest, and service worker
+
+**Files:** `icon-192.png` (192x192, 26,402 bytes) and `icon-512.png` (512x512, 105,698 bytes) in this folder; `manifest.json` (new); `sw.js` (new); `index.html` head (manifest + apple-touch-icon links) and service-worker registration at the end of the script.
+
+- **Icon:** a wooden bookshelf with colourful book spines on three shelves, on a dark warm brown background, full-bleed edge to edge (built for a dark-mode phone — the generator's white corners were filled with the icon's own dark edge colour). Reads clearly at 192px. The two PNGs are binary, so they cannot go through the connector's snapshot push — upload them to the repo root the same way the Bible icons were uploaded, **before** the text files go live (the service worker caches them at install, and a missing icon file makes the whole install fail).
+- **Manifest:** name "The Reading Shelf", short name "Reading Shelf", display standalone, background colour `#1e0e03` (the icon's dark brown), theme colour `#294b3b` (the app's green, matching the existing theme-color meta).
+- **Service worker:** `reading-shelf-v1`, same pattern as the Bible app's — network-first navigations (so a new deploy shows up), cache-first same-origin assets. The shell cached at install is `./`, `./index.html`, `./manifest.json`, `./icon-192.png`, `./icon-512.png`, and `./reading-shelf-modern-library-background.jpg`.
+- **Registration:** `index.html` registers `./sw.js` on window load, with failures swallowed so a failed registration can never break the app.
+
 ## Cross-cutting
 
 - **Shared-account explainer + forgot password:** the sign-in card now says "The Reading Shelf and Ronnie's Bible Challenge use the same Supabase account, so the same email and password work in both apps. Your books and your Bible reading are stored separately." A **"Forgot password?"** link sits under it and calls the new `forgotPassword()` (fixed file line 530), which sends a Supabase reset email to the address typed in the sign-in form and reports success or failure in-app.
@@ -139,8 +148,9 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 ## Deploy steps
 
-1. Push **only `index.html`** from this folder to the `Reading-Shelf` repo on `main` (same snapshot-push route used for the Bible Challenge fix; the background jpg is unchanged and stays as-is).
-2. The Cloudflare Worker auto-deploys from the repo — no separate deploy step. Allow a few minutes, then open the live site in a fresh tab.
+1. Upload **`icon-192.png` and `icon-512.png`** from this folder to the repo root first (binary — the snapshot push cannot carry them). Wait until the repo listing shows both files.
+2. Push **`index.html`, `manifest.json`, `sw.js`, and this CHANGELOG.md`** from this folder to the `Reading-Shelf` repo on `main` (same snapshot-push route used for the Bible Challenge fix; the background jpg is unchanged and stays as-is). Icons first, text files second — if the text files go live before the icons are in the repo, the service worker install fails on the missing icon files.
+3. The Cloudflare Worker auto-deploys from the repo — no separate deploy step. Allow a few minutes, then open the live site in a fresh tab.
 3. Download a fresh backup of nothing — the Shelf has no backup export; the fix touches code only, and the local data is preserved by the new empty-response guards. (If you want a safety net, the books are also in Supabase.)
 4. Do **not** sign in as the user to test; run the post-deploy checks below in the user's own signed-in session.
 
@@ -163,5 +173,8 @@ Do these in the live app, signed in as the user:
 13. **Insights:** read more than the weekly goal — the percentage goes above 100% with "Goal exceeded".
 14. **Pick up where you left off:** with no book marked "reading", the card shows your most recently finished book labelled "Last finished".
 15. **Sign out:** the footer ("Sign in to sync…") reappears.
+16. **Icon files live:** open https://reading-shelf.ronniew3099.workers.dev/icon-192.png and /icon-512.png — both show the bookshelf.
+17. **Add to Home Screen (iPhone, Safari):** open the site in a fresh Safari tab → Share → Add to Home Screen. The bookshelf icon shows, and the app opens full-screen with no browser bar.
+18. **Service worker:** after the first load, reload once — the app shell still opens, and the manifest serves at /manifest.json.
 
 If any check fails, the most likely suspects are the deployed file differing from this repo version (see "Deployed file vs repo" above) and the Supabase `books` table lacking a `started_at` column (expected — started dates are local-only by design).
