@@ -469,6 +469,23 @@ function renderCategoryOptions(selected=[]){
  $('categoryOptions').innerHTML=CATEGORIES.map(c=>`<label class="category-option"><input type="checkbox" name="bookCategory" value="${esc(c)}" ${chosen.has(c)?'checked':''}><span>${esc(c)}</span></label>`).join('');
 }
 function selectedCategories(){return [...document.querySelectorAll('input[name="bookCategory"]:checked')].map(x=>x.value)}
+function localDateString(date=new Date()){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');return `${y}-${m}-${d}`}
+async function recordReadingSession(book,fromPage,toPage){
+ const start=Math.max(0,Number(fromPage)||0),end=Math.max(0,Number(toPage)||0),pages=end-start;
+ if(pages<=0)return;
+ const session={id:`local-${Date.now()}-${Math.random().toString(16).slice(2)}`,bookId:book.id,pagesRead:pages,startPage:start,endPage:end,sessionDate:localDateString(),createdAt:new Date().toISOString(),bookTitle:book.title||''};
+ readingSessions.unshift(session);
+ localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
+ renderReadingHistory();
+ if(currentUser){
+  const {data,error}=await db.from('reading_sessions').insert({user_id:currentUser.id,book_id:book.id,pages_read:pages,start_page:start,end_page:end,session_date:session.sessionDate,book_title:book.title||null}).select('*').single();
+  if(error){message('Book progress saved, but reading history could not sync: '+error.message,true);return}
+  readingSessions=readingSessions.filter(s=>s.id!==session.id);
+  readingSessions.unshift({id:data.id,bookId:data.book_id,pagesRead:Number(data.pages_read)||0,startPage:Number(data.start_page)||0,endPage:Number(data.end_page)||0,sessionDate:data.session_date,createdAt:data.created_at,bookTitle:data.book_title||book.title||''});
+  localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
+  renderReadingHistory();
+ }
+}
 // A corrupt or unexpected saved value must never kill the whole app
 // (it used to throw here, before the sign-in form was wired up, so the
 // form reloaded the page instead of signing in). Fall back to empty data.

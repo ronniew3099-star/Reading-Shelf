@@ -130,6 +130,14 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 - **Finding 5 (two daily goals):** fixed as part of fix 12 above.
 - **Finding 6 (completed books show "Start reading"):** fixed as part of fix 5 above ("Read again").
 
+## Fix 16 — Two functions were missing, so the app died before sign-in (root cause)
+
+**File/line (fixed file):** `localDateString()` and `recordReadingSession()` restored near the top of the script.
+
+**Cause:** the earlier rewrite accidentally dropped two function definitions that the rest of the file still calls. `localDateString()` (formats a date as local YYYY-MM-DD) is called while the app loads its reading-plan data (`selectedPlanDay=localDateString()`), so the script threw `Uncaught ReferenceError: localDateString is not defined` and died before the sign-in form was wired up — tapping Sign in reloaded the page with no message. That is why the sign-in library guard (Fix 13), the service-worker change (Fix 13) and the safe saved-data loading (Fix 15) did not fix it: the script was dying on a missing function, not on a failed load or a bad saved value. `recordReadingSession()` (records a reading session when a book's page count moves) was also missing; it only runs when saving a book, so it did not block sign-in, but saving progress would have thrown. Both were restored verbatim from the original file. A check now confirms no function defined in the original is missing from the fixed file.
+
+**How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
+
 ## Fix 15 — A corrupt saved value could kill the app before sign-in
 
 **File/line (fixed file):** the saved-data loading at the top of the script (`safeParseArray` / `safeParseObject`).
