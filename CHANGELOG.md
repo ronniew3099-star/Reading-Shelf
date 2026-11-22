@@ -130,6 +130,14 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 - **Finding 5 (two daily goals):** fixed as part of fix 12 above.
 - **Finding 6 (completed books show "Start reading"):** fixed as part of fix 5 above ("Read again").
 
+## Fix 13 — Sign-in failed silently (page reloaded) when the sign-in library did not load
+
+**Files/lines (fixed file):** `window.supabase.createClient` guarded (top of the script); `const $` moved before it; sign-in submit guard; `init()` guards; `sw.js` fetch handler.
+
+**Cause:** the sign-in library loads from a CDN, and the app created its database client with a bare `window.supabase.createClient(...)` at the top of the script. If that library failed to load, the call threw and the whole script died before it defined `$`, attached the sign-in form's submit listener, or ran `init()`. The symptoms matched exactly: tapping Sign in did a native form submit (page reloaded, fields blank), tapping a tab hid the Home view and then threw (blank page, Home still highlighted), and the page showed only its static zeros. The service worker could also intercept the CDN script request, so its fetch handler now ignores every cross-origin request and only handles same-origin ones.
+
+**Fix:** `$` is defined before the client creation; the client creation is wrapped in try/catch (`db` stays null if the library is missing); the sign-in submit handler shows "Sign-in service could not load. Check your connection and reload the page." instead of reloading when `db` is null; `init()` throws a clear "the sign-in service did not load" error into its existing catch (instead of a null crash) and only subscribes to auth changes when `db` exists. The app now stays usable on local data and says what is wrong instead of dying silently.
+
 ## App icon, manifest, and service worker
 
 **Files:** `icon-192.png` (192x192, 26,402 bytes) and `icon-512.png` (512x512, 105,698 bytes) in this folder; `manifest.json` (new); `sw.js` (new); `index.html` head (manifest + apple-touch-icon links) and service-worker registration at the end of the script.

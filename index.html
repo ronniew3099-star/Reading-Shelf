@@ -413,13 +413,24 @@ const SUPABASE_PUBLISHABLE_KEY='sb_publishable_SQmckVEfTJy0Qt5EG_HhKg_b96WV8Xp';
 // Keep each browser/device signed in until the user explicitly signs out
 // or the browser's site data is cleared. Supabase stores the session locally
 // and refreshes access tokens automatically.
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
- auth:{
-  persistSession:true,
-  autoRefreshToken:true,
-  detectSessionInUrl:true
- }
-});
+// Defined first, so the page stays usable (and can report a clear error)
+// even if the sign-in library below fails to load.
+const $=id=>document.getElementById(id);
+// The sign-in library loads from a CDN. If it fails to load, the app used
+// to die silently here and the sign-in form reloaded the page instead of
+// signing in. Catch it: the app stays usable on local data and says so.
+let db=null;
+try{
+ db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+  auth:{
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
+  }
+ });
+}catch(err){
+ db=null;
+}
 const KEY='readingShelfBooksV1';
 const CATEGORIES=[
  'Psychology','Recovery','Faith & Spirituality','Relationships','Personal Development',
@@ -461,7 +472,6 @@ let bookKnowledge=JSON.parse(localStorage.getItem('readingShelfKnowledgeV1')||'{
 let books=JSON.parse(localStorage.getItem(KEY)||'[]').map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=JSON.parse(localStorage.getItem('readingShelfSessionsV1')||'[]'), filter='all', selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
 let readingPlans=JSON.parse(localStorage.getItem('readingShelfPlansV1')||'[]'), readingPlanBooks=JSON.parse(localStorage.getItem('readingShelfPlanBooksV1')||'[]'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', plansCloudReady=false;
 let planDayRecords=JSON.parse(localStorage.getItem('readingShelfPlanDaysV1')||'{}'), selectedPlanDay=localDateString(), planCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
-const $=id=>document.getElementById(id);
 $('goalInput').value=goal;
 if($('settingsGoalInput'))$('settingsGoalInput').value=goal;
 if($('annualBookGoal'))$('annualBookGoal').value=annualBookGoal;
@@ -469,7 +479,7 @@ renderCategoryOptions();
 $('generalNotes').value=localStorage.getItem('readingShelfNotes')||'';
 function message(t,isError=false){$('authMessage').textContent=t;$('authMessage').style.color=isError?'#9a3d37':'var(--green)'}
 function setAuthUI(user){currentUser=user;$('syncFooter').style.display=user?'none':'';$('authSignedOut').hidden=!!user;$('authSignedIn').hidden=!user;if(user){$('signedInEmail').textContent=user.email||'your account';message('Your reading shelf is connected to the cloud.')}else{message('Your shelf currently works on this device. Sign in to sync it with Supabase.')}}
-$('authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('authEmail').value.trim(),password=$('authPassword').value;$('signInButton').disabled=true;$('signUpButton').disabled=true;try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;setAuthUI(data.user);await loadCloudData()}catch(err){message(err.message||'Could not sign in.',true)}finally{$('signInButton').disabled=false;$('signUpButton').disabled=false}});
+$('authForm').addEventListener('submit',async e=>{e.preventDefault();if(!db){message('Sign-in service could not load. Check your connection and reload the page.',true);return;}const email=$('authEmail').value.trim(),password=$('authPassword').value;$('signInButton').disabled=true;$('signUpButton').disabled=true;try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;setAuthUI(data.user);await loadCloudData()}catch(err){message(err.message||'Could not sign in.',true)}finally{$('signInButton').disabled=false;$('signUpButton').disabled=false}});
 $('signUpButton').addEventListener('click',async()=>{const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||password.length<6){message('Enter an email and a password with at least 6 characters.',true);return}$('signInButton').disabled=true;$('signUpButton').disabled=true;try{const {data,error}=await db.auth.signUp({email,password});if(error)throw error;if(data.session){setAuthUI(data.user);await loadCloudData()}else{message('Account created. Check your email for the confirmation link, then return here and sign in.')}}catch(err){message(err.message||'Could not create account.',true)}finally{$('signInButton').disabled=false;$('signUpButton').disabled=false}});
 $('signOutButton').addEventListener('click',async()=>{const {error}=await db.auth.signOut();if(error){message(error.message,true);return}setAuthUI(null)});
 // --- In-app dialogs (replaces native confirm()/prompt()/alert(), which some
@@ -1408,13 +1418,14 @@ async function init(){
  message('Loading your shelf…');
  let session=null;
  try{
+  if(!db)throw new Error('the sign-in service did not load');
   const {data,error}=await db.auth.getSession();
   if(error)message('Could not restore your sign-in session: '+error.message,true);
   session=data?.session||null;
  }catch(err){message('Could not restore your sign-in session: '+(err.message||'unavailable'),true);}
  lastAuthUserId=session?.user?.id||null;
  setAuthUI(session?.user||null);
- db.auth.onAuthStateChange((event,nextSession)=>{
+ if(db)db.auth.onAuthStateChange((event,nextSession)=>{
   // Ignore the initial event: init() above already set the UI from
   // getSession(), and the first event can arrive before the session is
   // restored, which used to flash the signed-out form.

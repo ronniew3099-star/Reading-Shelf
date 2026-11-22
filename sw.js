@@ -21,6 +21,10 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+  // Only handle same-origin requests. Third-party scripts and data
+  // (for example the sign-in library from a CDN) must pass through
+  // untouched — intercepting them can break page loading.
+  if (new URL(event.request.url).origin !== self.location.origin) return;
   // Pages: network first, cache fallback (so deploys are picked up).
   if (event.request.mode === "navigate") {
     event.respondWith(
