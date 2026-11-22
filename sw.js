@@ -2,7 +2,7 @@
 // Caches the app shell so the app can be installed and opened offline.
 // Navigations always try the network first, so a new deploy shows up
 // without waiting for the cache to expire; the cache is only a fallback.
-const CACHE = "reading-shelf-v1";
+const CACHE = "reading-shelf-v2";
 const SHELL = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./reading-shelf-modern-library-background.jpg"];
 
 self.addEventListener("install", event => {

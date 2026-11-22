@@ -138,6 +138,22 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 **How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
 
+## Fix 19 — Service worker cache bumped to v2 (stale file suspected in the scroll gap)
+
+**File:** `sw.js` (`CACHE` `reading-shelf-v1` → `reading-shelf-v2`).
+
+**Cause:** the live Shelf shows an ~830px empty gap below the sign-in card that the served source cannot produce — the fetched file (153,794 bytes) has no height or min-height rule on the sign-in panel and no script setting a height, yet the live rendering pushes the navigation and hero ~830px down. The service worker is the remaining caching layer that could serve a different file than the one fetched directly, so its cache is being discarded: the new worker installs a fresh `reading-shelf-v2` cache and the activate handler deletes the old `v1` cache. The worker stays network-first for pages, so future deploys are still picked up without another bump.
+
+**How it was found:** a live browser check reproduced the gap on desktop and measured it, then confirmed from the exact served source that nothing in the file explains it.
+
+## Fix 18 — Dismiss the sign-in panel completely (Ronnie's request)
+
+**File/line (fixed file):** `#authPanel` / header (HTML lines 252, 254), `setAuthUI()` and new `dismissAuthPanel()` / `showAuthPanel()`.
+
+**Cause:** even collapsed to one slim bar, the sign-in panel sat above the navigation and the shelf, so on a phone the shelf still started below the fold and Ronnie had to scroll to see it. He asked for the sign-in to share the screen with everything else, or a way to leave it completely without scrolling.
+
+**Fix.** The sign-in bar now has a "Not now" button. Tapping it hides the whole sign-in panel and remembers that choice (localStorage `readingShelfHideAuth`), so it stays hidden on reload and the shelf fills the screen. A small "Sign in" button appears in the header while the panel is hidden; tapping it brings the panel back. Signing in clears the dismissal and shows the slim signed-in bar as before. Nothing about the sign-in itself changed.
+
 ## Fix 17 — Sign-in panel was too tall and its font did not match the site
 
 **File/line (fixed file):** `#authSignedOut` / `.auth-panel` (HTML line 254, CSS line 67), new `toggleAuthForm()` next to `setAuthUI()`.
@@ -217,5 +233,6 @@ Do these in the live app, signed in as the user:
 17. **Add to Home Screen (iPhone, Safari):** open the site in a fresh Safari tab → Share → Add to Home Screen. The bookshelf icon shows, and the app opens full-screen with no browser bar.
 18. **Service worker:** after the first load, reload once — the app shell still opens, and the manifest serves at /manifest.json.
 19. **Sign-in panel:** on a phone the shelf, navigation, and stats show without scrolling; the sign-in bar is one slim line; tapping Sign in opens the form (button reads Close), and the bar text is serif like the site's headings.
+20. **Dismiss:** tapping Not now hides the whole sign-in panel and it stays hidden on reload; a Sign in button appears in the header; tapping it brings the panel back; signing in clears the dismissal.
 
 If any check fails, the most likely suspects are the deployed file differing from this repo version (see "Deployed file vs repo" above) and the Supabase `books` table lacking a `started_at` column (expected — started dates are local-only by design).
