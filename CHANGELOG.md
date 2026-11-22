@@ -138,6 +138,18 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 **How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
 
+## Fix 20 — Sign-in is a modal overlay (Ronnie's request, replaces Fix 18)
+
+**Files:** `index.html` (CHANGELOG only).
+
+**What changed:** the sign-in no longer sits in the page at all. `#authPanel` is now a fixed full-screen overlay (`position:fixed; inset:0; z-index:1000; background:rgba(20,15,5,.55)`) with the card (`.auth-modal-card`, max-width 560px) centred inside it, and it starts `hidden`. The header Sign in button opens it (`openAuthModal()`); Close, tapping the dim area outside the card, or Escape closes it (`closeAuthModal()`). The form inside is always visible — no more collapsed bar or expand toggle. A header Sign out button appears when signed in (shared `signOut()` with the modal's Sign out button). `setAuthUI` now always keeps the modal closed on load and only swaps the header Sign in / Sign out buttons. The Fix 18 dismiss button and its localStorage flag are removed — nothing to dismiss any more, because the modal takes zero space on the page. This also sidesteps the unexplained ~830px gap: whatever was pushing the page down, the sign-in is no longer in the flow to do it.
+
+**How it was found:** Ronnie reported the page still scrolls to reach the shelf and asked for a modal instead.
+
+**Why it is believed to be true:** verified by reading the code — `node --check` clean, no references remain to `dismissAuthPanel`, `showAuthPanel`, `toggleAuthForm`, `authToggleButton`, `authDismissed`, or the `readingShelfHideAuth` flag; the overlay, card, `hidden` rule, open/close wiring, and header buttons are all present. The form submit, sign-up, and sign-out handlers are unchanged, and a successful sign-in closes the modal via `setAuthUI`.
+
+**After deploying:** the shelf, navigation, and stats should be on the first screen with no scrolling; tapping Sign in opens the sign-in as a popup over the shelf; Close (or tapping outside it, or Escape) returns to the shelf; signing in closes the popup and shows Sign out in the header.
+
 ## Fix 19 — Service worker cache bumped to v2 (stale file suspected in the scroll gap)
 
 **File:** `sw.js` (`CACHE` `reading-shelf-v1` → `reading-shelf-v2`).
@@ -233,6 +245,7 @@ Do these in the live app, signed in as the user:
 17. **Add to Home Screen (iPhone, Safari):** open the site in a fresh Safari tab → Share → Add to Home Screen. The bookshelf icon shows, and the app opens full-screen with no browser bar.
 18. **Service worker:** after the first load, reload once — the app shell still opens, and the manifest serves at /manifest.json.
 19. **Sign-in panel:** on a phone the shelf, navigation, and stats show without scrolling; the sign-in bar is one slim line; tapping Sign in opens the form (button reads Close), and the bar text is serif like the site's headings.
-20. **Dismiss:** tapping Not now hides the whole sign-in panel and it stays hidden on reload; a Sign in button appears in the header; tapping it brings the panel back; signing in clears the dismissal.
+20. **Dismiss:** tapping Not now hides the whole sign-in panel and it stays hidden on reload; a Sign in button appears in the header; tapping it brings the panel back; signing in clears the dismissal. (Superseded by Fix 20 — the sign-in is now a modal, so there is no panel to dismiss.)
+21. **Modal:** the shelf, navigation, and stats are on the first screen with no scrolling; tapping Sign in opens the sign-in as a popup over the shelf; Close (or tapping outside it, or Escape) returns to the shelf; signing in closes the popup and shows Sign out in the header.
 
 If any check fails, the most likely suspects are the deployed file differing from this repo version (see "Deployed file vs repo" above) and the Supabase `books` table lacking a `started_at` column (expected — started dates are local-only by design).
