@@ -138,6 +138,14 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 **How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
 
+## Fix 17 — Sign-in panel was too tall and its font did not match the site
+
+**File/line (fixed file):** `#authSignedOut` / `.auth-panel` (HTML line 254, CSS line 67), new `toggleAuthForm()` next to `setAuthUI()`.
+
+**Cause:** the sign-in panel sat at the top of the page, above the navigation, and always showed the full form (email, password, two buttons, two notes). On a phone that filled most of the screen, so the shelf itself was below the fold and Ronnie had to scroll to see it. Its title was also set in bold Arial, while the rest of the site's headings are Georgia serif, so it looked like it belonged to a different site.
+
+**Fix.** The panel is now a slim bar by default: one line, "Sign in to sync your shelf across devices", with a Sign in button. The form is hidden until the button is tapped (it then reads "Close"). The shelf, navigation, and stats are visible as soon as the page opens. The bar text is now Georgia serif in the site's green, matching the site's headings; the form fields, labels, and buttons are unchanged (they already match the site's other form controls). Signing in still hides the whole panel and shows the signed-in bar, as before.
+
 ## Fix 15 — A corrupt saved value could kill the app before sign-in
 
 **File/line (fixed file):** the saved-data loading at the top of the script (`safeParseArray` / `safeParseObject`).
@@ -208,5 +216,6 @@ Do these in the live app, signed in as the user:
 16. **Icon files live:** open https://reading-shelf.ronniew3099.workers.dev/icon-192.png and /icon-512.png — both show the bookshelf.
 17. **Add to Home Screen (iPhone, Safari):** open the site in a fresh Safari tab → Share → Add to Home Screen. The bookshelf icon shows, and the app opens full-screen with no browser bar.
 18. **Service worker:** after the first load, reload once — the app shell still opens, and the manifest serves at /manifest.json.
+19. **Sign-in panel:** on a phone the shelf, navigation, and stats show without scrolling; the sign-in bar is one slim line; tapping Sign in opens the form (button reads Close), and the bar text is serif like the site's headings.
 
 If any check fails, the most likely suspects are the deployed file differing from this repo version (see "Deployed file vs repo" above) and the Supabase `books` table lacking a `started_at` column (expected — started dates are local-only by design).
