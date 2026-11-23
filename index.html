@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#294b3b">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-512.png">
 <title>The Reading Shelf 3.0 · Stage 3.5</title>
 <style>
 :root{--bg:#eee7d9;--paper:#fffaf0;--ink:#30291f;--muted:#827766;--green:#294b3b;--green2:#e6ece5;--line:#e3d7c4;--gold:#b18a4e;--burgundy:#7b3f45;--shadow:0 9px 28px rgba(65,48,29,.09)}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-library-background.jpg') center center / cover fixed no-repeat;color:var(--ink);font-family:Georgia,'Times New Roman',serif}
-.app{position:relative;background:rgba(248,242,230,.91);backdrop-filter:blur(3px);border-left:1px solid rgba(255,255,255,.35);border-right:1px solid rgba(255,255,255,.35);min-height:100vh} .top,.section-head{ text-shadow:0 1px 10px rgba(255,250,240,.55)}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;padding:28px 22px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;border-radius:7px;background:linear-gradient(145deg,#355b46,#203d30);color:#fff;display:grid;place-items:center;font-size:23px;box-shadow:inset 0 0 0 1px #ffffff30,0 4px 10px #30291f22}.brand h1{font-size:22px;margin:0;letter-spacing:.2px}.brand small{display:block;color:var(--muted);font:12px Arial;margin-top:3px}.top button,.primary,.secondary{border:0;border-radius:7px;padding:11px 16px;font:600 13px Arial}.primary{background:var(--green);color:white;box-shadow:0 4px 10px #294b3b26}.secondary{background:var(--green2);color:var(--green)}.hero{background:linear-gradient(115deg,#203d30,#355b46 60%,#64765a);color:#fff;border-radius:10px;padding:32px 34px;margin-bottom:22px;display:flex;justify-content:space-between;gap:24px;align-items:center;box-shadow:0 12px 28px rgba(44,54,37,.2);position:relative;overflow:hidden;border:1px solid #a58b5b}.hero:before{content:"";position:absolute;inset:10px;border:1px solid #d9c18c55;border-radius:5px;pointer-events:none}.hero h2{font-size:clamp(26px,4vw,37px);font-weight:normal;margin:0 0 9px;position:relative;z-index:1}.hero p{font:14px/1.65 Arial;margin:0;color:#eee9dc;max-width:570px;position:relative;z-index:1}.hero-mark{font-size:68px;opacity:.92;filter:drop-shadow(0 6px 8px #1118);z-index:1}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 28px}.stat,.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:var(--shadow)}.stat small{font:11px Arial;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted)}.stat strong{display:block;font-size:28px;margin-top:8px;font-weight:normal;color:var(--green)}.section-head{display:flex;justify-content:space-between;align-items:center;margin:28px 0 13px;gap:12px}.section-head h3{font-size:21px;font-weight:normal;margin:0}.section-head span{font:12px Arial;color:var(--muted)}.currently{display:grid;grid-template-columns:1fr 250px;gap:18px}.reading-card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:21px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow)}.cover{width:76px;height:105px;flex-shrink:0;border-radius:3px;background:linear-gradient(145deg,#d8c39b,#a98a5b);color:#3f3323;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;box-shadow:4px 4px 0 #c4b18e,6px 6px 0 #8c7654;overflow:hidden;border:1px solid #8d744f}.cover img{width:100%;height:100%;object-fit:cover;display:block}.cover.has-image{padding:0;background:#e8dfcf}.cover-placeholder{font-size:inherit;line-height:1.25;overflow-wrap:anywhere}.cover-placeholder small{display:block;font:9px Arial;opacity:.7;margin-top:5px}.reading-info{flex:1;min-width:0}.reading-info h4{font-size:19px;font-weight:normal;margin:0 0 5px}.reading-info p{font:12px Arial;color:var(--muted);margin:0 0 14px}.progress{height:7px;background:#e9e1d3;border-radius:3px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--green),#8a9b70);border-radius:3px}.progress-meta{display:flex;justify-content:space-between;font:11px Arial;color:var(--muted);margin-top:7px}.empty{color:var(--muted);font:13px/1.5 Arial}.goal{background:linear-gradient(145deg,#e8e5d7,#f5ecda);border:1px solid #d9cfb9;border-radius:8px;padding:19px}.goal h4{font-size:17px;font-weight:normal;margin:0 0 8px;color:var(--green)}.goal p{font:12px/1.5 Arial;color:var(--muted);margin:0 0 13px}.goal input{width:75px;padding:8px;border:1px solid var(--line);border-radius:6px;background:white}.goal label{font:12px Arial;color:var(--muted)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.tab{border:1px solid var(--line);background:#fbf6eb;color:var(--muted);border-radius:4px;padding:8px 13px;font:12px Arial}.tab.active{background:var(--green);color:white;border-color:var(--green)}.books{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:max-content;align-items:start;gap:13px}.book{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:15px;display:flex;align-items:flex-start;gap:13px;min-width:0;height:fit-content;align-self:start;box-shadow:var(--shadow)}.book .cover{width:55px;height:78px;font-size:10px}.book h4{font-size:15px;font-weight:normal;margin:2px 0 5px}.book p{font:11px Arial;color:var(--muted);margin:0 0 9px}.book-actions{display:flex;gap:6px;flex-wrap:wrap}.rating-display{display:flex;align-items:center;gap:5px;margin:0 0 8px;font:12px Arial;color:var(--muted)}.rating-stars{color:var(--gold);letter-spacing:1px;font-size:15px}.rating-empty{color:#b9ad99}
+.app{position:relative;background:rgba(248,242,230,.91);backdrop-filter:blur(3px);border-left:1px solid rgba(255,255,255,.35);border-right:1px solid rgba(255,255,255,.35);min-height:100vh} .top,.section-head{ text-shadow:0 1px 10px rgba(255,250,240,.55)}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;padding:28px 22px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;border-radius:7px;background:linear-gradient(145deg,#355b46,#203d30);color:#fff;display:grid;place-items:center;font-size:23px;box-shadow:inset 0 0 0 1px #ffffff30,0 4px 10px #30291f22}.brand h1{font-size:22px;margin:0;letter-spacing:.2px}.brand small{display:block;color:var(--muted);font:12px Arial;margin-top:3px}.top button,.primary,.secondary{border:0;border-radius:7px;padding:11px 16px;font:600 13px Arial}.primary{background:var(--green);color:white;box-shadow:0 4px 10px #294b3b26}.secondary{background:var(--green2);color:var(--green)}.hero{background:linear-gradient(115deg,#203d30,#355b46 60%,#64765a);color:#fff;border-radius:10px;padding:32px 34px;margin-bottom:22px;display:flex;justify-content:space-between;gap:24px;align-items:center;box-shadow:0 12px 28px rgba(44,54,37,.2);position:relative;overflow:hidden;border:1px solid #a58b5b}.hero:before{content:"";position:absolute;inset:10px;border:1px solid #d9c18c55;border-radius:5px;pointer-events:none}.hero h2{font-size:clamp(26px,4vw,37px);font-weight:normal;margin:0 0 9px;position:relative;z-index:1}.hero p{font:14px/1.65 Arial;margin:0;color:#eee9dc;max-width:570px;position:relative;z-index:1}.hero-mark{font-size:68px;opacity:.92;filter:drop-shadow(0 6px 8px #1118);z-index:1}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 28px}.stat,.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:var(--shadow)}.stat small{font:11px Arial;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted)}.stat strong{display:block;font-size:28px;margin-top:8px;font-weight:normal;color:var(--green)}.section-head{display:flex;justify-content:space-between;align-items:center;margin:28px 0 13px;gap:12px}.section-head h3{font-size:21px;font-weight:normal;margin:0}.section-head span{font:12px Arial;color:var(--muted)}.currently{display:grid;grid-template-columns:1fr 250px;gap:18px}.reading-card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:21px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow)}.cover{width:76px;height:105px;flex-shrink:0;border-radius:3px;background:linear-gradient(145deg,#d8c39b,#a98a5b);color:#3f3323;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;box-shadow:4px 4px 0 #c4b18e,6px 6px 0 #8c7654;overflow:hidden;border:1px solid #8d744f}.cover img{width:100%;height:100%;object-fit:cover;display:block}.cover.has-image{padding:0;background:#e8dfcf}.cover-placeholder{font-size:inherit;line-height:1.25;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.cover-placeholder small{display:block;font:9px Arial;opacity:.7;margin-top:5px}.reading-info{flex:1;min-width:0}.reading-info h4{font-size:19px;font-weight:normal;margin:0 0 5px}.reading-info p{font:12px Arial;color:var(--muted);margin:0 0 14px}.progress{height:7px;background:#e9e1d3;border-radius:3px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--green),#8a9b70);border-radius:3px}.progress-meta{display:flex;justify-content:space-between;font:11px Arial;color:var(--muted);margin-top:7px}.empty{color:var(--muted);font:13px/1.5 Arial}.goal{background:linear-gradient(145deg,#e8e5d7,#f5ecda);border:1px solid #d9cfb9;border-radius:8px;padding:19px}.goal h4{font-size:17px;font-weight:normal;margin:0 0 8px;color:var(--green)}.goal p{font:12px/1.5 Arial;color:var(--muted);margin:0 0 13px}.goal input{width:75px;padding:8px;border:1px solid var(--line);border-radius:6px;background:white}.goal label{font:12px Arial;color:var(--muted)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.tab{border:1px solid var(--line);background:#fbf6eb;color:var(--muted);border-radius:4px;padding:8px 13px;font:12px Arial}.tab.active{background:var(--green);color:white;border-color:var(--green)}.books{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:max-content;align-items:start;gap:13px}.book{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:15px;display:flex;align-items:flex-start;gap:13px;min-width:0;height:fit-content;align-self:start;box-shadow:var(--shadow)}.book .cover{width:55px;height:78px;font-size:10px}.book h4{font-size:15px;font-weight:normal;margin:2px 0 5px}.book p{font:11px Arial;color:var(--muted);margin:0 0 9px}.book-actions{display:flex;gap:6px;flex-wrap:wrap}.rating-display{display:flex;align-items:center;gap:5px;margin:0 0 8px;font:12px Arial;color:var(--muted)}.rating-stars{color:var(--gold);letter-spacing:1px;font-size:15px}.rating-empty{color:#b9ad99}
 .history-panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:20px;box-shadow:var(--shadow);margin:24px 0}
 .history-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 18px}
 .history-metric{background:#f3ecdf;border:1px solid var(--line);border-radius:7px;padding:12px}
@@ -30,7 +32,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .quick-progress button.quick-save{background:var(--green);color:#fff}
 
 @media(max-width:520px){.history-summary{grid-template-columns:1fr 1fr}.history-panel{padding:14px}.week-chart{gap:4px}}
-.mini{border:0;background:var(--green2);color:var(--green);border-radius:4px;padding:6px 8px;font:11px Arial}.mini:hover{background:#d8e3d7}.notes{margin-top:28px}.notes textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:8px;padding:13px;background:var(--paper);resize:vertical;font:13px/1.5 Arial}.modal{position:fixed;inset:0;background:#211d17cc;display:none;place-items:center;padding:18px;z-index:5}.modal.show{display:grid}.dialog{background:var(--paper);width:min(490px,100%);border-radius:9px;padding:23px;max-height:90vh;overflow:auto;border:1px solid var(--gold)}.dialog h3{font-weight:normal;font-size:23px;margin:0 0 16px;color:var(--green)}.field{display:block;margin:12px 0}.field span{display:block;font:11px Arial;color:var(--muted);margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;background:white;font:14px Arial}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.close{background:transparent;border:0;color:var(--muted);float:right;font-size:21px}.footer{text-align:center;color:var(--muted);font:11px Arial;margin-top:36px}
+.mini{border:0;background:var(--green2);color:var(--green);border-radius:4px;padding:6px 8px;font:11px Arial}.mini:hover{background:#d8e3d7}.notes{margin-top:28px}.notes textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:8px;padding:13px;background:var(--paper);resize:vertical;font:13px/1.5 Arial}.modal{position:fixed;inset:0;background:#211d17cc;display:none;place-items:center;padding:18px;z-index:5}.modal.show{display:grid}.dialog{background:var(--paper);width:min(490px,100%);border-radius:9px;padding:23px;max-height:90vh;overflow:auto;border:1px solid var(--gold)}.dialog h3{font-weight:normal;font-size:23px;margin:0 0 16px;color:var(--green)}.field{display:block;margin:12px 0}.field span{display:block;font:11px Arial;color:var(--muted);margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;background:white;font:14px Arial}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;position:sticky;bottom:-23px;background:var(--paper);padding:12px 0 0;z-index:1}.close{background:transparent;border:0;color:var(--muted);float:right;font-size:21px}.footer{text-align:center;color:var(--muted);font:11px Arial;margin-top:36px}
 
 .cover-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cover-tools button{font:600 12px Arial;padding:9px 12px}
@@ -57,12 +59,12 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .category-tile.active{border:2px solid var(--green);background:var(--green2);padding:11px 12px}
 .category-tile strong{display:block;font:13px Arial;color:var(--green);line-height:1.35}
 .category-tile span{display:block;font:11px Arial;color:var(--muted);margin-top:5px}
-.category-tile .category-number{font:normal 23px Georgia,serif;color:var(--green);margin-right:4px}
+.category-tile .category-number{font:inherit;color:var(--green);margin-right:4px}
 @media(max-width:440px){.category-options{grid-template-columns:1fr}}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.currently{grid-template-columns:1fr}.books{grid-template-columns:1fr 1fr}.hero-mark{font-size:56px}.app{padding:20px 14px 45px}}
 @media(max-width:440px){.books{grid-template-columns:1fr}.reading-card{align-items:flex-start}.brand h1{font-size:18px}}
 
-.auth-panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:-14px 0 22px;box-shadow:var(--shadow);font:13px Arial;color:var(--ink)}
+.auth-panel{position:fixed;inset:0;z-index:1000;background:rgba(20,15,5,.35);display:flex;align-items:center;justify-content:center;padding:20px 14px;overflow-y:auto}.auth-panel[hidden]{display:none}.auth-modal-card{background:var(--ink);border:1px solid var(--line);border-radius:8px;padding:16px 18px;box-shadow:var(--shadow);font:13px Arial;color:#fff;width:100%;max-width:560px;margin:auto}.auth-modal-card .auth-bar-text{color:#fff}.auth-modal-card .auth-field label{color:#d8cfc0}.auth-modal-card .auth-note{color:#d8cfc0}.auth-modal-card .auth-note a{color:var(--gold)}.auth-modal-card .auth-message{color:#fff}.auth-modal-card .auth-account strong{color:#fff}.auth-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.auth-bar-text{font:15px Georgia,serif;color:var(--green);font-weight:bold}#authForm{margin-top:14px}
 .auth-row{display:flex;align-items:end;gap:9px;flex-wrap:wrap}.auth-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:180px}.auth-field label{font-size:11px;color:var(--muted)}.auth-field input{padding:10px;border:1px solid var(--line);border-radius:5px;background:#fff;font:13px Arial}.auth-actions{display:flex;gap:7px;flex-wrap:wrap}.auth-message{margin:9px 0 0;color:var(--green);font:12px/1.45 Arial}.auth-account{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.auth-account strong{color:var(--green)}
 
 .main-nav{display:flex;gap:7px;overflow-x:auto;padding:7px;margin:0 0 24px;background:rgba(255,250,240,.72);border:1px solid var(--line);border-radius:8px;scrollbar-width:thin}
@@ -228,15 +230,32 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .plan-empty-small{font:12px/1.5 Arial;color:var(--muted);padding:8px 0}
 @media(max-width:560px){.plan-assignment{align-items:flex-start;flex-direction:column}.plan-day-head{align-items:flex-start}.plan-calendar-day{min-height:36px}}
 
+.status-badge{display:inline-block;font:600 11px Arial;color:var(--green);background:var(--green2);border-radius:4px;padding:3px 7px;margin-bottom:6px}
+.status-badge.status-completed{background:#e7e0c8}
+.status-badge.status-want{background:#efe9da}
+.book-dates{font:11px Arial;color:var(--muted);margin:6px 0 0}
+.goal-progress{font:12px Arial;color:var(--muted);margin:10px 0 0}
+.goal-progress.goal-met{color:var(--green);font-weight:bold}
+.auth-note{font:12px/1.5 Arial;color:var(--muted);margin:10px 0 0}
+.auth-note a{color:var(--green)}
+.library-search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:white;font:14px Arial;margin:0 0 14px}
+.confirm-choices{display:grid;gap:6px;margin:12px 0}
+.confirm-choices label{display:flex;gap:8px;align-items:center;font:14px Arial}
+.confirm-input{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;background:white;font:14px Arial;margin:12px 0}
+.undo-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#203d30;color:#fff;border-radius:8px;padding:12px 16px;font:13px Arial;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:9;display:flex;gap:12px;align-items:center}
+.undo-toast[hidden]{display:none}
+.undo-toast button{border:0;background:#fff;color:#203d30;border-radius:5px;padding:6px 10px;font:600 12px Arial;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="top"><div class="brand"><div class="logo">📚</div><div><h1>The Reading Shelf</h1><small>A personal library for the books you own and the ideas you keep.</small></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" type="button" id="refreshCloudButton" onclick="refreshCloudData()" title="Load the latest data saved to your cloud shelf">↻ Refresh</button><button class="secondary" type="button" onclick="exportExcel()">↓ Export Excel</button><button class="primary" onclick="openAdd()">＋ Add a book</button></div></header>
-<section class="auth-panel" id="authPanel">
-<div id="authSignedOut"><div style="font-weight:bold;margin-bottom:10px;color:var(--green)">Save your shelf across devices</div><form id="authForm"><div class="auth-row"><div class="auth-field"><label for="authEmail">EMAIL</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div><div class="auth-field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div><div class="auth-actions"><button class="primary" type="submit" id="signInButton">Sign in</button><button class="secondary" type="button" id="signUpButton">Create account</button></div></div></form></div>
+<header class="top"><div class="brand"><div class="logo">📚</div><div><h1>The Reading Shelf</h1><small>A personal library for the books you own and the ideas you keep.</small></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" type="button" id="headerSignInButton" onclick="openAuthModal()" hidden>Sign in</button><button class="secondary" type="button" id="headerSignOutButton" onclick="signOut()" hidden>Sign out</button><button class="secondary" type="button" id="refreshCloudButton" onclick="refreshCloudData()" title="Load the latest data saved to your cloud shelf">↻ Refresh</button><button class="secondary" type="button" onclick="exportExcel()">↓ Export Excel</button><button class="primary" onclick="openAdd()">＋ Add a book</button></div></header>
+<section class="auth-panel" id="authPanel" hidden>
+<div class="auth-modal-card">
+<div id="authSignedOut"><div class="auth-bar"><span class="auth-bar-text">Sign in to sync your shelf across devices</span><button class="secondary" type="button" onclick="closeAuthModal()">Close</button></div><form id="authForm"><div class="auth-row"><div class="auth-field"><label for="authEmail">EMAIL</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div><div class="auth-field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div><div class="auth-actions"><button class="primary" type="submit" id="signInButton">Sign in</button><button class="secondary" type="button" id="signUpButton">Create account</button></div><p class="auth-note">The Reading Shelf and Ronnie's Bible Challenge use the same Supabase account, so the same email and password work in both apps. Your books and your Bible reading are stored separately.</p><p class="auth-note"><a href="#" onclick="forgotPassword();return false;">Forgot password?</a></p></div></div></form></div>
 <div id="authSignedIn" hidden><div class="auth-account"><span>Cloud sync enabled · Signed in as <strong id="signedInEmail"></strong></span><button class="secondary" type="button" id="signOutButton">Sign out</button></div></div>
 <div class="auth-message" id="authMessage" role="status">Your shelf currently works on this device. Sign in to sync it with Supabase.</div>
+</div>
 </section>
 <nav class="main-nav" aria-label="Main navigation">
   <button class="nav-item active" type="button" data-view="home" onclick="setView('home',this)">⌂ <span>Home</span></button>
@@ -244,7 +263,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   <button class="nav-item" type="button" data-view="insights" onclick="setView('insights',this)">◷ <span>Insights</span></button>
   <button class="nav-item" type="button" data-view="knowledge" onclick="setView('knowledge',this)">✎ <span>Knowledge</span></button>
   <button class="nav-item" type="button" data-view="plans" onclick="setView('plans',this)">▦ <span>Reading Plans</span></button>
-  <button class="nav-item" type="button" data-view="onenote" onclick="setView('onenote',this)">▣ <span>OneNote</span></button>
+  <button class="nav-item" type="button" data-view="onenote" onclick="setView('onenote',this)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px"><rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> <span>OneNote</span></button>
   <button class="nav-item" type="button" data-view="settings" onclick="setView('settings',this)">⚙ <span>Settings</span></button>
 </nav>
 <section id="homeView" class="app-view">
@@ -265,14 +284,14 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 </section>
 <div class="section-head"><h3>Pick up where you left off</h3><span id="focusHint">Your current focus</span></div>
 <section class="currently"><div class="reading-card" id="currentCard"><div class="empty">No book selected yet. Add a book and choose “Start reading” to make it your current focus.</div></div>
-<div class="goal"><h4>Daily page goal</h4><p>A small daily target helps turn a shelf of good intentions into finished books.</p><label for="goalInput">Pages per day</label><br><input id="goalInput" type="number" min="1" max="200" value="5" onchange="saveGoal()"> <span style="font:11px Arial;color:var(--muted)"> pages</span></div></section>
+<div class="goal"><h4>Daily page goal</h4><p>A small daily target helps turn a shelf of good intentions into finished books.</p><label for="goalInput">Pages per day</label><br><input id="goalInput" type="number" min="1" max="200" value="5"> <button class="mini" type="button" onclick="saveGoal()">Save goal</button> <span style="font:11px Arial;color:var(--muted)"> pages</span><p id="goalProgress" class="goal-progress" aria-live="polite"></p></div></section>
 </section>
 <section id="libraryView" class="app-view" hidden>
 <div class="section-head"><h3>My bookshelf</h3><span id="bookCount">0 of 0 books displayed</span></div>
 <div class="tabs"><button class="tab active" data-filter="all" onclick="setFilter('all',this)">All books</button><button class="tab" data-filter="want" onclick="setFilter('want',this)">Want to read</button><button class="tab" data-filter="reading" onclick="setFilter('reading',this)">Reading</button><button class="tab" data-filter="completed" onclick="setFilter('completed',this)">Completed</button></div>
 <div class="section-head"><h3>Browse by category</h3><span>Choose one or more categories</span></div>
 <div class="category-overview" id="categoryOverview" aria-label="Select one or more book categories"></div>
-<div class="category-filter"><span id="categoryResultCount" aria-live="polite">Showing all books</span><button type="button" id="clearCategorySelection" onclick="clearCategorySelection()" disabled>Clear selection</button></div>
+<div class="category-filter"><span id="categoryResultCount" aria-live="polite">Showing all books</span><button type="button" id="clearCategorySelection" onclick="clearCategorySelection()" disabled>Clear selection</button></div><input id="librarySearchInput" class="library-search" type="search" placeholder="Search your books by title or author" aria-label="Search your books by title or author" oninput="setLibrarySearch(this.value)">
 <div class="books" id="books"></div>
 </section>
 <section id="insightsView" class="app-view" hidden>
@@ -366,7 +385,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 </section>
 <section id="plansView" class="app-view" hidden>
   <div class="section-head"><h3>Reading Plans</h3><span>Build a realistic path through your reading list</span></div>
-  <div class="plan-intro"><h3>Turn your reading intentions into a plan.</h3><p>Create a curriculum from unread books, set a daily page goal, track chapter-based books, and use manual assignments when a page count is not available. Your existing bookshelf remains the source of book details and reading progress.</p></div>
+  <div class="plan-intro"><h3>Turn your reading intentions into a plan.</h3><p>Create a curriculum from unread books, set a plan pace, track chapter-based books, and use manual assignments when a page count is not available. Your existing bookshelf remains the source of book details and reading progress.</p></div>
   <div class="plan-toolbar">
     <select id="readingPlanSelect" aria-label="Choose a reading plan" onchange="selectReadingPlan(this.value)"><option value="">No plans yet</option></select>
     <button class="primary" type="button" onclick="createPlanFromUnread()">Create plan from unread books</button>
@@ -377,16 +396,18 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 </section>
 <section id="onenoteView" class="app-view" hidden>
   <div class="section-head"><h3>OneNote connection</h3><span>Coming in Stage 4</span></div>
-  <div class="coming-card"><div class="coming-icon">▣</div><h3>Your notes, connected to your books.</h3><p>Stage 4 will connect your personal Microsoft account, let you link existing OneNote pages to books, and support protected two-way synchronization.</p><span class="coming-label">Planned feature · Not connected yet</span></div>
+  <div class="coming-card"><div class="coming-icon"><svg width="26" height="26" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Your notes, connected to your books.</h3><p>Stage 4 will connect your personal Microsoft account, let you link existing OneNote pages to books, and support protected two-way synchronization.</p><span class="coming-label">Planned feature · Not connected yet</span></div>
 </section>
 <section id="settingsView" class="app-view" hidden>
   <div class="section-head"><h3>Reading preferences</h3><span>Personalize your routine</span></div>
-  <div class="settings-card"><div class="goal"><h4>Daily page goal</h4><p>Set a realistic target. Your weekly target is calculated as seven times this number.</p><label for="settingsGoalInput">Pages per day</label><br><input id="settingsGoalInput" type="number" min="1" max="200" value="5" onchange="saveGoalFromSettings()"> <span style="font:11px Arial;color:var(--muted)"> pages</span></div></div>
+  <div class="settings-card"><div class="goal"><h4>Daily page goal</h4><p>Set a realistic target. Your weekly target is calculated as seven times this number.</p><label for="settingsGoalInput">Pages per day</label><br><input id="settingsGoalInput" type="number" min="1" max="200" value="5"> <button class="mini" type="button" onclick="saveGoalFromSettings()">Save goal</button> <span style="font:11px Arial;color:var(--muted)"> pages</span></div></div>
   <section class="notes"><div class="section-head"><h3>What I'm learning</h3><span>Keep the insight, not just the page count</span></div><textarea id="generalNotes" placeholder="Write a thought, lesson, or action you want to remember..."></textarea></section>
 </section>
-<div class="footer">Sign in to sync your reading data across devices. Without signing in, data stays in this browser.</div>
+<div class="footer" id="syncFooter">Sign in to sync your reading data across devices. Without signing in, data stays in this browser.</div>
 </div>
-<div class="modal" id="modal"><div class="dialog"><button class="close" onclick="closeModal()">×</button><h3 id="modalTitle">Add a book</h3><form id="bookForm" onsubmit="saveBook(event)"><input type="hidden" id="bookId"><label class="field"><span>BOOK TITLE</span><input id="title" required placeholder="e.g. The Culture Map"></label><label class="field"><span>AUTHOR</span><input id="author" placeholder="Author's name"></label><div class="field"><span>BOOK COVER</span><div class="cover-tools"><button type="button" class="secondary" onclick="lookupBookCovers()">Find cover automatically</button><span id="coverLookupStatus" class="cover-status">Search by title and author, then choose the matching edition.</span></div><div id="coverResults" class="cover-results"></div><label class="field"><span>OR PASTE A COVER IMAGE URL</span><input id="coverUrl" type="url" placeholder="https://..."><div id="coverPreview" class="cover-preview"></div></label></div><div class="field"><span>CATEGORIES (SELECT ALL THAT APPLY)</span><div class="category-options" id="categoryOptions"></div></div><label class="field"><span>TOTAL PAGES (optional)</span><input id="totalPages" type="number" min="1" placeholder="e.g. 280"></label><label class="field"><span>STATUS</span><select id="status"><option value="want">Want to read</option><option value="reading">Currently reading</option><option value="completed">Completed</option></select></label><label class="field"><span>YOUR RATING</span><select id="rating"><option value="">Not rated</option><option value="1">★☆☆☆☆ — 1 star</option><option value="2">★★☆☆☆ — 2 stars</option><option value="3">★★★☆☆ — 3 stars</option><option value="4">★★★★☆ — 4 stars</option><option value="5">★★★★★ — 5 stars</option></select></label><label class="field"><span>CURRENT PAGE</span><input id="currentPage" type="number" min="0" value="0"></label><div class="dialog-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button class="primary" type="submit">Save book</button></div></form></div></div>
+<div class="modal" id="confirmModal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle"><div class="dialog"><h3 id="confirmTitle">Are you sure?</h3><p id="confirmMessage" style="font:14px/1.5 Arial;color:var(--muted);margin:0 0 6px"></p><div id="confirmChoices" class="confirm-choices" hidden></div><input id="confirmInput" class="confirm-input" type="text" hidden><div class="dialog-actions"><button type="button" class="secondary" id="confirmCancel">Cancel</button><button type="button" class="primary" id="confirmOk">Confirm</button></div></div></div>
+<div class="undo-toast" id="undoToast" hidden><span id="undoToastText"></span><button type="button" onclick="undoRemoveBook()">Undo</button></div>
+<div class="modal" id="modal"><div class="dialog"><button class="close" onclick="closeModal()">×</button><h3 id="modalTitle">Add a book</h3><form id="bookForm" onsubmit="saveBook(event)"><input type="hidden" id="bookId"><label class="field"><span>BOOK TITLE</span><input id="title" required placeholder="e.g. The Culture Map"></label><label class="field"><span>AUTHOR</span><input id="author" placeholder="Author's name"></label><div class="field"><span>BOOK COVER</span><div class="cover-tools"><button type="button" class="secondary" onclick="lookupBookCovers()">Find cover automatically</button><span id="coverLookupStatus" class="cover-status">Search by title and author, then choose the matching edition.</span></div><div id="coverResults" class="cover-results"></div><label class="field"><span>OR PASTE A COVER IMAGE URL</span><input id="coverUrl" type="url" placeholder="https://..."><div id="coverPreview" class="cover-preview"></div></label></div><div class="field"><span>CATEGORIES (SELECT ALL THAT APPLY)</span><div class="category-options" id="categoryOptions"></div></div><label class="field"><span>TOTAL PAGES (optional)</span><input id="totalPages" type="number" min="1" placeholder="e.g. 280"></label><label class="field"><span>STATUS</span><select id="status"><option value="want">Want to read</option><option value="reading">Currently reading</option><option value="completed">Completed</option></select></label><label class="field"><span>YOUR RATING</span><select id="rating"><option value="">Not rated</option><option value="1">★☆☆☆☆ — 1 star</option><option value="2">★★☆☆☆ — 2 stars</option><option value="3">★★★☆☆ — 3 stars</option><option value="4">★★★★☆ — 4 stars</option><option value="5">★★★★★ — 5 stars</option></select></label><label class="field"><span>CURRENT PAGE</span><input id="currentPage" type="number" min="0" value="0"></label><label class="field"><span>STARTED (optional)</span><input id="startedAt" type="date"></label><label class="field"><span>FINISHED (optional)</span><input id="finishedAt" type="date"></label><div class="dialog-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button class="primary" type="submit">Save book</button></div></form></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
@@ -395,13 +416,24 @@ const SUPABASE_PUBLISHABLE_KEY='sb_publishable_SQmckVEfTJy0Qt5EG_HhKg_b96WV8Xp';
 // Keep each browser/device signed in until the user explicitly signs out
 // or the browser's site data is cleared. Supabase stores the session locally
 // and refreshes access tokens automatically.
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
- auth:{
-  persistSession:true,
-  autoRefreshToken:true,
-  detectSessionInUrl:true
- }
-});
+// Defined first, so the page stays usable (and can report a clear error)
+// even if the sign-in library below fails to load.
+const $=id=>document.getElementById(id);
+// The sign-in library loads from a CDN. If it fails to load, the app used
+// to die silently here and the sign-in form reloaded the page instead of
+// signing in. Catch it: the app stays usable on local data and says so.
+let db=null;
+try{
+ db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+  auth:{
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
+  }
+ });
+}catch(err){
+ db=null;
+}
 const KEY='readingShelfBooksV1';
 const CATEGORIES=[
  'Psychology','Recovery','Faith & Spirituality','Relationships','Personal Development',
@@ -439,21 +471,130 @@ function renderCategoryOptions(selected=[]){
  $('categoryOptions').innerHTML=CATEGORIES.map(c=>`<label class="category-option"><input type="checkbox" name="bookCategory" value="${esc(c)}" ${chosen.has(c)?'checked':''}><span>${esc(c)}</span></label>`).join('');
 }
 function selectedCategories(){return [...document.querySelectorAll('input[name="bookCategory"]:checked')].map(x=>x.value)}
-let bookKnowledge=JSON.parse(localStorage.getItem('readingShelfKnowledgeV1')||'{}'), knowledgeQuotes=JSON.parse(localStorage.getItem('readingShelfQuotesV1')||'[]'), selectedKnowledgeBook='', knowledgeSaveTimer=null;
-let books=JSON.parse(localStorage.getItem(KEY)||'[]').map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=JSON.parse(localStorage.getItem('readingShelfSessionsV1')||'[]'), filter='all', selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
-let readingPlans=JSON.parse(localStorage.getItem('readingShelfPlansV1')||'[]'), readingPlanBooks=JSON.parse(localStorage.getItem('readingShelfPlanBooksV1')||'[]'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', plansCloudReady=false;
-let planDayRecords=JSON.parse(localStorage.getItem('readingShelfPlanDaysV1')||'{}'), selectedPlanDay=localDateString(), planCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
-const $=id=>document.getElementById(id);
+function localDateString(date=new Date()){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');return `${y}-${m}-${d}`}
+async function recordReadingSession(book,fromPage,toPage){
+ const start=Math.max(0,Number(fromPage)||0),end=Math.max(0,Number(toPage)||0),pages=end-start;
+ if(pages<=0)return;
+ const session={id:`local-${Date.now()}-${Math.random().toString(16).slice(2)}`,bookId:book.id,pagesRead:pages,startPage:start,endPage:end,sessionDate:localDateString(),createdAt:new Date().toISOString(),bookTitle:book.title||''};
+ readingSessions.unshift(session);
+ localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
+ renderReadingHistory();
+ if(currentUser){
+  const {data,error}=await db.from('reading_sessions').insert({user_id:currentUser.id,book_id:book.id,pages_read:pages,start_page:start,end_page:end,session_date:session.sessionDate,book_title:book.title||null}).select('*').single();
+  if(error){message('Book progress saved, but reading history could not sync: '+error.message,true);return}
+  readingSessions=readingSessions.filter(s=>s.id!==session.id);
+  readingSessions.unshift({id:data.id,bookId:data.book_id,pagesRead:Number(data.pages_read)||0,startPage:Number(data.start_page)||0,endPage:Number(data.end_page)||0,sessionDate:data.session_date,createdAt:data.created_at,bookTitle:data.book_title||book.title||''});
+  localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
+  renderReadingHistory();
+ }
+}
+// A corrupt or unexpected saved value must never kill the whole app
+// (it used to throw here, before the sign-in form was wired up, so the
+// form reloaded the page instead of signing in). Fall back to empty data.
+function safeParseArray(key){try{const v=JSON.parse(localStorage.getItem(key));return Array.isArray(v)?v:[];}catch(e){return[];}}
+function safeParseObject(key){try{const v=JSON.parse(localStorage.getItem(key));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch(e){return{};}}
+let bookKnowledge=safeParseObject('readingShelfKnowledgeV1'), knowledgeQuotes=safeParseArray('readingShelfQuotesV1'), selectedKnowledgeBook='', knowledgeSaveTimer=null;
+let books=safeParseArray(KEY).map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=safeParseArray('readingShelfSessionsV1'), filter='all', selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
+let readingPlans=safeParseArray('readingShelfPlansV1'), readingPlanBooks=safeParseArray('readingShelfPlanBooksV1'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', plansCloudReady=false;
+let planDayRecords=safeParseObject('readingShelfPlanDaysV1'), selectedPlanDay=localDateString(), planCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 $('goalInput').value=goal;
 if($('settingsGoalInput'))$('settingsGoalInput').value=goal;
 if($('annualBookGoal'))$('annualBookGoal').value=annualBookGoal;
 renderCategoryOptions();
 $('generalNotes').value=localStorage.getItem('readingShelfNotes')||'';
 function message(t,isError=false){$('authMessage').textContent=t;$('authMessage').style.color=isError?'#9a3d37':'var(--green)'}
-function setAuthUI(user){currentUser=user;$('authSignedOut').hidden=!!user;$('authSignedIn').hidden=!user;if(user){$('signedInEmail').textContent=user.email||'your account';message('Your reading shelf is connected to the cloud.')}else{message('Your shelf currently works on this device. Sign in to sync it with Supabase.')}}
-$('authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('authEmail').value.trim(),password=$('authPassword').value;$('signInButton').disabled=true;$('signUpButton').disabled=true;try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;setAuthUI(data.user);await loadCloudData()}catch(err){message(err.message||'Could not sign in.',true)}finally{$('signInButton').disabled=false;$('signUpButton').disabled=false}});
+function setAuthUI(user){currentUser=user;$('syncFooter').style.display=user?'none':'';$('authSignedOut').hidden=!!user;$('authSignedIn').hidden=!user;$('authPanel').hidden=true;$('headerSignInButton').hidden=!!user;$('headerSignOutButton').hidden=!user;if(user){$('signedInEmail').textContent=user.email||'your account';message('Your reading shelf is connected to the cloud.')}else{message('Your shelf currently works on this device. Sign in to sync it with Supabase.')}}
+// The sign-in lives in a modal overlay, so it takes no space on the page and
+// the shelf is on the first screen. Sign in opens it; Close, tapping the dim
+// area outside the card, or Escape closes it.
+function openAuthModal(){$('authPanel').hidden=false;}
+function closeAuthModal(){$('authPanel').hidden=true;}
+$('authPanel').addEventListener('click',e=>{if(e.target===$('authPanel'))closeAuthModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('authPanel').hidden)closeAuthModal();});
+async function signOut(){const {error}=await db.auth.signOut();if(error){message(error.message,true);return}setAuthUI(null);}
+$('authForm').addEventListener('submit',async e=>{e.preventDefault();if(!db){message('Sign-in service could not load. Check your connection and reload the page.',true);return;}const email=$('authEmail').value.trim(),password=$('authPassword').value;$('signInButton').disabled=true;$('signUpButton').disabled=true;try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;setAuthUI(data.user);await loadCloudData()}catch(err){message(err.message||'Could not sign in.',true)}finally{$('signInButton').disabled=false;$('signUpButton').disabled=false}});
 $('signUpButton').addEventListener('click',async()=>{const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||password.length<6){message('Enter an email and a password with at least 6 characters.',true);return}$('signInButton').disabled=true;$('signUpButton').disabled=true;try{const {data,error}=await db.auth.signUp({email,password});if(error)throw error;if(data.session){setAuthUI(data.user);await loadCloudData()}else{message('Account created. Check your email for the confirmation link, then return here and sign in.')}}catch(err){message(err.message||'Could not create account.',true)}finally{$('signInButton').disabled=false;$('signUpButton').disabled=false}});
-$('signOutButton').addEventListener('click',async()=>{const {error}=await db.auth.signOut();if(error){message(error.message,true);return}setAuthUI(null)});
+$('signOutButton').addEventListener('click',signOut);
+// --- In-app dialogs (replaces native confirm()/prompt()/alert(), which some
+// browsers auto-dismiss, silently aborting the action) ---
+let librarySearch='';
+let lastRemovedBook=null,lastRemovedIndex=-1;
+let lastAuthUserId=null;
+function fmtDate(value){
+ if(!value)return '';
+ const d=new Date(value);
+ if(isNaN(d))return String(value).slice(0,10);
+ return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+}
+function showConfirmDialog(opts){
+ return new Promise(resolve=>{
+  const modal=$('confirmModal');
+  $('confirmTitle').textContent=opts.title||'Are you sure?';
+  $('confirmMessage').textContent=opts.message||'';
+  const choicesEl=$('confirmChoices'),inputEl=$('confirmInput');
+  choicesEl.innerHTML='';choicesEl.hidden=true;inputEl.hidden=true;inputEl.value='';
+  let getValue=()=>true;
+  if(opts.choices&&opts.choices.length){
+   const type=opts.choiceType||'checkbox';
+   choicesEl.hidden=false;
+   opts.choices.forEach((c,i)=>{
+    const label=document.createElement('label');
+    const input=document.createElement('input');
+    input.type=type;input.name='confirmChoice';input.value=c.value;
+    if(type==='radio'&&(opts.selectedValue===c.value||(!opts.selectedValue&&i===0)))input.checked=true;
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(c.label));
+    choicesEl.appendChild(label);
+   });
+   getValue=()=>[...choicesEl.querySelectorAll('input:checked')].map(x=>x.value);
+  }else if(opts.input){
+   inputEl.hidden=false;
+   inputEl.type=opts.inputType||'text';
+   inputEl.placeholder=opts.inputPlaceholder||'';
+   inputEl.value=opts.inputValue||'';
+   getValue=()=>inputEl.value;
+  }
+  $('confirmOk').textContent=opts.confirmLabel||'Confirm';
+  const done=value=>{modal.classList.remove('show');$('confirmOk').onclick=null;$('confirmCancel').onclick=null;modal.onclick=null;resolve(value);};
+  $('confirmOk').onclick=()=>done(getValue());
+  $('confirmCancel').onclick=()=>done(opts.input?null:(opts.choices?null:false));
+  modal.onclick=e=>{if(e.target===modal)done(opts.input?null:(opts.choices?null:false));};
+  modal.classList.add('show');
+  if(opts.input)setTimeout(()=>inputEl.focus(),0);
+ });
+}
+function askConfirm(title,messageText,confirmLabel){
+ return showConfirmDialog({title,message:messageText,confirmLabel:confirmLabel||'Confirm'}).then(v=>v===true);
+}
+function askInput(title,messageText,placeholder,value,confirmLabel,inputType){
+ return showConfirmDialog({title,message:messageText,input:true,inputPlaceholder:placeholder,inputValue:value==null?'':String(value),confirmLabel:confirmLabel||'Save',inputType:inputType||'text'});
+}
+function showNotice(title,messageText){
+ return showConfirmDialog({title,message:messageText,confirmLabel:'OK'}).then(()=>undefined);
+}
+async function forgotPassword(){
+ const email=$('authEmail').value.trim();
+ if(!email){showNotice('Enter your email first','Type your email address in the sign-in form above, then tap Forgot password again.');return;}
+ const {error}=await db.auth.resetPasswordForEmail(email);
+ if(error)showNotice('Could not send the reset email',error.message);
+ else showNotice('Reset email sent','Check '+email+' for a password reset link from Supabase.');
+}
+function showUndoToast(text){
+ const toast=$('undoToast');
+ $('undoToastText').textContent=text;
+ toast.hidden=false;
+ clearTimeout(showUndoToast._t);
+ showUndoToast._t=setTimeout(()=>{toast.hidden=true;lastRemovedBook=null;lastRemovedIndex=-1;},8000);
+}
+async function undoRemoveBook(){
+ if(!lastRemovedBook)return;
+ const index=lastRemovedIndex>=0?Math.min(lastRemovedIndex,books.length):books.length;
+ books.splice(index,0,lastRemovedBook);
+ lastRemovedBook=null;lastRemovedIndex=-1;
+ $('undoToast').hidden=true;
+ await persist();
+ message('Book restored.');
+}
 
 function safeCoverUrl(value){
  const raw=String(value||'').trim();
@@ -508,23 +649,35 @@ async function loadCloudData(){
  if(!currentUser||syncing)return;
  syncing=true;
  const warnings=[];
+ // Start the plan load at the same time as the library queries; it handles
+ // its own errors and renders the plans view when it finishes.
+ const plansLoad=loadReadingPlans();
  try{
-  // Load the core library first. Never replace a local cache on an empty or failed response.
-  try{
-   const {data:remoteBooks,error}=await db.from('books').select('*').order('created_at',{ascending:false});
-   if(error)throw error;
+  // Load the core library in parallel. Never replace a local cache on an
+  // empty or failed cloud response (books already had this guard; sessions,
+  // knowledge and quotes now get the same rule).
+  const [booksRes,settingsRes,sessionsRes,knowledgeRes,quotesRes]=await Promise.allSettled([
+   db.from('books').select('*').order('created_at',{ascending:false}),
+   db.from('reading_settings').select('*').eq('user_id',currentUser.id).maybeSingle(),
+   db.from('reading_sessions').select('*').order('session_date',{ascending:false}).order('created_at',{ascending:false}).limit(1000),
+   db.from('book_knowledge').select('*').order('updated_at',{ascending:false}),
+   db.from('book_quotes').select('*').order('created_at',{ascending:false})
+  ]);
+  if(booksRes.status==='fulfilled'&&!booksRes.value.error){
+   const remoteBooks=booksRes.value.data;
    if(Array.isArray(remoteBooks)&&remoteBooks.length){
-    books=remoteBooks.map(r=>({id:r.id,title:r.title,author:r.author||'',categories:parseCategories(r.category),totalPages:r.page_count||0,currentPage:r.current_page||0,status:r.status==='want-to-read'?'want':r.status,notes:r.notes||'',rating:r.rating??null,coverUrl:r.cover_url||'',completedAt:r.completed_at||null}));
+    const localById=new Map(books.map(b=>[String(b.id),b]));
+    books=remoteBooks.map(r=>({id:r.id,title:r.title,author:r.author||'',categories:parseCategories(r.category),totalPages:r.page_count||0,currentPage:r.current_page||0,status:r.status==='want-to-read'?'want':r.status,notes:r.notes||'',rating:r.rating??null,coverUrl:r.cover_url||'',completedAt:r.completed_at||null,startedAt:localById.get(String(r.id))?.startedAt||r.started_at||null}));
     localStorage.setItem(KEY,JSON.stringify(books));
    }else if(Array.isArray(remoteBooks)&&remoteBooks.length===0){
     warnings.push('Supabase returned no books. Your existing local shelf was preserved; no records were uploaded or deleted.');
    }
-  }catch(err){warnings.push('Books could not sync: '+(err.message||'connection unavailable')+'. Showing any locally saved books.');}
-
-  // Each supporting dataset loads independently so one missing/blocked table cannot hide the library.
-  try{
-   const {data:settings,error}=await db.from('reading_settings').select('*').eq('user_id',currentUser.id).maybeSingle();
-   if(error)throw error;
+  }else{
+   const err=booksRes.status==='rejected'?booksRes.reason:booksRes.value.error;
+   warnings.push('Books could not sync: '+((err&&err.message)||'connection unavailable')+'. Showing any locally saved books.');
+  }
+  if(settingsRes.status==='fulfilled'&&!settingsRes.value.error){
+   const settings=settingsRes.value.data;
    if(settings){
     goal=settings.daily_page_goal||5;annualBookGoal=Number(settings.annual_book_goal)||annualBookGoal;
     if($('goalInput'))$('goalInput').value=goal;
@@ -533,32 +686,49 @@ async function loadCloudData(){
     renderCategoryOptions();localStorage.setItem('readingShelfGoal',String(goal));
     if(settings.general_notes!==undefined&&settings.general_notes!==null){$('generalNotes').value=settings.general_notes;localStorage.setItem('readingShelfNotes',settings.general_notes);}
    }
-  }catch(err){warnings.push('Reading settings could not sync: '+(err.message||'unavailable')+'.');}
-
-  try{
-   const {data:remoteSessions,error}=await db.from('reading_sessions').select('*').order('session_date',{ascending:false}).order('created_at',{ascending:false}).limit(1000);
-   if(error)throw error;
-   readingSessions=(remoteSessions||[]).map(s=>({id:s.id,bookId:s.book_id,pagesRead:Number(s.pages_read)||0,startPage:Number(s.start_page)||0,endPage:Number(s.end_page)||0,sessionDate:s.session_date,createdAt:s.created_at,bookTitle:s.book_title||''}));
-   localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
-  }catch(err){warnings.push('Reading history could not sync: '+(err.message||'unavailable')+'. Your locally saved history was preserved.');}
-
-  try{
-   const {data:remoteKnowledge,error}=await db.from('book_knowledge').select('*').order('updated_at',{ascending:false});
-   if(error)throw error;
-   bookKnowledge={};
-   (remoteKnowledge||[]).forEach(row=>{bookKnowledge[row.book_id]={summary:row.summary||'',keyConcepts:row.key_concepts||'',takeaways:row.takeaways||'',applications:row.applications||'',reflectionQuestions:row.reflection_questions||'',updatedAt:row.updated_at||null};});
-   localStorage.setItem('readingShelfKnowledgeV1',JSON.stringify(bookKnowledge));
-  }catch(err){warnings.push('Knowledge notes could not sync: '+(err.message||'unavailable')+'. Your locally saved notes were preserved.');}
-
-  try{
-   const {data:remoteQuotes,error}=await db.from('book_quotes').select('*').order('created_at',{ascending:false});
-   if(error)throw error;
-   knowledgeQuotes=(remoteQuotes||[]).map(q=>({id:q.id,bookId:q.book_id,quoteText:q.quote_text,pageReference:q.page_reference||'',personalNote:q.personal_note||'',createdAt:q.created_at||null}));
-   localStorage.setItem('readingShelfQuotesV1',JSON.stringify(knowledgeQuotes));
-  }catch(err){warnings.push('Quotes could not sync: '+(err.message||'unavailable')+'. Your locally saved quotes were preserved.');}
-
+  }else{
+   const err=settingsRes.status==='rejected'?settingsRes.reason:settingsRes.value.error;
+   warnings.push('Reading settings could not sync: '+((err&&err.message)||'unavailable')+'.');
+  }
+  if(sessionsRes.status==='fulfilled'&&!sessionsRes.value.error){
+   const remoteSessions=sessionsRes.value.data;
+   if(Array.isArray(remoteSessions)&&remoteSessions.length){
+    readingSessions=remoteSessions.map(s=>({id:s.id,bookId:s.book_id,pagesRead:Number(s.pages_read)||0,startPage:Number(s.start_page)||0,endPage:Number(s.end_page)||0,sessionDate:s.session_date,createdAt:s.created_at,bookTitle:s.book_title||''}));
+    localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
+   }else if(Array.isArray(remoteSessions)){
+    warnings.push('Supabase returned no reading history. Your locally saved history was preserved.');
+   }
+  }else{
+   const err=sessionsRes.status==='rejected'?sessionsRes.reason:sessionsRes.value.error;
+   warnings.push('Reading history could not sync: '+((err&&err.message)||'unavailable')+'. Your locally saved history was preserved.');
+  }
+  if(knowledgeRes.status==='fulfilled'&&!knowledgeRes.value.error){
+   const remoteKnowledge=knowledgeRes.value.data;
+   if(Array.isArray(remoteKnowledge)&&remoteKnowledge.length){
+    bookKnowledge={};
+    remoteKnowledge.forEach(row=>{bookKnowledge[row.book_id]={summary:row.summary||'',keyConcepts:row.key_concepts||'',takeaways:row.takeaways||'',applications:row.applications||'',reflectionQuestions:row.reflection_questions||'',updatedAt:row.updated_at||null};});
+    localStorage.setItem('readingShelfKnowledgeV1',JSON.stringify(bookKnowledge));
+   }else if(Array.isArray(remoteKnowledge)){
+    warnings.push('Supabase returned no knowledge notes. Your locally saved notes were preserved.');
+   }
+  }else{
+   const err=knowledgeRes.status==='rejected'?knowledgeRes.reason:knowledgeRes.value.error;
+   warnings.push('Knowledge notes could not sync: '+((err&&err.message)||'unavailable')+'. Your locally saved notes were preserved.');
+  }
+  if(quotesRes.status==='fulfilled'&&!quotesRes.value.error){
+   const remoteQuotes=quotesRes.value.data;
+   if(Array.isArray(remoteQuotes)&&remoteQuotes.length){
+    knowledgeQuotes=remoteQuotes.map(q=>({id:q.id,bookId:q.book_id,quoteText:q.quote_text,pageReference:q.page_reference||'',personalNote:q.personal_note||'',createdAt:q.created_at||null}));
+    localStorage.setItem('readingShelfQuotesV1',JSON.stringify(knowledgeQuotes));
+   }else if(Array.isArray(remoteQuotes)){
+    warnings.push('Supabase returned no quotes. Your locally saved quotes were preserved.');
+   }
+  }else{
+   const err=quotesRes.status==='rejected'?quotesRes.reason:quotesRes.value.error;
+   warnings.push('Quotes could not sync: '+((err&&err.message)||'unavailable')+'. Your locally saved quotes were preserved.');
+  }
   if(!selectedKnowledgeBook&&books.length)selectedKnowledgeBook=String(books[0].id);
-  await loadReadingPlans();
+  await plansLoad;
  }finally{
   // Always render the available data, even if one or more cloud requests fail.
   render();renderKnowledge();renderReadingPlans();
@@ -567,32 +737,25 @@ async function loadCloudData(){
   else message('Cloud sync is active. Your books, reading history and knowledge notes are loaded.');
  }
 }
-function localDateString(date=new Date()){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');return `${y}-${m}-${d}`}
-async function recordReadingSession(book,fromPage,toPage){
- const start=Math.max(0,Number(fromPage)||0),end=Math.max(0,Number(toPage)||0),pages=end-start;
- if(pages<=0)return;
- const session={id:`local-${Date.now()}-${Math.random().toString(16).slice(2)}`,bookId:book.id,pagesRead:pages,startPage:start,endPage:end,sessionDate:localDateString(),createdAt:new Date().toISOString(),bookTitle:book.title||''};
- readingSessions.unshift(session);
- localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
- renderReadingHistory();
- if(currentUser){
-  const {data,error}=await db.from('reading_sessions').insert({user_id:currentUser.id,book_id:book.id,pages_read:pages,start_page:start,end_page:end,session_date:session.sessionDate,book_title:book.title||null}).select('*').single();
-  if(error){message('Book progress saved, but reading history could not sync: '+error.message,true);return}
-  readingSessions=readingSessions.filter(s=>s.id!==session.id);
-  readingSessions.unshift({id:data.id,bookId:data.book_id,pagesRead:Number(data.pages_read)||0,startPage:Number(data.start_page)||0,endPage:Number(data.end_page)||0,sessionDate:data.session_date,createdAt:data.created_at,bookTitle:data.book_title||book.title||''});
-  localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
-  renderReadingHistory();
- }
-}
 async function persist(){localStorage.setItem(KEY,JSON.stringify(books));render();if(!currentUser)return;try{for(let i=0;i<books.length;i++){const b=books[i],isUuid=typeof b.id==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(b.id);const payload={user_id:currentUser.id,title:b.title,author:b.author||null,category:JSON.stringify(parseCategories(b.categories??b.category)),page_count:b.totalPages||null,current_page:b.currentPage||0,status:b.status==='want'?'want-to-read':b.status,notes:b.notes||null,rating:b.rating||null,cover_url:b.coverUrl||null,completed_at:b.completedAt||null};if(isUuid){const {error}=await db.from('books').update(payload).eq('id',b.id);if(error)throw error}else{const {data,error}=await db.from('books').insert(payload).select('id').single();if(error)throw error;books[i].id=data.id}}localStorage.setItem(KEY,JSON.stringify(books));message('Saved to your cloud shelf.')}catch(err){message('Could not save to cloud: '+err.message,true)}}
-async function saveGoal(){goal=Math.max(1,Number($('goalInput').value)||5);$('goalInput').value=goal;if($('settingsGoalInput'))$('settingsGoalInput').value=goal;localStorage.setItem('readingShelfGoal',goal);renderInsights();if(currentUser){const {error}=await db.from('reading_settings').upsert({user_id:currentUser.id,daily_page_goal:goal,annual_book_goal:annualBookGoal,general_notes:$('generalNotes').value||''});if(error)message('Could not save goal: '+error.message,true);else message('Daily goal saved to your cloud shelf.')}}
+async function saveGoal(){
+ goal=Math.max(1,Number($('goalInput').value)||5);
+ $('goalInput').value=goal;if($('settingsGoalInput'))$('settingsGoalInput').value=goal;
+ localStorage.setItem('readingShelfGoal',goal);
+ renderInsights();renderGoalProgress();
+ if(currentUser){
+  const {error}=await db.from('reading_settings').upsert({user_id:currentUser.id,daily_page_goal:goal,annual_book_goal:annualBookGoal,general_notes:$('generalNotes').value||''});
+  if(error){message('Could not save goal: '+error.message,true);return;}
+ }
+ message(currentUser?'Daily goal saved to your cloud shelf.':'Daily goal saved on this device.');
+}
 async function saveGoalFromSettings(){ $('goalInput').value=$('settingsGoalInput').value; await saveGoal(); }
-function setView(view,button){activeView=view;document.querySelectorAll('.app-view').forEach(el=>el.hidden=true);const target=$(view+'View');if(target)target.hidden=false;document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.view===view));if(view==='insights')renderInsights();if(view==='knowledge'){renderKnowledge();renderKnowledgeSearch()}if(view==='plans')renderReadingPlans();window.scrollTo({top:0,behavior:'smooth'});}
+function setView(view,button){activeView=view;document.querySelectorAll('.app-view').forEach(el=>el.hidden=true);const target=$(view+'View');if(target)target.hidden=false;document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.view===view));if(view==='home'){render();renderReadingPlans()}else if(view==='library')render();else if(view==='insights')renderInsights();else if(view==='knowledge'){renderKnowledge();renderKnowledgeSearch()}else if(view==='plans')renderReadingPlans();window.scrollTo({top:0,behavior:'smooth'});}
 function changeCalendarMonth(delta){calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+delta,1);renderCalendar();}
 function readingDayTotals(){const totals=new Map();readingSessions.forEach(s=>{const d=s.sessionDate;if(!d)return;totals.set(d,(totals.get(d)||0)+(Number(s.pagesRead)||0));});return totals;}
 function calculateStreaks(){const totals=readingDayTotals(),dates=[...totals.keys()].filter(d=>totals.get(d)>0).sort();if(!dates.length)return {current:0,best:0};const dayMs=86400000;const toUTC=d=>{const [y,m,day]=d.split('-').map(Number);return Date.UTC(y,m-1,day)};let best=0,run=0,previous=null;for(const d of dates){const stamp=toUTC(d);run=previous!==null&&stamp-previous===dayMs?run+1:1;best=Math.max(best,run);previous=stamp;}const today=localDateString(),yesterday=localDateString(new Date(Date.now()-dayMs));let cursor=totals.has(today)?today:(totals.has(yesterday)?yesterday:null),current=0;if(cursor){while(totals.has(cursor)){current++;const [y,m,d]=cursor.split('-').map(Number);cursor=localDateString(new Date(y,m-1,d-1));}}return {current,best};}
 function renderCalendar(){const totals=readingDayTotals(),year=calendarMonth.getFullYear(),month=calendarMonth.getMonth(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,daysInMonth=new Date(year,month+1,0).getDate(),cells=Math.ceil((offset+daysInMonth)/7)*7;$('calendarMonthLabel').textContent=calendarMonth.toLocaleDateString(undefined,{month:'long',year:'numeric'});let out='';for(let i=0;i<cells;i++){const day=i-offset+1;if(day<1||day>daysInMonth){out+='<div class="calendar-day muted" aria-hidden="true"></div>';continue;}const date=localDateString(new Date(year,month,day)),pages=totals.get(date)||0,level=pages>=25?3:pages>=10?2:pages>0?1:0,today=date===localDateString();out+=`<div class="calendar-day level-${level} ${today?'today':''}" title="${date}: ${pages} pages"><span class="day-number">${day}</span><span class="day-pages">${pages?pages+' pages':''}</span></div>`;}$('calendarGrid').innerHTML=out;}
-function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.sessions>0).length,weeklyGoal=goal*7,percent=Math.min(100,Math.round(pages/Math.max(1,weeklyGoal)*100)),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target';$('weeklyGoalBar').style.width=percent+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');renderCalendar();renderAdvancedAnalytics();}
+function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.sessions>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');renderCalendar();renderAdvancedAnalytics();}
 
 function renderAdvancedAnalytics(){
  const now=new Date(),year=now.getFullYear(),month=now.getMonth(),totals=readingDayTotals();
@@ -747,7 +910,7 @@ async function addKnowledgeQuote(){
 }
 async function deleteKnowledgeQuote(id){
  const q=knowledgeQuotes.find(x=>String(x.id)===String(id));if(!q)return;
- if(!confirm('Delete this saved quote?'))return;
+ if(!(await askConfirm('Delete this quote?','Delete this saved quote?','Delete')))return;
  if(currentUser&&!String(id).startsWith('local-')){const {error}=await db.from('book_quotes').delete().eq('id',id);if(error){message('Could not delete quote: '+error.message,true);return;}}
  knowledgeQuotes=knowledgeQuotes.filter(x=>String(x.id)!==String(id));localStorage.setItem('readingShelfQuotesV1',JSON.stringify(knowledgeQuotes));
  renderKnowledge();renderKnowledgeSearch();message('Quote deleted.');
@@ -784,16 +947,44 @@ function statusKey(value){
  if(['completed','complete','finished','read'].includes(raw))return 'completed';
  return raw;
 }
+function statusLabel(value){return {want:'Want to read',reading:'Currently reading',completed:'Completed'}[statusKey(value)]||String(value||'');}
+function bookDatesHTML(b){
+ const parts=[];
+ if(b.startedAt)parts.push('Started '+fmtDate(b.startedAt));
+ if(statusKey(b.status)==='completed'&&b.completedAt)parts.push('Finished '+fmtDate(b.completedAt));
+ return parts.length?`<p class="book-dates">${esc(parts.join(' · '))}</p>`:'';
+}
+function bookCardHTML(b){
+ const st=statusKey(b.status);
+ const action=st==='completed'?`<button class="mini" onclick="startBook('${b.id}')">Read again</button>`:st==='reading'?`<button class="mini" onclick="editBook('${b.id}')">Update</button>`:`<button class="mini" onclick="startBook('${b.id}')">Start reading</button>`;
+ const progress=b.totalPages?`<div class="progress"><div style="width:${pct(b)}%"></div></div><p style="margin-top:5px">Page ${b.currentPage||0} of ${b.totalPages} · ${pct(b)}% complete</p>`:`<p style="margin-top:5px">Page ${b.currentPage||0} · total pages not set</p>`;
+ const quick=st==='reading'?`<div class="quick-progress"><input id="quickPage-${b.id}" type="number" min="0" max="${b.totalPages||999999}" value="${b.currentPage||0}" aria-label="Current page for ${esc(b.title)}"><button class="quick-save" onclick="quickSaveProgress('${b.id}','quickPage-${b.id}')">Save page</button><button onclick="quickAddProgress('${b.id}',5)">+5</button><button onclick="quickAddProgress('${b.id}',10)">+10</button></div>`:'';
+ return `<article class="book">${coverHTML(b)}<div class="book-details" style="min-width:0;flex:1"><span class="status-badge status-${st}">${statusLabel(b.status)}</span><h4>${esc(b.title)}</h4><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p>${ratingHTML(b.rating)}${progress}${bookDatesHTML(b)}${quick}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button><button class="mini" onclick="removeBook('${b.id}')">Remove</button></div></div></article>`;
+}
+function renderGoalProgress(){
+ const el=$('goalProgress');if(!el)return;
+ const today=readingDayTotals().get(localDateString())||0;
+ el.textContent=today>=goal?`Goal met — ${today} pages today`:`${today} / ${goal} pages today`;
+ el.classList.toggle('goal-met',today>=goal);
+}
+function setLibrarySearch(value){librarySearch=String(value||'').trim().toLowerCase();render();}
+
 function render(){
  renderReadingHistory();
  renderInsights();
+ renderGoalProgress();
  $('total').textContent=books.length;
  $('readingCount').textContent=books.filter(b=>statusKey(b.status)==='reading').length;
  $('completed').textContent=books.filter(b=>statusKey(b.status)==='completed').length;
  $('pagesRead').textContent=books.reduce((n,b)=>n+(Number(b.currentPage)||0),0);
- let current=books.find(b=>statusKey(b.status)==='reading'),cc=$('currentCard');
- if(current){cc.innerHTML=`${coverHTML(current)}<div class="reading-info"><h4>${esc(current.title)}</h4><p>${esc(current.author||'Author not added')} · ${esc(categoryText(current))}</p>${ratingHTML(current.rating)}<div class="progress"><div style="width:${pct(current)}%"></div></div><div class="progress-meta"><span>Page ${current.currentPage||0}${current.totalPages?' of '+current.totalPages:''}</span><span>${current.totalPages?pct(current)+'%':'Page count not set'}</span></div><div class="quick-progress"><input id="quickPage-current" type="number" min="0" max="${current.totalPages||999999}" value="${current.currentPage||0}" aria-label="Current page for ${esc(current.title)}"><button class="quick-save" onclick="quickSaveProgress('${current.id}','quickPage-current')">Save page</button><button onclick="quickAddProgress('${current.id}',5)">+5</button><button onclick="quickAddProgress('${current.id}',10)">+10</button></div></div>`}
- else cc.innerHTML='<div class="empty">No book selected yet. Add a book and choose “Start reading” to make it your current focus.</div>';
+ const focusBook=books.find(b=>statusKey(b.status)==='reading')||books.filter(b=>statusKey(b.status)==='completed').slice().sort((a,b)=>String(b.completedAt||'').localeCompare(String(a.completedAt||'')))[0]||books[0]||null;
+ const focusLabel=focusBook?(statusKey(focusBook.status)==='reading'?'Your current focus':statusKey(focusBook.status)==='completed'?'Last finished':'Continue'):'';
+ const cc=$('currentCard');
+ if(focusBook){
+  const isReading=statusKey(focusBook.status)==='reading';
+  $('focusHint').textContent=focusLabel;
+  cc.innerHTML=`${coverHTML(focusBook)}<div class="reading-info"><h4>${esc(focusBook.title)}</h4><p>${esc(focusBook.author||'Author not added')} · ${esc(categoryText(focusBook))}</p>${ratingHTML(focusBook.rating)}<div class="progress"><div style="width:${pct(focusBook)}%"></div></div><div class="progress-meta"><span>Page ${focusBook.currentPage||0}${focusBook.totalPages?' of '+focusBook.totalPages:''}</span><span>${focusBook.totalPages?pct(focusBook)+'%':'Page count not set'}</span></div>${bookDatesHTML(focusBook)}${isReading?`<div class="quick-progress"><input id="quickPage-current" type="number" min="0" max="${focusBook.totalPages||999999}" value="${focusBook.currentPage||0}" aria-label="Current page for ${esc(focusBook.title)}"><button class="quick-save" onclick="quickSaveProgress('${focusBook.id}','quickPage-current')">Save page</button><button onclick="quickAddProgress('${focusBook.id}',5)">+5</button><button onclick="quickAddProgress('${focusBook.id}',10)">+10</button></div>`:`<div class="book-actions" style="margin-top:10px"><button class="mini" onclick="startBook('${focusBook.id}')">${statusKey(focusBook.status)==='completed'?'Read again':'Start reading'}</button><button class="mini" onclick="editBook('${focusBook.id}')">Edit</button></div>`}</div>`;
+ }else{cc.innerHTML='<div class="empty">No book selected yet. Add a book and choose “Start reading” to make it your current focus.</div>';}
  const statusBooks=books.filter(b=>filter==='all'||statusKey(b.status)===filter);
  const categoryCounts=[...new Set(statusBooks.flatMap(book=>parseCategories(book.categories??book.category)))].sort((a,b)=>a.localeCompare(b)).map(category=>({category,count:statusBooks.filter(book=>parseCategories(book.categories??book.category).some(value=>value.toLowerCase()===category.toLowerCase())).length}));
  const availableCategories=categoryCounts.map(item=>item.category.toLowerCase());
@@ -806,49 +997,104 @@ function render(){
  $('categoryOverview').innerHTML=categoryCounts.length
  ? categoryCounts.map(item=>{const checked=selectedCategoryFilters.some(value=>value.toLowerCase()===item.category.toLowerCase());return `<label class="category-tile ${checked?'active':''}"><input class="category-check" type="checkbox" value="${esc(item.category)}" ${checked?'checked':''} onchange="toggleCategoryFilter(this.value,this.checked)"><strong>${esc(item.category)}</strong><span><b class="category-number">${item.count}</b> ${item.count===1?'book':'books'}</span></label>`}).join('')
  : '<div class="empty">No books in this status yet.</div>';
- const shown=statusBooks.filter(b=>!selectedCategoryFilters.length||parseCategories(b.categories??b.category).some(value=>selectedCategoryFilters.some(selected=>value.toLowerCase()===selected.toLowerCase())));
+ const shown=statusBooks.filter(b=>!selectedCategoryFilters.length||parseCategories(b.categories??b.category).some(value=>selectedCategoryFilters.some(selected=>value.toLowerCase()===selected.toLowerCase()))).filter(b=>!librarySearch||((b.title||'')+' '+(b.author||'')).toLowerCase().includes(librarySearch));
  $('bookCount').textContent=`${shown.length} of ${books.length} books displayed`;
- $('categoryResultCount').textContent=selectedCategoryFilters.length
-  ? `Showing ${shown.length} of ${books.length} books · ${selectedCategoryFilters.length} ${selectedCategoryFilters.length===1?'category':'categories'} selected${filter!=='all'?' · '+({want:'Want to read',reading:'Reading',completed:'Completed'}[filter]):''}`
-  : `Showing ${shown.length} of ${books.length} books${filter!=='all'?' · '+({want:'Want to read',reading:'Reading',completed:'Completed'}[filter]):''}`;
+ $('categoryResultCount').textContent=(selectedCategoryFilters.length||filter!=='all')?[selectedCategoryFilters.length?selectedCategoryFilters.length+(selectedCategoryFilters.length===1?' category':' categories')+' selected':null,filter!=='all'?({want:'Want to read',reading:'Reading',completed:'Completed'}[filter]):null].filter(Boolean).join(' · '):'Showing all books';
  $('clearCategorySelection').disabled=selectedCategoryFilters.length===0;
- $('books').innerHTML=shown.length?shown.map(b=>`<article class="book">${coverHTML(b)}<div class="book-details" style="min-width:0;flex:1"><h4>${esc(b.title)}</h4><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p>${ratingHTML(b.rating)}${statusKey(b.status)==='reading'?`<div class="progress"><div style="width:${pct(b)}%"></div></div><p style="margin-top:5px">${b.totalPages?pct(b)+'% complete':'Page '+(b.currentPage||0)}</p><div class="quick-progress"><input id="quickPage-${b.id}" type="number" min="0" max="${b.totalPages||999999}" value="${b.currentPage||0}" aria-label="Current page for ${esc(b.title)}"><button class="quick-save" onclick="quickSaveProgress('${b.id}','quickPage-${b.id}')">Save page</button><button onclick="quickAddProgress('${b.id}',5)">+5</button><button onclick="quickAddProgress('${b.id}',10)">+10</button></div>`:''}<div class="book-actions">${statusKey(b.status)!=='reading'?`<button class="mini" onclick="startBook('${b.id}')">Start reading</button>`:`<button class="mini" onclick="editBook('${b.id}')">Update</button>`}<button class="mini" onclick="editBook('${b.id}')">Edit</button><button class="mini" onclick="removeBook('${b.id}')">Remove</button></div></div></article>`).join(''):'<div class="empty">No books match these filters. Try another category or clear your selection.</div>';
+ $('books').innerHTML=shown.length?shown.map(bookCardHTML).join(''):(librarySearch?'<div class="empty">No books match your search. Try another title or author.</div>':'<div class="empty">No books match these filters. Try another category or clear your selection.</div>');
 }
 function setFilter(f,el){filter=['all','want','reading','completed'].includes(f)?f:'all';selectedCategoryFilters=[];render()}
 function toggleCategoryFilter(value,checked){const key=String(value).toLowerCase();selectedCategoryFilters=selectedCategoryFilters.filter(item=>item.toLowerCase()!==key);if(checked)selectedCategoryFilters.push(value);render()}
 function clearCategorySelection(){selectedCategoryFilters=[];render()}
-function openAdd(){$('bookForm').reset();$('bookId').value='';$('currentPage').value=0;$('coverUrl').value='';$('coverPreview').innerHTML='';$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';renderCategoryOptions(['Other']);$('modalTitle').textContent='Add a book';$('modal').classList.add('show')}
+function openAdd(){$('bookForm').reset();$('bookId').value='';$('currentPage').value=0;$('startedAt').value='';$('finishedAt').value='';$('coverUrl').value='';$('coverPreview').innerHTML='';$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';renderCategoryOptions(['Other']);$('modalTitle').textContent='Add a book';$('modal').classList.add('show')}
 function closeModal(){$('modal').classList.remove('show')}
-function editBook(id){let b=books.find(x=>x.id===id);if(!b)return;$('bookId').value=b.id;$('title').value=b.title;$('author').value=b.author||'';renderCategoryOptions(b.categories??b.category);$('totalPages').value=b.totalPages||'';$('status').value=b.status;$('rating').value=b.rating||'';$('currentPage').value=b.currentPage||0;$('coverUrl').value=b.coverUrl||'';updateCoverPreview();$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';$('modalTitle').textContent='Update book';$('modal').classList.add('show')}
+function editBook(id){let b=books.find(x=>x.id===id);if(!b)return;$('bookId').value=b.id;$('title').value=b.title;$('author').value=b.author||'';renderCategoryOptions(b.categories??b.category);$('totalPages').value=b.totalPages||'';$('status').value=b.status;$('rating').value=b.rating||'';$('currentPage').value=b.currentPage||0;$('startedAt').value=b.startedAt?String(b.startedAt).slice(0,10):'';$('finishedAt').value=b.completedAt?String(b.completedAt).slice(0,10):'';$('coverUrl').value=b.coverUrl||'';updateCoverPreview();$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';$('modalTitle').textContent='Update book';$('modal').classList.add('show')}
 async function quickSaveProgress(id,inputId){
  const book=books.find(b=>b.id===id),input=$(inputId);if(!book||!input)return;
  const previous=Number(book.currentPage)||0;
- let next=Math.max(0,Number(input.value)||0);
- if(book.totalPages)next=Math.min(next,Number(book.totalPages));
- if(next<previous){if(!confirm('This page number is lower than your saved progress. Save the correction?')){input.value=previous;return}}
+ const requested=Math.max(0,Number(input.value)||0);
+ let next=requested,clamped=false;
+ if(book.totalPages&&next>Number(book.totalPages)){next=Number(book.totalPages);clamped=true;}
+ if(next<previous){if(!(await askConfirm('Save a lower page?','This page number is lower than your saved progress. Save the correction?','Save correction'))){input.value=previous;return}}
  book.currentPage=next;
  if(book.totalPages&&next>=book.totalPages){if(book.status!=='completed')book.completedAt=new Date().toISOString();book.status='completed';}
  await persist();
  if(next>previous)await recordReadingSession(book,previous,next);
+ if(clamped)message('Page cannot exceed '+book.totalPages+', so it was set to '+book.totalPages+'.');
 }
 async function quickAddProgress(id,amount){
  const book=books.find(b=>b.id===id);if(!book)return;
  const previous=Number(book.currentPage)||0;
- let next=previous+amount;
- if(book.totalPages)next=Math.min(next,Number(book.totalPages));
+ let next=previous+amount,clamped=false;
+ if(book.totalPages&&next>Number(book.totalPages)){next=Number(book.totalPages);clamped=true;}
  if(next===previous){message('This book is already at its final page.');return}
  book.currentPage=next;
  if(book.totalPages&&next>=book.totalPages){if(book.status!=='completed')book.completedAt=new Date().toISOString();book.status='completed';}
  await persist();
  await recordReadingSession(book,previous,next);
+ if(clamped)message('Page cannot exceed '+book.totalPages+', so it was set to '+book.totalPages+'.');
 }
-async function saveBook(e){e.preventDefault();let id=$('bookId').value;const previousBook=books.find(x=>x.id===id);const previousPage=previousBook?Number(previousBook.currentPage)||0:0;let b={id:id||String(Date.now()),title:$('title').value.trim(),author:$('author').value.trim(),categories:selectedCategories(),totalPages:Number($('totalPages').value)||0,currentPage:Number($('currentPage').value)||0,status:$('status').value,rating:$('rating').value?Number($('rating').value):null,coverUrl:safeCoverUrl($('coverUrl').value),completedAt:previousBook?.completedAt||null};if(!b.categories.length){alert('Please select at least one category.');return}b.currentPage=Math.max(0,b.currentPage);if(b.totalPages)b.currentPage=Math.min(b.currentPage,b.totalPages);if(b.status==='completed'&&b.totalPages)b.currentPage=b.totalPages;if(b.status==='completed'&&previousBook?.status!=='completed')b.completedAt=new Date().toISOString();if(b.status!=='completed')b.completedAt=null;if(b.status==='reading')books.forEach(x=>{if(x.id!==id&&x.status==='reading')x.status='want'});let i=books.findIndex(x=>x.id===id);if(i>=0)books[i]=b;else books.unshift(b);closeModal();await persist();if(previousBook&&b.currentPage>previousPage)await recordReadingSession(b,previousPage,b.currentPage)}
+async function saveBook(e){
+ e.preventDefault();
+ let id=$('bookId').value;
+ const previousBook=books.find(x=>x.id===id);
+ const previousPage=previousBook?Number(previousBook.currentPage)||0:0;
+ const requestedPage=Number($('currentPage').value)||0;
+ let b={id:id||String(Date.now()),title:$('title').value.trim(),author:$('author').value.trim(),categories:selectedCategories(),totalPages:Number($('totalPages').value)||0,currentPage:requestedPage,status:$('status').value,rating:$('rating').value?Number($('rating').value):null,coverUrl:safeCoverUrl($('coverUrl').value),startedAt:$('startedAt').value||previousBook?.startedAt||null,completedAt:previousBook?.completedAt||null};
+ if(!b.categories.length){await showNotice('Choose a category','Please select at least one category.');return;}
+ b.currentPage=Math.max(0,b.currentPage);
+ let clamped=false;
+ if(b.totalPages&&b.currentPage>b.totalPages){b.currentPage=b.totalPages;clamped=true;}
+ if(b.totalPages&&b.currentPage>=b.totalPages&&b.status!=='completed')b.status='completed';
+ if(b.status==='completed'&&b.totalPages)b.currentPage=b.totalPages;
+ if(b.status==='completed'){
+  const finishedInput=$('finishedAt').value;
+  b.completedAt=finishedInput?new Date(finishedInput+'T12:00:00').toISOString():(previousBook?.completedAt||new Date().toISOString());
+ }else b.completedAt=null;
+ if(b.status==='reading')books.forEach(x=>{if(x.id!==id&&x.status==='reading')x.status='want'});
+ let i=books.findIndex(x=>x.id===id);
+ if(i>=0)books[i]=b;else books.unshift(b);
+ closeModal();
+ await persist();
+ if(previousBook&&b.currentPage>previousPage)await recordReadingSession(b,previousPage,b.currentPage);
+ if(clamped)message('Page cannot exceed '+b.totalPages+', so it was set to '+b.totalPages+'.');
+}
 async function startBook(id){books.forEach(b=>{if(b.status==='reading')b.status='want'});let b=books.find(x=>x.id===id);b.status='reading';await persist()}
-async function removeBook(id){if(confirm('Remove this book from your shelf?')){books=books.filter(b=>b.id!==id);if(currentUser){const {error}=await db.from('books').delete().eq('id',id);if(error)message('Could not remove from cloud: '+error.message,true)}await persist()}}
+async function removeBook(id){
+ const index=books.findIndex(b=>b.id===id);
+ const removed=books[index];
+ if(!removed)return;
+ if(!(await askConfirm('Remove this book?','Remove “'+removed.title+'” from your shelf?','Remove')))return;
+ books=books.filter(b=>b.id!==id);
+ if(currentUser){
+  const {error}=await db.from('books').delete().eq('id',id);
+  if(error){books.splice(index,0,removed);render();message('Could not remove from cloud: '+error.message,true);return;}
+ }
+ await persist();
+ lastRemovedBook=removed;lastRemovedIndex=index;
+ showUndoToast('“'+removed.title+'” removed.');
+}
 
-function exportExcel(){
- if(!books.length){alert('Your bookshelf is empty. Add a book before exporting.');return}
- if(!window.XLSX){alert('The Excel export library did not load. Check your internet connection and try again.');return}
+let xlsxLoadPromise=null;
+function loadXlsxLibrary(){
+ if(window.XLSX)return Promise.resolve(true);
+ if(xlsxLoadPromise)return xlsxLoadPromise;
+ xlsxLoadPromise=new Promise(resolve=>{
+  const s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+  s.onload=()=>resolve(!!window.XLSX);
+  s.onerror=()=>{xlsxLoadPromise=null;resolve(false);};
+  document.head.appendChild(s);
+ });
+ return xlsxLoadPromise;
+}
+async function exportExcel(){
+ if(!books.length){showNotice('Nothing to export','Your bookshelf is empty. Add a book before exporting.');return}
+ if(!window.XLSX){
+  message('Loading the Excel export library…');
+  const loaded=await loadXlsxLibrary();
+  if(!loaded){showNotice('Export unavailable','The Excel export library could not load. Check your internet connection and try Export again.');return}
+ }
  const statusLabels={want:'Want to read',reading:'Currently reading',completed:'Completed'};
  const rows=books.map(b=>{
   const categories=parseCategories(b.categories??b.category);
@@ -972,7 +1218,7 @@ function renderReadingPlans(){
  <div class="plan-progress"><span style="width:${percent}%"></span></div><div class="plan-today"><strong>Reading focus</strong><br>${esc(todayText)}</div>
  <div id="planDailySchedule"></div>
  <div class="section-head"><h3>Plan settings</h3><span>Saved to your account when signed in</span></div>
- <div class="plan-settings"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Target end date<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label><label>Daily page goal<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div><div class="plan-note">Reading days: ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].filter((d,i)=>(plan.reading_days||[1,2,3,4,5]).includes(i+1)).join(', ')||'Not set'} (the current schedule uses your saved reading-day settings).</div>
+ <div class="plan-settings"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Target end date<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label><label>Plan pace (pages/day)<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div><div class="plan-note">Reading days: ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].filter((d,i)=>(plan.reading_days||[1,2,3,4,5]).includes(i+1)).join(', ')||'Not set'} (the current schedule uses your saved reading-day settings).</div>
  <div class="plan-toolbar"><button class="secondary" onclick="saveReadingPlanSettings()">Save settings</button><span class="plan-note">Estimated finish based on known remaining pages: ${knownRemaining?planDateValue(finishDate):'not available'} · assumes ${perDay} pages every calendar day</span></div>
  <div class="section-head"><h3>Books in this plan</h3><span>${items.length} assigned</span></div>
  <div class="plan-book-list">${rows||'<div class="plan-empty">No books have been added yet.</div>'}</div>
@@ -1113,7 +1359,7 @@ async function selectReadingPlan(id){
  planLocalSave();renderReadingPlans();
 }
 async function createEmptyReadingPlan(){
- const name=prompt('Name your reading plan:','Personal Reading Curriculum');if(name===null)return;
+ const name=await askInput('Name your reading plan','Give your new plan a name.','Plan name','Personal Reading Curriculum','Create plan');if(name===null)return;
  const draft={name:name.trim()||'Personal Reading Curriculum',start_date:planDateValue(new Date()),target_end_date:null,daily_page_goal:25,reading_days:[1,2,3,4,5],status:'active'};
  if(currentUser){const {data,error}=await db.from('reading_plans').insert({...draft,user_id:currentUser.id}).select('*').single();if(error){message('Could not create plan: '+error.message,true);return;}readingPlans.unshift(data);selectedReadingPlanId=data.id;readingPlanBooks=[];}
  else{const id='local-plan-'+Date.now();readingPlans.unshift({id,...draft,created_at:new Date().toISOString()});selectedReadingPlanId=id;readingPlanBooks=[];}
@@ -1122,7 +1368,7 @@ async function createEmptyReadingPlan(){
 async function createPlanFromUnread(){
  const candidates=books.filter(b=>statusKey(b.status)!=='completed'&&!/^AWS Training Notes 2023$/i.test(String(b.title||'').trim()));
  if(!candidates.length){message('No unread books found to add to a plan.',true);return;}
- const name=prompt('Name your reading plan:','Personal Reading Curriculum');if(name===null)return;
+ const name=await askInput('Name your reading plan','Give your new plan a name.','Plan name','Personal Reading Curriculum','Create plan');if(name===null)return;
  const draft={name:name.trim()||'Personal Reading Curriculum',start_date:planDateValue(new Date()),target_end_date:null,daily_page_goal:25,reading_days:[1,2,3,4,5],status:'active'};
  let plan;
  if(currentUser){const {data,error}=await db.from('reading_plans').insert({...draft,user_id:currentUser.id}).select('*').single();if(error){message('Could not create plan: '+error.message,true);return;}plan=data;}
@@ -1137,9 +1383,9 @@ async function addBooksToPlan(){
  const existing=new Set(readingPlanBooks.map(i=>String(i.book_id)));
  const candidates=books.filter(b=>statusKey(b.status)!=='completed'&&!existing.has(String(b.id)));
  if(!candidates.length){message('There are no additional unread books to add.');return;}
- const choices=candidates.map((b,i)=>`${i+1}. ${b.title}${Number(b.totalPages)?'': ' (page count missing)'}`).join('\n');
- const answer=prompt('Enter book numbers separated by commas to add:\n\n'+choices);if(answer===null||!answer.trim())return;
- const chosen=[...new Set(answer.split(',').map(v=>Number(v.trim())-1).filter(i=>Number.isInteger(i)&&i>=0&&i<candidates.length))].map(i=>candidates[i]);if(!chosen.length){message('No valid books selected.',true);return;}
+ const selected=await showConfirmDialog({title:'Add books to plan',message:'Choose the books to add to this plan.',choices:candidates.map((b,i)=>({value:String(i),label:b.title+(Number(b.totalPages)?'':' (page count missing)')})),confirmLabel:'Add books'});
+ if(!selected||!selected.length)return;
+ const chosen=[...new Set(selected.map(v=>Number(v)).filter(i=>Number.isInteger(i)&&i>=0&&i<candidates.length))].map(i=>candidates[i]);if(!chosen.length){message('No valid books selected.',true);return;}
  const next=readingPlanBooks.reduce((m,i)=>Math.max(m,Number(i.sequence_number)||0),0)+1;
  if(currentUser&&plansCloudReady){const rows=chosen.filter(b=>planIsUuid(b.id)).map((b,i)=>({user_id:currentUser.id,plan_id:plan.id,book_id:b.id,sequence_number:next+i,schedule_mode:Number(b.totalPages)>0?'pages':'manual'}));if(rows.length){const {data,error}=await db.from('reading_plan_books').insert(rows).select('*');if(error){message('Could not add books: '+error.message,true);return;}readingPlanBooks.push(...(data||[]));}}
  else chosen.forEach((b,i)=>readingPlanBooks.push({id:`local-plan-book-${Date.now()}-${i}`,plan_id:plan.id,book_id:b.id,sequence_number:next+i,schedule_mode:Number(b.totalPages)>0?'pages':'manual',chapter_count:null,current_chapter:0,chapters_per_day:1,manual_assignment:null}));
@@ -1155,16 +1401,24 @@ async function saveReadingPlanSettings(){
 }
 async function configurePlanBook(id){
  const item=readingPlanBooks.find(i=>String(i.id)===String(id));if(!item)return;
- const choice=prompt('Choose schedule type: pages, chapters, or manual.',item.schedule_mode||'pages');if(choice===null)return;
- const mode=choice.trim().toLowerCase();if(!['pages','chapters','manual'].includes(mode)){message('Choose pages, chapters, or manual.',true);return;}
+ const picked=await showConfirmDialog({title:'Book schedule',message:'Choose how this book is scheduled in the plan.',choices:[{value:'pages',label:'Pages'},{value:'chapters',label:'Chapters'},{value:'manual',label:'Manual'}],choiceType:'radio',selectedValue:item.schedule_mode||'pages',confirmLabel:'Continue'});
+ if(!picked||!picked.length)return;
+ const mode=picked[0];
  const patch={schedule_mode:mode};
  if(mode==='chapters'){
-  const total=Number(prompt('How many chapters are in this book?',item.chapter_count||''));if(!Number.isInteger(total)||total<1){message('Enter a valid chapter count.',true);return;}
-  const current=Number(prompt('What chapter are you currently on? Enter 0 if you have not started.',item.current_chapter||0));if(!Number.isInteger(current)||current<0||current>total){message('Enter a current chapter between 0 and the total.',true);return;}
-  const per=Number(prompt('How many chapters per reading day?',item.chapters_per_day||1));if(!Number.isInteger(per)||per<1){message('Enter a positive chapters-per-day target.',true);return;}
+  const totalText=await askInput('Chapters in this book','How many chapters are in this book?','Chapter count',item.chapter_count==null?'':String(item.chapter_count),'Continue','number');
+  if(totalText===null)return;
+  const total=Number(totalText);if(!Number.isInteger(total)||total<1){showNotice('Check the chapter count','Enter a valid chapter count.');return;}
+  const currentText=await askInput('Current chapter','What chapter are you currently on? Enter 0 if you have not started.','Current chapter',String(item.current_chapter||0),'Continue','number');
+  if(currentText===null)return;
+  const current=Number(currentText);if(!Number.isInteger(current)||current<0||current>total){showNotice('Check the current chapter','Enter a current chapter between 0 and the total.');return;}
+  const perText=await askInput('Chapters per reading day','How many chapters per reading day?','Chapters per day',String(item.chapters_per_day||1),'Save','number');
+  if(perText===null)return;
+  const per=Number(perText);if(!Number.isInteger(per)||per<1){showNotice('Check the chapters per day','Enter a positive chapters-per-day target.');return;}
   Object.assign(patch,{chapter_count:total,current_chapter:current,chapters_per_day:per,manual_assignment:null});
  }else if(mode==='manual'){
-  const assignment=prompt('Enter a manual assignment, e.g. “Read chapters 1–2”.',item.manual_assignment||'');if(assignment===null)return;
+  const assignment=await askInput('Manual assignment','Enter a manual assignment, e.g. “Read chapters 1–2”.','Assignment',item.manual_assignment||'','Save');
+  if(assignment===null)return;
   Object.assign(patch,{manual_assignment:assignment.trim()||null});
  }else Object.assign(patch,{manual_assignment:null});
  Object.assign(item,patch);await savePlanBookItem(item);renderReadingPlans();message('Book schedule saved.');
@@ -1176,34 +1430,52 @@ async function savePlanBookItem(item){
 async function advancePlanChapters(id){
  const item=readingPlanBooks.find(i=>String(i.id)===String(id));if(!item||!Number(item.chapter_count))return;
  const next=Math.min(Number(item.chapter_count),Number(item.current_chapter||0)+Number(item.chapters_per_day||1));
- if(!confirm(`Mark chapters ${Number(item.current_chapter||0)+1}–${next} as read?`))return;
+ if(!(await askConfirm('Mark chapters read?',`Mark chapters ${Number(item.current_chapter||0)+1}–${next} as read?`,'Mark read')))return;
  item.current_chapter=next;await savePlanBookItem(item);renderReadingPlans();message('Chapter progress updated.');
 }
 async function removePlanBook(id){
  const item=readingPlanBooks.find(i=>String(i.id)===String(id));if(!item)return;
- if(!confirm('Remove this book from the plan? It will remain in My Library.'))return;
+ if(!(await askConfirm('Remove from plan?','Remove this book from the plan? It will remain in My Library.','Remove')))return;
  if(currentUser&&plansCloudReady&&planIsUuid(item.id)){const {error}=await db.from('reading_plan_books').delete().eq('id',item.id).eq('user_id',currentUser.id);if(error){message('Could not remove book from cloud plan: '+error.message,true);return;}}
  readingPlanBooks=readingPlanBooks.filter(i=>String(i.id)!==String(id));planLocalSave();renderReadingPlans();
 }
-async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)return;if(!confirm('Mark this reading plan as completed? This will not change the status of any books.'))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').update({status:'completed'}).eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not update plan: '+error.message,true);return;}}plan.status='completed';planLocalSave();renderReadingPlans();message('Plan marked completed.');}
-async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!confirm('Delete this reading plan and its plan assignments? Your books and reading history will remain untouched.'))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId=readingPlans[0]?.id||'';if(currentUser&&plansCloudReady&&selectedReadingPlanId){const {data,error}=await db.from('reading_plan_books').select('*').eq('user_id',currentUser.id).eq('plan_id',selectedReadingPlanId).order('sequence_number',{ascending:true});if(!error)readingPlanBooks=data||[];}planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
+async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Mark plan completed?','Mark this reading plan as completed? This will not change the status of any books.','Mark completed')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').update({status:'completed'}).eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not update plan: '+error.message,true);return;}}plan.status='completed';planLocalSave();renderReadingPlans();message('Plan marked completed.');}
+async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its plan assignments? Your books and reading history will remain untouched.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId=readingPlans[0]?.id||'';if(currentUser&&plansCloudReady&&selectedReadingPlanId){const {data,error}=await db.from('reading_plan_books').select('*').eq('user_id',currentUser.id).eq('plan_id',selectedReadingPlanId).order('sequence_number',{ascending:true});if(!error)readingPlanBooks=data||[];}planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,lookupBookCovers,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,removeBook,setFilter,setCategoryFilter,exportExcel,quickSaveProgress,quickAddProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
+Object.assign(window,{openAdd,closeModal,saveBook,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,removeBook,setFilter,exportExcel,quickSaveProgress,quickAddProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
 async function init(){
- const {data:{session},error}=await db.auth.getSession();
- if(error)message('Could not restore your sign-in session: '+error.message,true);
+ // Show the locally saved shelf immediately, before waiting on the session,
+ // so the page never sits on hardcoded zeros.
+ render();renderReadingPlans();renderKnowledge();
+ message('Loading your shelf…');
+ let session=null;
+ try{
+  if(!db)throw new Error('the sign-in service did not load');
+  const {data,error}=await db.auth.getSession();
+  if(error)message('Could not restore your sign-in session: '+error.message,true);
+  session=data?.session||null;
+ }catch(err){message('Could not restore your sign-in session: '+(err.message||'unavailable'),true);}
+ lastAuthUserId=session?.user?.id||null;
  setAuthUI(session?.user||null);
- db.auth.onAuthStateChange((event,nextSession)=>{
-  setAuthUI(nextSession?.user||null);
+ if(db)db.auth.onAuthStateChange((event,nextSession)=>{
+  // Ignore the initial event: init() above already set the UI from
+  // getSession(), and the first event can arrive before the session is
+  // restored, which used to flash the signed-out form.
+  if(event==='INITIAL_SESSION')return;
+  const userId=nextSession?.user?.id||null;
+  if(userId!==lastAuthUserId){lastAuthUserId=userId;setAuthUI(nextSession?.user||null);}
   if(nextSession?.user && (event==='SIGNED_IN'||event==='TOKEN_REFRESHED'||event==='USER_UPDATED')){
    setTimeout(()=>loadCloudData(),0);
   }
  });
  if(session?.user)await loadCloudData();
- else{render();renderReadingPlans()}
 }
 init();
+
+// Register the service worker so the app can be installed and opened offline.
+// A failed registration is swallowed so it can never break the app.
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
 </script>
-<input type='hidden' name='ntsp_block_page' value='https://block.canopy.us/?a=block/block1&level=-30&url=http%3A%2F%2Fchatgpt.com%2Fbackend-api%2Festuary%2Fcontent%3Fid%3Dfile_0000000084608212be44a496ddd11b3e%26ts%3D498504%26p%3Dfs%26cid%3D1%26sig%3Dbcd9278a298148dc7883ca9b6de2dac368f5c830f203331c6e0e263f50b490af%26v%3D0&user_id=1446607&sigid=fb9d6f408e50f592e90110bb238e8f79f4b3b60829429d121c9881c2ff9b7ec6&startm=0&keyword=&referer=https%3A%2F%2Fchatgpt.com%2F&category=24&cause=Quiltingjs'/><input type='hidden' name='ntsp_is_etrog' value='0'/><input type='hidden' name='ntsp_url_category' value='24'/><input type='hidden' name='ntsp_quilting' value='3'/><input type='hidden' name='ntsp_media_level' value='-30'/><input type='hidden' name='ntsp_user_level' value='-30'/><input type='hidden' name='ntsp_url_level' value='20'/><input type='hidden' name='ntsp_block_wa_status' value='0'/><script src='/jsQuilting/server/jsDict_utf8.js?v=1&k=23898278c1850f536d688db3614128a0' type='text/javascript' defer></script><input type='hidden' name='ntsp_block_page' value='https://block.canopy.us/?a=block/block1&level=-30&url=http%3A%2F%2Fchatgpt.com%2Fbackend-api%2Festuary%2Fcontent%3Fid%3Dfile_00000000735882128766447f4890078c%26fn%3Dreading-shelf-persistent-login-refresh.html%26cd%3Dattachment%26ts%3D498579%26p%3Dfs%26cid%3D1%26sig%3Da7a676aeaaa3557248a3548c060b6f38310647378ffb5245cb58c611832887ca%26v%3D0&user_id=1446607&sigid=fb9d6f408e50f592e90110bb238e8f79f4b3b60829429d121c9881c2ff9b7ec6&startm=0&keyword=&referer=https%3A%2F%2Fchatgpt.com%2F&category=24&cause=Quiltingjs'/><input type='hidden' name='ntsp_is_etrog' value='0'/><input type='hidden' name='ntsp_url_category' value='24'/><input type='hidden' name='ntsp_quilting' value='3'/><input type='hidden' name='ntsp_media_level' value='-30'/><input type='hidden' name='ntsp_user_level' value='-30'/><input type='hidden' name='ntsp_url_level' value='20'/><input type='hidden' name='ntsp_block_wa_status' value='0'/><script src='/jsQuilting/server/jsDict_utf8.js?v=1&k=23898278c1850f536d688db3614128a0' type='text/javascript' defer></script></body>
+</body>
 </html>
