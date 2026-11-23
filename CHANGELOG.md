@@ -138,6 +138,18 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 **How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
 
+## Fix 24 — Compact header on phone, same design, buttons fit in one row (Ronnie's request)
+
+**Files:** `index.html` (CHANGELOG only).
+
+**What changed:** Ronnie said he just wanted things to fit well and he likes what he made, so the header keeps its original one-row design — no stacking, no redesign. On a phone (600px and below) the header only gets more compact: the subtitle is hidden, the logo is a little smaller (36px), the title is a little smaller (16px), the gaps are tighter, and the five header buttons show only their icon (Sign in →, Sign out ←, Refresh ↻, Export ↓, Add a book ＋) with smaller padding. The button labels are hidden visually but kept for screen readers (visually-hidden text, not `display:none`), so the buttons still announce their names. The hero, the nav, and everything else are untouched. A single row of compact buttons plus the brand now fits in 362px of phone width.
+
+**How it was found:** Ronnie reverted Fix 22 and said he just wanted things to fit well while keeping what he made.
+
+**Why it is believed to be true:** verified by reading the code — the five `btn-text` spans, the compact-header rules, and `node --check` are all clean, and no Fix 22 stacking rules are present. The 390px fit is by width arithmetic (brand ~179px + buttons ~160px + gaps), not measured directly.
+
+**After deploying:** on a phone the header is still one row with the same look, just more compact — the title, the logo, and the five icon buttons all fit with no sideways scrolling. On a computer nothing changes.
+
 ## Fix 23 — Revert Fix 22 (Ronnie did not like the stacked phone layout)
 
 **Files:** `index.html` (CHANGELOG only).
