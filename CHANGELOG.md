@@ -277,5 +277,6 @@ Do these in the live app, signed in as the user:
 19. **Sign-in panel:** on a phone the shelf, navigation, and stats show without scrolling; the sign-in bar is one slim line; tapping Sign in opens the form (button reads Close), and the bar text is serif like the site's headings.
 20. **Dismiss:** tapping Not now hides the whole sign-in panel and it stays hidden on reload; a Sign in button appears in the header; tapping it brings the panel back; signing in clears the dismissal. (Superseded by Fix 20 — the sign-in is now a modal, so there is no panel to dismiss.)
 21. **Modal:** the shelf, navigation, and stats are on the first screen with no scrolling; tapping Sign in opens the sign-in as a popup over the shelf; Close (or tapping outside it, or Escape) returns to the shelf; signing in closes the popup and shows Sign out in the header.
+22. **Phone layout:** on a phone the title is on top, the header buttons are below it and all reachable (Export and Add a book no longer run off the right edge), the hero text is full width, the tabs fit, and the page does not scroll sideways.
 
 If any check fails, the most likely suspects are the deployed file differing from this repo version (see "Deployed file vs repo" above) and the Supabase `books` table lacking a `started_at` column (expected — started dates are local-only by design).
