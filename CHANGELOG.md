@@ -138,6 +138,24 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 **How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
 
+## Fix 22 — Responsive phone layout: header stacks, hero stacks, narrower tabs (Ronnie's request)
+
+**Files:** `index.html` (CHANGELOG only).
+
+**What changed:**
+- **Header stacks on phone** (`@media(max-width:760px)`): `.top` becomes a column, so the title sits on top and the Sign in / Sign out / Refresh / Export / Add a book buttons sit below it in a wrapping row, instead of squeezing side by side. This was the confirmed break: at 500px wide the header ran off the right edge, Export was cut to a sliver, Add a book was fully off screen and unreachable, and the page scrolled sideways.
+- **Hero stacks on phone** (new `@media(max-width:600px)`): `.hero` becomes a column with less padding and a smaller mark, so the welcome text gets the full width instead of being squeezed beside the mark.
+- **Narrower nav tabs on small phones** (`@media(max-width:440px)`): `.nav-item` min-width 78px → 64px, so the six tabs fit better at 390px. The nav already fit in one row at 500px, so it was not wrapped into two rows — it only needed to be narrower.
+- **Safety net:** `overflow-x:clip` on `body`, so no element can push the page sideways and bring the horizontal scrollbar back.
+
+**What was checked and left alone:** a phone-width check (signed in, 29 books) confirmed the header overflow and that the hero, stats (2 columns), and nav fit at 500px; the book grid already drops to one column and the category tiles already wrap (auto-fit), so those were not changed. The dark sign-in popup was reachable at 500px. Tap targets were already about 35px tall, so their padding was not changed.
+
+**How it was found:** Ronnie asked for responsive-mode ideas; a live phone-width check confirmed the header overflow.
+
+**Why it is believed to be true:** verified by reading the code — the four new/changed rules are present, `node --check` is clean. The phone-width check could not reach a true 390px viewport (the browser window could not be resized), so the 390px fit is inferred from the 500px evidence and the CSS, not measured directly.
+
+**After deploying:** on a phone the title is on top, the buttons are below it and all reachable, the hero text is full width, the tabs fit, and the page does not scroll sideways.
+
 ## Fix 21 — One page, Sign in button, white text on the dark popup (Ronnie's request)
 
 **Files:** `index.html` (CHANGELOG only).

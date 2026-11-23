@@ -10,8 +10,8 @@
 <style>
 :root{--bg:#eee7d9;--paper:#fffaf0;--ink:#30291f;--muted:#827766;--green:#294b3b;--green2:#e6ece5;--line:#e3d7c4;--gold:#b18a4e;--burgundy:#7b3f45;--shadow:0 9px 28px rgba(65,48,29,.09)}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-library-background.jpg') center center / cover fixed no-repeat;color:var(--ink);font-family:Georgia,'Times New Roman',serif}
-.app{position:relative;background:rgba(248,242,230,.91);backdrop-filter:blur(3px);border-left:1px solid rgba(255,255,255,.35);border-right:1px solid rgba(255,255,255,.35);min-height:100vh} .top,.section-head{ text-shadow:0 1px 10px rgba(255,250,240,.55)}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;padding:28px 22px 60px}.top{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:18px;margin-bottom:34px}.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;flex:0 0 auto}.top-actions .icon-action{width:42px;height:42px;min-width:42px;padding:0;display:inline-grid;place-items:center;border-radius:8px;transition:background .15s ease,transform .15s ease,box-shadow .15s ease}.top-actions .icon-action:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(41,75,59,.16)}.top-actions .icon-action:focus-visible{outline:3px solid var(--gold);outline-offset:2px}.top-actions .icon-action svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;border-radius:7px;background:linear-gradient(145deg,#355b46,#203d30);color:#fff;display:grid;place-items:center;font-size:23px;box-shadow:inset 0 0 0 1px #ffffff30,0 4px 10px #30291f22}.brand h1{font-size:22px;margin:0;letter-spacing:.2px}.brand small{display:block;color:var(--muted);font:12px Arial;margin-top:3px}.top button,.primary,.secondary{border:0;border-radius:7px;padding:11px 16px;font:600 13px Arial}.primary{background:var(--green);color:white;box-shadow:0 4px 10px #294b3b26}.secondary{background:var(--green2);color:var(--green)}.hero{background:linear-gradient(115deg,#203d30,#355b46 60%,#64765a);color:#fff;border-radius:10px;padding:32px 34px;margin-bottom:22px;display:flex;justify-content:space-between;gap:24px;align-items:center;box-shadow:0 12px 28px rgba(44,54,37,.2);position:relative;overflow:hidden;border:1px solid #a58b5b}.hero:before{content:"";position:absolute;inset:10px;border:1px solid #d9c18c55;border-radius:5px;pointer-events:none}.hero h2{font-size:clamp(26px,4vw,37px);font-weight:normal;margin:0 0 9px;position:relative;z-index:1}.hero p{font:14px/1.65 Arial;margin:0;color:#eee9dc;max-width:570px;position:relative;z-index:1}.hero-mark{font-size:68px;opacity:.92;filter:drop-shadow(0 6px 8px #1118);z-index:1}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 28px}.stat,.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:var(--shadow)}.stat small{font:11px Arial;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted)}.stat strong{display:block;font-size:28px;margin-top:8px;font-weight:normal;color:var(--green)}.section-head{display:flex;justify-content:space-between;align-items:center;margin:28px 0 13px;gap:12px}.section-head h3{font-size:21px;font-weight:normal;margin:0}.section-head span{font:12px Arial;color:var(--muted)}.currently{display:grid;grid-template-columns:1fr 250px;gap:18px}.reading-card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:21px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow)}.cover{width:76px;height:105px;flex-shrink:0;border-radius:3px;background:linear-gradient(145deg,#d8c39b,#a98a5b);color:#3f3323;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;box-shadow:4px 4px 0 #c4b18e,6px 6px 0 #8c7654;overflow:hidden;border:1px solid #8d744f}.cover img{width:100%;height:100%;object-fit:cover;display:block}.cover.has-image{padding:0;background:#e8dfcf}.cover-placeholder{font-size:inherit;line-height:1.25;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.cover-placeholder small{display:block;font:9px Arial;opacity:.7;margin-top:5px}.reading-info{flex:1;min-width:0}.reading-info h4{font-size:19px;font-weight:normal;margin:0 0 5px}.reading-info p{font:12px Arial;color:var(--muted);margin:0 0 14px}.progress{height:7px;background:#e9e1d3;border-radius:3px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--green),#8a9b70);border-radius:3px}.progress-meta{display:flex;justify-content:space-between;font:11px Arial;color:var(--muted);margin-top:7px}.empty{color:var(--muted);font:13px/1.5 Arial}.goal{background:linear-gradient(145deg,#e8e5d7,#f5ecda);border:1px solid #d9cfb9;border-radius:8px;padding:19px}.goal h4{font-size:17px;font-weight:normal;margin:0 0 8px;color:var(--green)}.goal p{font:12px/1.5 Arial;color:var(--muted);margin:0 0 13px}.goal input{width:75px;padding:8px;border:1px solid var(--line);border-radius:6px;background:white}.goal label{font:12px Arial;color:var(--muted)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.tab{border:1px solid var(--line);background:#fbf6eb;color:var(--muted);border-radius:4px;padding:8px 13px;font:12px Arial}.tab.active{background:var(--green);color:white;border-color:var(--green)}.books{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:max-content;align-items:start;gap:13px}.book{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:15px;display:flex;align-items:flex-start;gap:13px;min-width:0;height:fit-content;align-self:start;box-shadow:var(--shadow)}.book .cover{width:55px;height:78px;font-size:10px}.book h4{font-size:15px;font-weight:normal;margin:2px 0 5px}.book p{font:11px Arial;color:var(--muted);margin:0 0 9px}.book-actions{display:flex;gap:6px;flex-wrap:wrap}.rating-display{display:flex;align-items:center;gap:5px;margin:0 0 8px;font:12px Arial;color:var(--muted)}.rating-stars{color:var(--gold);letter-spacing:1px;font-size:15px}.rating-empty{color:#b9ad99}
+body{margin:0;overflow-x:clip;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-library-background.jpg') center center / cover fixed no-repeat;color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+.app{position:relative;background:rgba(248,242,230,.91);backdrop-filter:blur(3px);border-left:1px solid rgba(255,255,255,.35);border-right:1px solid rgba(255,255,255,.35);min-height:100vh} .top,.section-head{ text-shadow:0 1px 10px rgba(255,250,240,.55)}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;padding:28px 22px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;border-radius:7px;background:linear-gradient(145deg,#355b46,#203d30);color:#fff;display:grid;place-items:center;font-size:23px;box-shadow:inset 0 0 0 1px #ffffff30,0 4px 10px #30291f22}.brand h1{font-size:22px;margin:0;letter-spacing:.2px}.brand small{display:block;color:var(--muted);font:12px Arial;margin-top:3px}.top button,.primary,.secondary{border:0;border-radius:7px;padding:11px 16px;font:600 13px Arial}.primary{background:var(--green);color:white;box-shadow:0 4px 10px #294b3b26}.secondary{background:var(--green2);color:var(--green)}.hero{background:linear-gradient(115deg,#203d30,#355b46 60%,#64765a);color:#fff;border-radius:10px;padding:32px 34px;margin-bottom:22px;display:flex;justify-content:space-between;gap:24px;align-items:center;box-shadow:0 12px 28px rgba(44,54,37,.2);position:relative;overflow:hidden;border:1px solid #a58b5b}.hero:before{content:"";position:absolute;inset:10px;border:1px solid #d9c18c55;border-radius:5px;pointer-events:none}.hero h2{font-size:clamp(26px,4vw,37px);font-weight:normal;margin:0 0 9px;position:relative;z-index:1}.hero p{font:14px/1.65 Arial;margin:0;color:#eee9dc;max-width:570px;position:relative;z-index:1}.hero-mark{font-size:68px;opacity:.92;filter:drop-shadow(0 6px 8px #1118);z-index:1}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 28px}.stat,.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:var(--shadow)}.stat small{font:11px Arial;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted)}.stat strong{display:block;font-size:28px;margin-top:8px;font-weight:normal;color:var(--green)}.section-head{display:flex;justify-content:space-between;align-items:center;margin:28px 0 13px;gap:12px}.section-head h3{font-size:21px;font-weight:normal;margin:0}.section-head span{font:12px Arial;color:var(--muted)}.currently{display:grid;grid-template-columns:1fr 250px;gap:18px}.reading-card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:21px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow)}.cover{width:76px;height:105px;flex-shrink:0;border-radius:3px;background:linear-gradient(145deg,#d8c39b,#a98a5b);color:#3f3323;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;box-shadow:4px 4px 0 #c4b18e,6px 6px 0 #8c7654;overflow:hidden;border:1px solid #8d744f}.cover img{width:100%;height:100%;object-fit:cover;display:block}.cover.has-image{padding:0;background:#e8dfcf}.cover-placeholder{font-size:inherit;line-height:1.25;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.cover-placeholder small{display:block;font:9px Arial;opacity:.7;margin-top:5px}.reading-info{flex:1;min-width:0}.reading-info h4{font-size:19px;font-weight:normal;margin:0 0 5px}.reading-info p{font:12px Arial;color:var(--muted);margin:0 0 14px}.progress{height:7px;background:#e9e1d3;border-radius:3px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--green),#8a9b70);border-radius:3px}.progress-meta{display:flex;justify-content:space-between;font:11px Arial;color:var(--muted);margin-top:7px}.empty{color:var(--muted);font:13px/1.5 Arial}.goal{background:linear-gradient(145deg,#e8e5d7,#f5ecda);border:1px solid #d9cfb9;border-radius:8px;padding:19px}.goal h4{font-size:17px;font-weight:normal;margin:0 0 8px;color:var(--green)}.goal p{font:12px/1.5 Arial;color:var(--muted);margin:0 0 13px}.goal input{width:75px;padding:8px;border:1px solid var(--line);border-radius:6px;background:white}.goal label{font:12px Arial;color:var(--muted)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.tab{border:1px solid var(--line);background:#fbf6eb;color:var(--muted);border-radius:4px;padding:8px 13px;font:12px Arial}.tab.active{background:var(--green);color:white;border-color:var(--green)}.books{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:max-content;align-items:start;gap:13px}.book{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:15px;display:flex;align-items:flex-start;gap:13px;min-width:0;height:fit-content;align-self:start;box-shadow:var(--shadow)}.book .cover{width:55px;height:78px;font-size:10px}.book h4{font-size:15px;font-weight:normal;margin:2px 0 5px}.book p{font:11px Arial;color:var(--muted);margin:0 0 9px}.book-actions{display:flex;gap:6px;flex-wrap:wrap}.rating-display{display:flex;align-items:center;gap:5px;margin:0 0 8px;font:12px Arial;color:var(--muted)}.rating-stars{color:var(--gold);letter-spacing:1px;font-size:15px}.rating-empty{color:#b9ad99}
 .history-panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:20px;box-shadow:var(--shadow);margin:24px 0}
 .history-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 18px}
 .history-metric{background:#f3ecdf;border:1px solid var(--line);border-radius:7px;padding:12px}
@@ -31,7 +31,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .quick-progress button{border:0;border-radius:5px;padding:7px 9px;background:var(--green2);color:var(--green);font:600 11px Arial}
 .quick-progress button.quick-save{background:var(--green);color:#fff}
 
-@media(max-width:640px){.top{align-items:flex-start;gap:12px}.top-actions{gap:6px}.top-actions .icon-action{width:40px;height:40px;min-width:40px}}@media(max-width:520px){.history-summary{grid-template-columns:1fr 1fr}.history-panel{padding:14px}.week-chart{gap:4px}}
+@media(max-width:520px){.history-summary{grid-template-columns:1fr 1fr}.history-panel{padding:14px}.week-chart{gap:4px}}
 .mini{border:0;background:var(--green2);color:var(--green);border-radius:4px;padding:6px 8px;font:11px Arial}.mini:hover{background:#d8e3d7}.notes{margin-top:28px}.notes textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:8px;padding:13px;background:var(--paper);resize:vertical;font:13px/1.5 Arial}.modal{position:fixed;inset:0;background:#211d17cc;display:none;place-items:center;padding:18px;z-index:5}.modal.show{display:grid}.dialog{background:var(--paper);width:min(490px,100%);border-radius:9px;padding:23px;max-height:90vh;overflow:auto;border:1px solid var(--gold)}.dialog h3{font-weight:normal;font-size:23px;margin:0 0 16px;color:var(--green)}.field{display:block;margin:12px 0}.field span{display:block;font:11px Arial;color:var(--muted);margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;background:white;font:14px Arial}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;position:sticky;bottom:-23px;background:var(--paper);padding:12px 0 0;z-index:1}.close{background:transparent;border:0;color:var(--muted);float:right;font-size:21px}.footer{text-align:center;color:var(--muted);font:11px Arial;margin-top:36px}
 
 .cover-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -61,10 +61,11 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .category-tile span{display:block;font:11px Arial;color:var(--muted);margin-top:5px}
 .category-tile .category-number{font:inherit;color:var(--green);margin-right:4px}
 @media(max-width:440px){.category-options{grid-template-columns:1fr}}
-@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.currently{grid-template-columns:1fr}.books{grid-template-columns:1fr 1fr}.hero-mark{font-size:56px}.app{padding:20px 14px 45px}}
-@media(max-width:440px){.books{grid-template-columns:1fr}.reading-card{align-items:flex-start}.brand h1{font-size:18px}.top-actions{gap:6px}.top-actions .icon-action{width:40px;height:40px;min-width:40px}}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.currently{grid-template-columns:1fr}.books{grid-template-columns:1fr 1fr}.hero-mark{font-size:56px}.app{padding:20px 14px 45px}.top{flex-direction:column;align-items:stretch;gap:12px;margin-bottom:24px}}
+@media(max-width:600px){.hero{flex-direction:column;align-items:flex-start;padding:22px 20px}.hero-mark{font-size:48px}}
+@media(max-width:440px){.books{grid-template-columns:1fr}.reading-card{align-items:flex-start}.brand h1{font-size:18px}}
 
-.auth-panel{position:fixed;inset:0;z-index:1000;background:rgba(20,15,5,.35);display:flex;align-items:center;justify-content:center;padding:20px 14px;overflow-y:auto}.auth-panel[hidden]{display:none}.auth-modal-card{background:var(--paper);border:1px solid var(--gold);border-radius:10px;padding:20px 22px;box-shadow:0 18px 48px rgba(40,32,20,.22);font:13px Arial;color:var(--ink);width:100%;max-width:560px;margin:auto}.auth-modal-card .auth-bar-text{color:var(--green)}.auth-modal-card .auth-field label{color:var(--muted)}.auth-modal-card .auth-note{color:var(--muted)}.auth-modal-card .auth-note a{color:var(--green)}.auth-modal-card .auth-message{color:var(--green)}.auth-modal-card .auth-account strong{color:var(--green)}.auth-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.auth-bar-text{font:15px Georgia,serif;color:var(--green);font-weight:bold}#authForm{margin-top:14px}
+.auth-panel{position:fixed;inset:0;z-index:1000;background:rgba(20,15,5,.35);display:flex;align-items:center;justify-content:center;padding:20px 14px;overflow-y:auto}.auth-panel[hidden]{display:none}.auth-modal-card{background:var(--ink);border:1px solid var(--line);border-radius:8px;padding:16px 18px;box-shadow:var(--shadow);font:13px Arial;color:#fff;width:100%;max-width:560px;margin:auto}.auth-modal-card .auth-bar-text{color:#fff}.auth-modal-card .auth-field label{color:#d8cfc0}.auth-modal-card .auth-note{color:#d8cfc0}.auth-modal-card .auth-note a{color:var(--gold)}.auth-modal-card .auth-message{color:#fff}.auth-modal-card .auth-account strong{color:#fff}.auth-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.auth-bar-text{font:15px Georgia,serif;color:var(--green);font-weight:bold}#authForm{margin-top:14px}
 .auth-row{display:flex;align-items:end;gap:9px;flex-wrap:wrap}.auth-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:180px}.auth-field label{font-size:11px;color:var(--muted)}.auth-field input{padding:10px;border:1px solid var(--line);border-radius:5px;background:#fff;font:13px Arial}.auth-actions{display:flex;gap:7px;flex-wrap:wrap}.auth-message{margin:9px 0 0;color:var(--green);font:12px/1.45 Arial}.auth-account{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.auth-account strong{color:var(--green)}
 
 .main-nav{display:flex;gap:7px;overflow-x:auto;padding:7px;margin:0 0 24px;background:rgba(255,250,240,.72);border:1px solid var(--line);border-radius:8px;scrollbar-width:thin}
@@ -101,7 +102,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .coming-icon{font-size:38px;color:var(--gold)}.coming-card h3{font:normal 24px Georgia,serif;color:var(--green);margin:12px 0}.coming-card p{font:13px/1.7 Arial;color:var(--muted);max-width:540px;margin:0 auto 18px}.coming-label{font:10px Arial;text-transform:uppercase;letter-spacing:1px;color:var(--gold)}
 .settings-card{max-width:480px}.settings-card .goal{max-width:100%}
 @media(max-width:700px){.insight-grid{grid-template-columns:1fr 1fr}.calendar-day{min-height:58px;padding:6px}.calendar-grid{gap:4px}}
-@media(max-width:440px){.insight-grid{grid-template-columns:1fr}.nav-item{min-width:78px;padding:10px 8px}.calendar-day{min-height:48px;padding:4px}.calendar-day .day-pages{font-size:9px}.calendar-legend{gap:8px}.calendar-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:440px){.insight-grid{grid-template-columns:1fr}.nav-item{min-width:64px;padding:10px 8px}.calendar-day{min-height:48px;padding:4px}.calendar-day .day-pages{font-size:9px}.calendar-legend{gap:8px}.calendar-head{align-items:flex-start;flex-direction:column}}
 
 
 .analytics-section{margin:20px 0}
@@ -186,69 +187,6 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .book>.cover img{width:100%;height:100%;object-fit:cover}
 .book-details{display:block}
 
-.default-plan-star{color:#b58a2a;font-size:12px;margin-left:3px}
-/* Reading Plan usability refinements */
-.selected-plan-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:var(--soft,#f2f5ef)}
-.selected-plan-banner>div{display:grid;gap:3px;min-width:0}
-.selected-plan-banner small{font:700 10px Arial,sans-serif;letter-spacing:.08em;color:var(--muted)}
-.selected-plan-banner strong{font:700 16px Arial,sans-serif;color:var(--ink);overflow-wrap:anywhere}
-.selected-plan-banner span{font:11px Arial,sans-serif;color:var(--muted)}
-.selected-plan-status{flex:0 0 auto;padding:5px 9px;border-radius:20px;background:#e3eee0;color:#315d37!important;text-transform:capitalize;font-weight:700!important}
-.plan-cascade-choice{display:flex!important;flex-direction:column;align-items:flex-start;gap:3px;white-space:normal!important}
-.plan-cascade-name{font-weight:600}
-.plan-cascade-meta{font:10px Arial,sans-serif;color:var(--muted);white-space:normal}
-.plan-cascade-choice.is-selected{background:var(--soft,#eef3eb)!important;box-shadow:inset 3px 0 0 var(--green,#456b43)}
-
-
-.plan-section-highlight{scroll-margin-top:24px}
-/* Cascading Reading Plan management menus */
-.plan-section-highlight{outline:2px solid var(--green,#456b43);outline-offset:5px;border-radius:8px;transition:outline-color .3s}
-.plan-cascade-item{position:relative}
-.plan-cascade-trigger{display:flex!important;align-items:center;justify-content:space-between;gap:16px}
-.plan-cascade-menu{display:none;position:absolute;left:calc(100% + 5px);top:-6px;min-width:220px;max-width:300px;padding:6px;background:var(--card,#fff);border:1px solid var(--line,#d9dfd5);border-radius:10px;box-shadow:0 8px 24px rgba(25,40,25,.14);z-index:40}
-.plan-cascade-item:hover>.plan-cascade-menu,.plan-cascade-item:focus-within>.plan-cascade-menu{display:block}
-.plan-cascade-menu button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-radius:7px;background:transparent;color:var(--ink);font:inherit;cursor:pointer;white-space:normal}
-.plan-cascade-menu button:hover,.plan-cascade-menu button:focus-visible{background:var(--soft,#eef3eb);outline:none}
-.plan-cascade-empty{padding:10px 12px;color:var(--muted);font:12px Arial,sans-serif}
-
-
-
-
-.plan-cascade-plan{position:relative}
-.plan-cascade-plan 
-@media(max-width:560px){
- .plan-cascade-menu{position:static;left:auto;top:auto;max-width:none;min-width:0;margin:2px 0 6px 12px;box-shadow:none}
- .plan-cascade-item:hover>.plan-cascade-menu,.plan-cascade-item:focus-within>.plan-cascade-menu{display:block}
- 
-}
-/* On-page Reading Plan setup and book selection */
-.plan-setup-panel{margin:14px 0;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-.plan-setup-panel h3{margin:0 0 6px;font-size:18px}
-.plan-setup-panel p{margin:0 0 14px;color:var(--muted);font:13px/1.5 Arial,sans-serif}
-.plan-setup-fields{display:grid;grid-template-columns:minmax(220px,1fr);gap:10px;margin-bottom:14px}
-.plan-setup-fields label{display:grid;gap:5px;font:600 12px Arial,sans-serif;color:var(--muted)}
-.plan-setup-fields input{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:14px Arial}
-.plan-setup-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;max-height:340px;overflow:auto;padding:2px;margin:10px 0 16px}
-.plan-setup-book{display:flex;align-items:flex-start;gap:9px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface,#fff);font:13px/1.4 Arial,sans-serif;color:var(--ink);cursor:pointer}
-.plan-setup-book input{margin:2px 0 0;accent-color:var(--green);flex:0 0 auto}
-.plan-setup-book small{display:block;color:var(--muted);margin-top:2px}
-.plan-setup-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-.plan-setup-count{font:12px Arial,sans-serif;color:var(--muted);margin-left:auto}
-@media(max-width:520px){.plan-setup-panel{padding:13px}.plan-setup-count{width:100%;margin-left:0}}
-/* Reading Plans create/manage dropdowns */
-.plan-menu-toolbar{align-items:flex-start;gap:10px;flex-wrap:wrap}
-.plan-action-dropdown{position:relative;display:inline-block}
-.plan-action-dropdown>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:10px;user-select:none}
-.plan-action-dropdown>summary::-webkit-details-marker{display:none}
-.plan-action-dropdown>summary::marker{content:""}
-.plan-action-menu{position:absolute;z-index:30;top:calc(100% + 6px);left:0;min-width:210px;padding:6px;background:var(--card,#fff);border:1px solid var(--line,#d9dfd5);border-radius:10px;box-shadow:0 8px 24px rgba(25,40,25,.14)}
-.plan-action-menu button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-radius:7px;background:transparent;color:var(--ink);font:inherit;cursor:pointer}
-.plan-action-menu button:hover,.plan-action-menu button:focus-visible{background:var(--soft,#eef3eb);outline:none}
-.existing-plans-picker{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.existing-plans-picker[hidden]{display:none}
-.existing-plans-picker label{font:600 12px Arial,sans-serif;color:var(--muted)}
-.existing-plans-picker select{min-width:190px}
-@media(max-width:440px){.plan-menu-toolbar{align-items:stretch}.plan-action-dropdown,.plan-action-dropdown>summary{width:100%}.plan-action-dropdown>summary{justify-content:space-between}.plan-action-menu{width:100%;box-sizing:border-box}.existing-plans-picker{width:100%}.existing-plans-picker select{width:100%}}
 /* Stage 3.4 — Reading Plans */
 .plan-intro{background:linear-gradient(120deg,#203d30,#355b46 65%,#64765a);color:#fff;border:1px solid #a58b5b;border-radius:9px;padding:22px 24px;margin:14px 0 20px}
 .plan-intro h3{font:normal 24px Georgia,serif;margin:0 0 7px}.plan-intro p{font:13px/1.55 Arial;color:#eee9dc;margin:0;max-width:760px}
@@ -260,10 +198,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .plan-progress{height:9px;background:#e9e1d3;border-radius:8px;overflow:hidden;margin:10px 0}.plan-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--green),#8a9b70)}
 .plan-today{background:#edf1e8;border:1px solid #cbd8c4;border-radius:7px;padding:15px;font:13px/1.6 Arial;color:var(--ink);margin:14px 0}.plan-today strong{color:var(--green)}
 .plan-settings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end}.plan-settings label{display:flex;flex-direction:column;gap:6px;font:11px Arial;color:var(--muted)}
-.plan-book-list{display:grid;gap:9px}.plan-book{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:7px;background:#fffaf0}.plan-book h4{font:normal 16px Georgia,serif;margin:0 0 5px;color:var(--green)}.plan-book p{font:11px/1.5 Arial;color:var(--muted);margin:0}.plan-book-actions .plan-icon-button{width:38px;min-width:38px;height:38px;padding:8px;display:inline-flex;align-items:center;justify-content:center}
-.plan-book-actions .plan-icon-button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.plan-book-actions .plan-icon-button:disabled{opacity:.4;cursor:not-allowed}
-.plan-book-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.plan-book.current-focus{border-color:#8b9c78;background:#f1f5eb}.plan-current-tag{display:inline-block;margin-left:7px;padding:3px 6px;border-radius:4px;background:#e5ecdf;color:var(--green);font:10px Arial;vertical-align:middle}.plan-empty{padding:25px;text-align:center;color:var(--muted);font:13px/1.6 Arial;border:1px dashed var(--line);border-radius:7px;background:#fffaf0}
+.plan-book-list{display:grid;gap:9px}.plan-book{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:7px;background:#fffaf0}.plan-book h4{font:normal 16px Georgia,serif;margin:0 0 5px;color:var(--green)}.plan-book p{font:11px/1.5 Arial;color:var(--muted);margin:0}.plan-book-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.plan-book.current-focus{border-color:#8b9c78;background:#f1f5eb}.plan-current-tag{display:inline-block;margin-left:7px;padding:3px 6px;border-radius:4px;background:#e5ecdf;color:var(--green);font:10px Arial;vertical-align:middle}.plan-empty{padding:25px;text-align:center;color:var(--muted);font:13px/1.6 Arial;border:1px dashed var(--line);border-radius:7px;background:#fffaf0}
 .plan-note{font:11px/1.5 Arial;color:var(--muted);margin-top:10px}.plan-warning{color:#8b4a37}.plan-inline-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.plan-inline-form input{padding:9px;border:1px solid var(--line);border-radius:5px;width:110px}
 @media(max-width:760px){.plan-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-settings{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-book{grid-template-columns:1fr}.plan-book-actions{justify-content:flex-start}}
 @media(max-width:440px){.plan-settings{grid-template-columns:1fr}.plan-intro{padding:18px}}
@@ -274,8 +209,6 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .plan-day-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .plan-day-head h3{font:normal 20px Georgia,serif;color:var(--green);margin:0}
 .plan-day-head input{padding:8px;border:1px solid var(--line);border-radius:5px;font:12px Arial}
-.plan-calendar-controls{margin:8px 0 4px;justify-content:flex-end;flex-wrap:wrap}
-@media(max-width:440px){.plan-calendar-controls{width:100%;justify-content:flex-start}}
 .plan-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:12px 0}
 .plan-calendar-label,.plan-calendar-day{font:10px Arial;text-align:center;padding:7px 2px}
 .plan-calendar-label{color:var(--muted)}
@@ -313,173 +246,14 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .undo-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#203d30;color:#fff;border-radius:8px;padding:12px 16px;font:13px Arial;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:9;display:flex;gap:12px;align-items:center}
 .undo-toast[hidden]{display:none}
 .undo-toast button{border:0;background:#fff;color:#203d30;border-radius:5px;padding:6px 10px;font:600 12px Arial;cursor:pointer}
-
-/* Responsive navigation: compact labels on tablets, icon-only on phones */
-@media (max-width: 760px) {
-  .main-nav { gap: 5px; padding: 5px; }
-  .nav-item { min-width: 0; padding: 10px 7px; font-size: 11px; }
-  .nav-item span { font-size: 11px; }
-}
-@media (max-width: 560px) {
-  .main-nav {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 4px;
-    padding: 5px;
-    overflow: visible;
-  }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    min-width: 0;
-    min-height: 44px;
-    padding: 8px 2px;
-    font-size: 17px;
-    line-height: 1;
-    white-space: normal;
-  }
-  .nav-item span { display: none; }
-}
-@media (max-width: 360px) {
-  .main-nav { gap: 2px; padding: 4px; }
-  .nav-item { min-height: 40px; font-size: 16px; border-radius: 5px; }
-}
-
-/* Quick month/year navigation for the reading calendar */
-.calendar-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.calendar-select-wrap{display:inline-flex;align-items:center}
-.calendar-controls select{
-  appearance:auto;
-  border:1px solid var(--line);
-  border-radius:6px;
-  background:var(--paper);
-  color:var(--green);
-  padding:9px 30px 9px 10px;
-  min-height:38px;
-  font:600 13px Arial,sans-serif;
-  cursor:pointer;
-}
-.calendar-controls select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-@media(max-width:440px){
-  .calendar-controls{width:100%;gap:6px}
-  .calendar-controls select{padding:8px 24px 8px 8px;min-height:36px;font-size:12px}
-}
-
-/* Show the active account beside the account control */
-.header-account-email{
-  display:inline-block;
-  max-width:220px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  color:var(--green);
-  font:600 12px Arial,sans-serif;
-  padding:0 4px;
-  vertical-align:middle;
-}
-.header-account-email[hidden]{display:none}
-@media(max-width:760px){.header-account-email{max-width:150px;font-size:11px}}
-@media(max-width:440px){.header-account-email{max-width:105px;font-size:10px}}
-
-.calendar-today-button{min-height:38px;padding:8px 12px;font:600 12px Arial,sans-serif;white-space:nowrap}
-@media(max-width:440px){.calendar-today-button{min-height:36px;padding:7px 9px;font-size:11px}}
-
-.rating-star-button{
-  appearance:none;border:0;background:transparent;color:var(--gold);
-  padding:0 1px;margin:0;font:inherit;font-size:18px;line-height:1;
-  cursor:pointer;vertical-align:middle;
-}
-.rating-star-button.is-empty{color:#b9ad99}
-.rating-star-button:hover{transform:scale(1.15)}
-.rating-star-button:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:3px}
-.rating-display .rating-stars{display:inline-flex;align-items:center;gap:1px}
-
-/* Reading plan ordering, scrolling and pagination */
-.plan-book-scroll{max-height:560px;overflow-y:auto;overscroll-behavior:contain;padding:2px 5px 2px 1px;border-radius:8px;scrollbar-gutter:stable}
-.plan-book-main{display:flex;align-items:center;gap:10px;min-width:0}
-.plan-book-order{display:flex;align-items:center;gap:6px;flex:0 0 auto}
-.plan-drag-handle{cursor:grab;color:var(--muted);font-size:22px;line-height:1;user-select:none;touch-action:none}
-.plan-book[draggable="true"]:active .plan-drag-handle{cursor:grabbing}
-.plan-order-input{width:48px;min-height:32px;padding:5px 4px;border:1px solid var(--line);border-radius:5px;background:#fff;font:12px Arial;text-align:center;color:var(--green)}
-.plan-book-copy{min-width:0}
-.plan-book-copy h4{overflow-wrap:anywhere}
-.plan-pagination{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0 4px;padding:10px 2px;border-top:1px solid var(--line)}
-.plan-pagination-controls{display:flex;align-items:center;gap:9px;font:12px Arial;color:var(--muted)}
-.plan-pagination button:disabled{opacity:.4;cursor:not-allowed}
-@media(max-width:560px){
- .plan-book{grid-template-columns:minmax(0,1fr);gap:9px}
- .plan-book-actions{justify-content:flex-start}
- .plan-book-main{align-items:flex-start}
- .plan-book-scroll{max-height:460px}
- .plan-pagination{align-items:flex-start;flex-direction:column}
-}
-
-.rating-clear-button{border:0;background:transparent;color:var(--muted);font:16px/1 Arial;padding:1px 4px;cursor:pointer;border-radius:4px}
-.rating-clear-button:hover{background:var(--green2);color:var(--green)}
-.rating-clear-button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-
-/* Header account state and add-book action colors */
-.header-account-status{
-  display:inline-block;color:var(--muted);font:600 12px Arial,sans-serif;
-  white-space:nowrap;padding:0 2px;vertical-align:middle;
-}
-.header-account-status.is-signed-in{color:var(--green)}
-.add-book-login-warning{color:#b42318;font-size:12px;font-weight:700;white-space:nowrap;line-height:1.3}
-.add-book-login-warning[hidden]{display:none}
-
-#headerAccountButton.is-signed-in,
-#headerAccountButton.is-modal-open{background:#174f36;border-color:#174f36;color:#fff}
-#headerAccountButton.is-signed-in:hover,
-#headerAccountButton.is-modal-open:hover{background:#103d29;border-color:#103d29}
-#headerAccountButton.is-signed-in svg,
-#headerAccountButton.is-modal-open svg{stroke:currentColor}
-
-#addBookHeaderButton .add-book-icon-combo{display:inline-flex;align-items:center;justify-content:center;gap:0px;width:35px;height:24px;overflow:visible;flex:0 0 auto}
-#addBookHeaderButton .add-book-icon-combo svg{display:block;width:20px;height:20px;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
-#addBookHeaderButton .add-book-icon-combo .add-book-plus-icon{width:11px;height:11px;stroke-width:2.5;transform:translateY(-2px)}
-#addBookHeaderButton .add-book-icon-combo .add-book-book-icon{stroke-width:1.45}
-#addBookHeaderButton{background:var(--green2);color:var(--green);border:0}
-#addBookHeaderButton:hover{background:var(--green2);color:var(--green)}
-#addBookHeaderButton.is-modal-open{background:#174f36;border-color:#174f36;color:#fff}
-#addBookHeaderButton.is-modal-open:hover{background:#103d29;border-color:#103d29;color:#fff}
-#addBookHeaderButton.is-modal-open svg{stroke:currentColor}
-#bookForm button[type="submit"]{background:#174f36;border-color:#174f36;color:#fff}
-#bookForm button[type="submit"]:hover{background:#103d29;border-color:#103d29}
-#refreshCloudButton.is-refreshing,
-#exportExcelButton.is-exporting{background:#174f36;border-color:#174f36;color:#fff}
-#refreshCloudButton.is-refreshing svg,
-#exportExcelButton.is-exporting svg{stroke:currentColor}
-#exportExcelButton.is-exporting{cursor:wait}
-#refreshCloudButton.is-refreshing svg{animation:readingShelfRefreshSpin .8s linear infinite}
-@keyframes readingShelfRefreshSpin{to{transform:rotate(360deg)}}
-#refreshCloudButton:disabled{opacity:.75;cursor:wait}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="top"><div class="brand"><div class="logo">📚</div><div><h1>The Reading Shelf</h1><small>A personal library for the books you own and the ideas you keep.</small></div></div><div class="top-actions" aria-label="Reading Shelf actions">
-<span class="header-account-status" id="headerAccountStatus">Signed out</span>
-<span class="add-book-login-warning" id="addBookLoginWarning" hidden>* Sign in first to add a book</span>
-<span class="header-account-email" id="headerAccountEmail" hidden></span>
-<button class="secondary icon-action" type="button" id="headerAccountButton" onclick="handleHeaderAccountAction()" title="Sign in" aria-label="Sign in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" /></svg></button>
-<button class="secondary icon-action" type="button" id="refreshCloudButton" onclick="refreshCloudData()" title="Refresh" aria-label="Refresh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5" /><path d="M5.6 9a7 7 0 0 1 11.6-2L20 12M4 12l2.8 5a7 7 0 0 0 11.6-2" /></svg></button>
-<button class="secondary icon-action" type="button" id="exportExcelButton" onclick="exportExcel()" title="Export Excel" aria-label="Export Excel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13l3 5m0-5-3 5m6-5v5m0-5 3 5m0-5-3 5" /></svg></button>
-<button class="primary icon-action" type="button" id="addBookHeaderButton" onclick="openAdd()" title="Add a book" aria-label="Add a book"><span class="add-book-icon-combo" aria-hidden="true">
-  <svg class="add-book-plus-icon" viewBox="0 0 24 24" focusable="false">
-    <path d="M12 3v18M3 12h18"/>
-  </svg>
-  <svg class="add-book-book-icon" viewBox="0 0 24 24" focusable="false">
-    <path d="M12 6.2C9.7 4.5 6.7 4 3.5 4.8v14.7c3.2-.8 6.2-.3 8.5 1.5 2.3-1.8 5.3-2.3 8.5-1.5V4.8c-3.2-.8-6.2-.3-8.5 1.4Z"/>
-    <path d="M12 6.2v14.8M6.2 8.2c1.7-.2 3.3.1 4.6.8M17.8 8.2c-1.7-.2-3.3.1-4.6.8M6.2 12c1.7-.2 3.3.1 4.6.8M17.8 12c-1.7-.2-3.3.1-4.6.8"/>
-  </svg>
-</span></button>
-</div></header>
+<header class="top"><div class="brand"><div class="logo">📚</div><div><h1>The Reading Shelf</h1><small>A personal library for the books you own and the ideas you keep.</small></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" type="button" id="headerSignInButton" onclick="openAuthModal()" hidden>Sign in</button><button class="secondary" type="button" id="headerSignOutButton" onclick="signOut()" hidden>Sign out</button><button class="secondary" type="button" id="refreshCloudButton" onclick="refreshCloudData()" title="Load the latest data saved to your cloud shelf">↻ Refresh</button><button class="secondary" type="button" onclick="exportExcel()">↓ Export Excel</button><button class="primary" onclick="openAdd()">＋ Add a book</button></div></header>
 <section class="auth-panel" id="authPanel" hidden>
 <div class="auth-modal-card">
-<div id="authSignedOut"><div class="auth-bar"><span class="auth-bar-text">Sign in to sync your shelf across devices</span><button class="secondary" type="button" onclick="closeAuthModal()">Close</button></div><form id="authForm"><div class="auth-row"><div class="auth-field"><label for="authEmail">EMAIL</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div><div class="auth-field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div><div class="auth-actions"><button class="primary" type="submit" id="signInButton">Sign in</button><button class="secondary" type="button" id="signUpButton">Create account</button></div><p class="auth-note">The Reading Shelf and Ronnie's Bible Challenge use the same Supabase account, so the same email and password work in both apps. Your books and your Bible reading are stored separately.</p><p class="auth-note"><a href="#" onclick="forgotPassword();return false;">Forgot password?</a></p></div></form></div>
+<div id="authSignedOut"><div class="auth-bar"><span class="auth-bar-text">Sign in to sync your shelf across devices</span><button class="secondary" type="button" onclick="closeAuthModal()">Close</button></div><form id="authForm"><div class="auth-row"><div class="auth-field"><label for="authEmail">EMAIL</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div><div class="auth-field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div><div class="auth-actions"><button class="primary" type="submit" id="signInButton">Sign in</button><button class="secondary" type="button" id="signUpButton">Create account</button></div><p class="auth-note">The Reading Shelf and Ronnie's Bible Challenge use the same Supabase account, so the same email and password work in both apps. Your books and your Bible reading are stored separately.</p><p class="auth-note"><a href="#" onclick="forgotPassword();return false;">Forgot password?</a></p></div></div></form></div>
 <div id="authSignedIn" hidden><div class="auth-account"><span>Cloud sync enabled · Signed in as <strong id="signedInEmail"></strong></span><button class="secondary" type="button" id="signOutButton">Sign out</button></div></div>
 <div class="auth-message" id="authMessage" role="status">Your shelf currently works on this device. Sign in to sync it with Supabase.</div>
 </div>
@@ -490,6 +264,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   <button class="nav-item" type="button" data-view="insights" onclick="setView('insights',this)">◷ <span>Insights</span></button>
   <button class="nav-item" type="button" data-view="knowledge" onclick="setView('knowledge',this)">✎ <span>Knowledge</span></button>
   <button class="nav-item" type="button" data-view="plans" onclick="setView('plans',this)">▦ <span>Reading Plans</span></button>
+  <button class="nav-item" type="button" data-view="onenote" onclick="setView('onenote',this)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px"><rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> <span>OneNote</span></button>
   <button class="nav-item" type="button" data-view="settings" onclick="setView('settings',this)">⚙ <span>Settings</span></button>
 </nav>
 <section id="homeView" class="app-view">
@@ -528,11 +303,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <div class="insight-card"><small>7-day reading goal</small><strong id="weeklyGoalProgress">0 / 35 pages</strong><span id="weeklyGoalHint">Daily goal × 7 days</span><div class="goal-track"><div id="weeklyGoalBar"></div></div></div>
   </div>
   <section class="calendar-panel">
-    <div class="calendar-head"><div><h3>Reading calendar</h3><p>Pages recorded on each day</p></div><div class="calendar-controls" aria-label="Choose calendar month and year">
-      <button class="secondary calendar-today-button" type="button" onclick="goToCurrentCalendarDate()">Today</button>
-      <label class="calendar-select-wrap"><span class="sr-only">Month</span><select id="calendarMonthSelect" aria-label="Select month" onchange="setCalendarMonthYear()"></select></label>
-      <label class="calendar-select-wrap"><span class="sr-only">Year</span><select id="calendarYearSelect" aria-label="Select year" onchange="setCalendarMonthYear()"></select></label>
-    </div></div>
+    <div class="calendar-head"><div><h3>Reading calendar</h3><p>Pages recorded on each day</p></div><div class="calendar-controls"><button class="secondary" type="button" onclick="changeCalendarMonth(-1)" aria-label="Previous month">‹</button><strong id="calendarMonthLabel"></strong><button class="secondary" type="button" onclick="changeCalendarMonth(1)" aria-label="Next month">›</button></div></div>
     <div class="calendar-grid calendar-weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
     <div class="calendar-grid" id="calendarGrid"></div>
     <div class="calendar-legend"><span><i class="level-0"></i>No recorded pages</span><span><i class="level-1"></i>1–9</span><span><i class="level-2"></i>10–24</span><span><i class="level-3"></i>25+</span></div>
@@ -616,27 +387,11 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 <section id="plansView" class="app-view" hidden>
   <div class="section-head"><h3>Reading Plans</h3><span>Build a realistic path through your reading list</span></div>
   <div class="plan-intro"><h3>Turn your reading intentions into a plan.</h3><p>Create a curriculum from unread books, set a plan pace, track chapter-based books, and use manual assignments when a page count is not available. Your existing bookshelf remains the source of book details and reading progress.</p></div>
-  <div class="plan-toolbar plan-menu-toolbar">
-    <details class="plan-action-dropdown">
-      <summary class="primary">Create Plan <span aria-hidden="true">▾</span></summary>
-      <div class="plan-action-menu">
-        <button type="button" onclick="createPlanFromUnread();closeReadingPlanMenus()" >Plan with Unread Books</button>
-        <button type="button" onclick="createEmptyReadingPlan();closeReadingPlanMenus()" >Empty Plan</button>
-      </div>
-    </details>
-    <details class="plan-action-dropdown manage-plan-dropdown">
-      <summary class="secondary">Manage Plan <span aria-hidden="true">▾</span></summary>
-      <div class="plan-action-menu">
-        <div class="plan-cascade-item">
-          <button type="button" class="plan-cascade-trigger">Edit Plan <span aria-hidden="true">›</span></button>
-          <div class="plan-cascade-menu" id="editPlanCascade"><div class="plan-cascade-empty">No reading plans yet</div></div>
-        </div>
-        <div class="plan-cascade-item">
-          <button type="button" class="plan-cascade-trigger">Add Book(s) to Existing Plan <span aria-hidden="true">›</span></button>
-          <div class="plan-cascade-menu" id="addBooksPlanCascade"><div class="plan-cascade-empty">No reading plans yet</div></div>
-        </div>
-      </div>
-    </details>
+  <div class="plan-toolbar">
+    <select id="readingPlanSelect" aria-label="Choose a reading plan" onchange="selectReadingPlan(this.value)"><option value="">No plans yet</option></select>
+    <button class="primary" type="button" onclick="createPlanFromUnread()">Create plan from unread books</button>
+    <button class="secondary" type="button" onclick="createEmptyReadingPlan()">Create empty plan</button>
+    <button class="secondary" type="button" onclick="addBooksToPlan()">Add books</button>
   </div>
   <div id="readingPlanContent"><div class="plan-empty">Sign in to sync your plans, or create a plan on this device.</div></div>
 </section>
@@ -653,7 +408,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 </div>
 <div class="modal" id="confirmModal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle"><div class="dialog"><h3 id="confirmTitle">Are you sure?</h3><p id="confirmMessage" style="font:14px/1.5 Arial;color:var(--muted);margin:0 0 6px"></p><div id="confirmChoices" class="confirm-choices" hidden></div><input id="confirmInput" class="confirm-input" type="text" hidden><div class="dialog-actions"><button type="button" class="secondary" id="confirmCancel">Cancel</button><button type="button" class="primary" id="confirmOk">Confirm</button></div></div></div>
 <div class="undo-toast" id="undoToast" hidden><span id="undoToastText"></span><button type="button" onclick="undoRemoveBook()">Undo</button></div>
-<div class="modal" id="modal"><div class="dialog"><button class="close" onclick="closeModal()">×</button><h3 id="modalTitle">Add a book</h3><form id="bookForm" onsubmit="saveBook(event)"><input type="hidden" id="bookId"><label class="field"><span>BOOK TITLE</span><input id="title" required placeholder="e.g. The Culture Map"></label><label class="field"><span>AUTHOR</span><input id="author" placeholder="Author's name"></label><div class="field"><span>BOOK COVER</span><div class="cover-tools"><button type="button" class="secondary" onclick="lookupBookCovers()">Find cover automatically</button><span id="coverLookupStatus" class="cover-status">Search by title and author, then choose the matching edition.</span></div><div id="coverResults" class="cover-results"></div><label class="field"><span>OR PASTE A COVER IMAGE URL</span><input id="coverUrl" type="url" placeholder="https://..."><div id="coverPreview" class="cover-preview"></div></label></div><div class="field"><span>CATEGORIES (SELECT ALL THAT APPLY)</span><div class="category-options" id="categoryOptions"></div></div><label class="field"><span>TOTAL PAGES (optional)</span><input id="totalPages" type="number" min="1" placeholder="e.g. 280"></label><label class="field"><span>STATUS</span><select id="status"><option value="want">Want to read</option><option value="reading">Currently reading</option><option value="completed">Completed</option></select></label><label class="field"><span>YOUR RATING</span><select id="rating"><option value="">Not rated</option><option value="1">★☆☆☆☆ — 1 star</option><option value="2">★★☆☆☆ — 2 stars</option><option value="3">★★★☆☆ — 3 stars</option><option value="4">★★★★☆ — 4 stars</option><option value="5">★★★★★ — 5 stars</option></select></label><label class="field"><span>CURRENT PAGE</span><input id="currentPage" type="number" min="0" value="0"></label><label class="field"><span>STARTED (optional)</span><input id="startedAt" type="date"></label><label class="field"><span>FINISHED (optional)</span><input id="finishedAt" type="date"></label><div class="dialog-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button class="primary" id="saveBookButton" type="submit">Save book</button></div></form></div></div>
+<div class="modal" id="modal"><div class="dialog"><button class="close" onclick="closeModal()">×</button><h3 id="modalTitle">Add a book</h3><form id="bookForm" onsubmit="saveBook(event)"><input type="hidden" id="bookId"><label class="field"><span>BOOK TITLE</span><input id="title" required placeholder="e.g. The Culture Map"></label><label class="field"><span>AUTHOR</span><input id="author" placeholder="Author's name"></label><div class="field"><span>BOOK COVER</span><div class="cover-tools"><button type="button" class="secondary" onclick="lookupBookCovers()">Find cover automatically</button><span id="coverLookupStatus" class="cover-status">Search by title and author, then choose the matching edition.</span></div><div id="coverResults" class="cover-results"></div><label class="field"><span>OR PASTE A COVER IMAGE URL</span><input id="coverUrl" type="url" placeholder="https://..."><div id="coverPreview" class="cover-preview"></div></label></div><div class="field"><span>CATEGORIES (SELECT ALL THAT APPLY)</span><div class="category-options" id="categoryOptions"></div></div><label class="field"><span>TOTAL PAGES (optional)</span><input id="totalPages" type="number" min="1" placeholder="e.g. 280"></label><label class="field"><span>STATUS</span><select id="status"><option value="want">Want to read</option><option value="reading">Currently reading</option><option value="completed">Completed</option></select></label><label class="field"><span>YOUR RATING</span><select id="rating"><option value="">Not rated</option><option value="1">★☆☆☆☆ — 1 star</option><option value="2">★★☆☆☆ — 2 stars</option><option value="3">★★★☆☆ — 3 stars</option><option value="4">★★★★☆ — 4 stars</option><option value="5">★★★★★ — 5 stars</option></select></label><label class="field"><span>CURRENT PAGE</span><input id="currentPage" type="number" min="0" value="0"></label><label class="field"><span>STARTED (optional)</span><input id="startedAt" type="date"></label><label class="field"><span>FINISHED (optional)</span><input id="finishedAt" type="date"></label><div class="dialog-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button class="primary" type="submit">Save book</button></div></form></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
@@ -741,7 +496,7 @@ function safeParseArray(key){try{const v=JSON.parse(localStorage.getItem(key));r
 function safeParseObject(key){try{const v=JSON.parse(localStorage.getItem(key));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch(e){return{};}}
 let bookKnowledge=safeParseObject('readingShelfKnowledgeV1'), knowledgeQuotes=safeParseArray('readingShelfQuotesV1'), selectedKnowledgeBook='', knowledgeSaveTimer=null;
 let books=safeParseArray(KEY).map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=safeParseArray('readingShelfSessionsV1'), filter='all', selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
-let readingPlans=safeParseArray('readingShelfPlansV1'), readingPlanBooks=safeParseArray('readingShelfPlanBooksV1'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', defaultReadingPlanId=localStorage.getItem('readingShelfDefaultPlanV1')||'', plansCloudReady=false;
+let readingPlans=safeParseArray('readingShelfPlansV1'), readingPlanBooks=safeParseArray('readingShelfPlanBooksV1'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', plansCloudReady=false;
 let planDayRecords=safeParseObject('readingShelfPlanDaysV1'), selectedPlanDay=localDateString(), planCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 $('goalInput').value=goal;
 if($('settingsGoalInput'))$('settingsGoalInput').value=goal;
@@ -749,13 +504,12 @@ if($('annualBookGoal'))$('annualBookGoal').value=annualBookGoal;
 renderCategoryOptions();
 $('generalNotes').value=localStorage.getItem('readingShelfNotes')||'';
 function message(t,isError=false){$('authMessage').textContent=t;$('authMessage').style.color=isError?'#9a3d37':'var(--green)'}
-function handleHeaderAccountAction(){if(currentUser){signOut()}else{openAuthModal()}}
-function setAuthUI(user){currentUser=user;const addBookWarning=$('addBookLoginWarning');if(addBookWarning&&user)addBookWarning.hidden=true;$('syncFooter').style.display=user?'none':'';$('authSignedOut').hidden=!!user;$('authSignedIn').hidden=!user;$('authPanel').hidden=true;const accountButton=$('headerAccountButton');if(accountButton)accountButton.classList.remove('is-modal-open');const headerEmail=$('headerAccountEmail');const headerStatus=$('headerAccountStatus');if(headerStatus){headerStatus.textContent=user?'Signed in:':'Signed out';headerStatus.classList.toggle('is-signed-in',!!user)}if(headerEmail){headerEmail.textContent=user?(user.email||'your account'):'';headerEmail.hidden=!user;headerEmail.title=user?(user.email||'your account'):''}if(accountButton){const signedIn=!!user;accountButton.title=signedIn?'Sign out':'Sign in';accountButton.setAttribute('aria-label',signedIn?'Sign out':'Sign in');accountButton.classList.toggle('is-signed-in',signedIn);accountButton.innerHTML=signedIn?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7l-5 5 5 5M4 12h12M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5" /></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" /></svg>'}const saveBookButton=$('saveBookButton');if(saveBookButton)saveBookButton.textContent=user?'Save book':'Log in first';if(user){$('signedInEmail').textContent=user.email||'your account';message('Your reading shelf is connected to the cloud.')}else{message('Your shelf currently works on this device. Sign in to sync it with Supabase.')}}
+function setAuthUI(user){currentUser=user;$('syncFooter').style.display=user?'none':'';$('authSignedOut').hidden=!!user;$('authSignedIn').hidden=!user;$('authPanel').hidden=true;$('headerSignInButton').hidden=!!user;$('headerSignOutButton').hidden=!user;if(user){$('signedInEmail').textContent=user.email||'your account';message('Your reading shelf is connected to the cloud.')}else{message('Your shelf currently works on this device. Sign in to sync it with Supabase.')}}
 // The sign-in lives in a modal overlay, so it takes no space on the page and
 // the shelf is on the first screen. Sign in opens it; Close, tapping the dim
 // area outside the card, or Escape closes it.
-function openAuthModal(){$('authPanel').hidden=false;$('headerAccountButton').classList.add('is-modal-open');}
-function closeAuthModal(){$('authPanel').hidden=true;$('headerAccountButton').classList.remove('is-modal-open');}
+function openAuthModal(){$('authPanel').hidden=false;}
+function closeAuthModal(){$('authPanel').hidden=true;}
 $('authPanel').addEventListener('click',e=>{if(e.target===$('authPanel'))closeAuthModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('authPanel').hidden)closeAuthModal();});
 async function signOut(){const {error}=await db.auth.signOut();if(error){message(error.message,true);return}setAuthUI(null);}
@@ -887,10 +641,10 @@ async function refreshCloudData(){
  const button=$('refreshCloudButton');
  if(!currentUser){message('Sign in to refresh your cloud shelf.',true);return;}
  if(syncing){message('A cloud sync is already in progress. Please wait.');return;}
- if(button){button.disabled=true;button.classList.add('is-refreshing');button.setAttribute('aria-busy','true');button.title='Refreshing';button.setAttribute('aria-label','Refreshing');}
+ if(button){button.disabled=true;button.textContent='↻ Refreshing…';}
  message('Refreshing your shelf from the cloud…');
  try{await loadCloudData();}
- finally{if(button){button.disabled=false;button.classList.remove('is-refreshing');button.removeAttribute('aria-busy');button.title='Refresh';button.setAttribute('aria-label','Refresh');}}
+ finally{if(button){button.disabled=false;button.textContent='↻ Refresh';}}
 }
 async function loadCloudData(){
  if(!currentUser||syncing)return;
@@ -998,12 +752,10 @@ async function saveGoal(){
 }
 async function saveGoalFromSettings(){ $('goalInput').value=$('settingsGoalInput').value; await saveGoal(); }
 function setView(view,button){activeView=view;document.querySelectorAll('.app-view').forEach(el=>el.hidden=true);const target=$(view+'View');if(target)target.hidden=false;document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.view===view));if(view==='home'){render();renderReadingPlans()}else if(view==='library')render();else if(view==='insights')renderInsights();else if(view==='knowledge'){renderKnowledge();renderKnowledgeSearch()}else if(view==='plans')renderReadingPlans();window.scrollTo({top:0,behavior:'smooth'});}
-function goToCurrentCalendarDate(){const now=new Date();calendarMonth=new Date(now.getFullYear(),now.getMonth(),1);renderCalendar();}
-function setCalendarMonthYear(){const month=Number($('calendarMonthSelect').value),year=Number($('calendarYearSelect').value);if(Number.isFinite(month)&&Number.isFinite(year)){calendarMonth=new Date(year,month,1);renderCalendar();}}
 function changeCalendarMonth(delta){calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+delta,1);renderCalendar();}
 function readingDayTotals(){const totals=new Map();readingSessions.forEach(s=>{const d=s.sessionDate;if(!d)return;totals.set(d,(totals.get(d)||0)+(Number(s.pagesRead)||0));});return totals;}
 function calculateStreaks(){const totals=readingDayTotals(),dates=[...totals.keys()].filter(d=>totals.get(d)>0).sort();if(!dates.length)return {current:0,best:0};const dayMs=86400000;const toUTC=d=>{const [y,m,day]=d.split('-').map(Number);return Date.UTC(y,m-1,day)};let best=0,run=0,previous=null;for(const d of dates){const stamp=toUTC(d);run=previous!==null&&stamp-previous===dayMs?run+1:1;best=Math.max(best,run);previous=stamp;}const today=localDateString(),yesterday=localDateString(new Date(Date.now()-dayMs));let cursor=totals.has(today)?today:(totals.has(yesterday)?yesterday:null),current=0;if(cursor){while(totals.has(cursor)){current++;const [y,m,d]=cursor.split('-').map(Number);cursor=localDateString(new Date(y,m-1,d-1));}}return {current,best};}
-function renderCalendar(){const totals=readingDayTotals(),year=calendarMonth.getFullYear(),month=calendarMonth.getMonth(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,daysInMonth=new Date(year,month+1,0).getDate(),cells=Math.ceil((offset+daysInMonth)/7)*7;const monthSelect=$('calendarMonthSelect'),yearSelect=$('calendarYearSelect');if(monthSelect&&!monthSelect.options.length){monthSelect.innerHTML=Array.from({length:12},(_,m)=>`<option value="${m}">${new Date(2000,m,1).toLocaleDateString(undefined,{month:'long'})}</option>`).join('');}if(yearSelect){const sessionYears=readingSessions.map(x=>Number(String(x.sessionDate||'').slice(0,4))).filter(Number.isFinite),currentYear=new Date().getFullYear(),minYear=Math.min(currentYear-10,...sessionYears),maxYear=Math.max(currentYear+10,...sessionYears);const years=Array.from({length:maxYear-minYear+1},(_,i)=>minYear+i);yearSelect.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join('');yearSelect.value=String(year);}if(monthSelect)monthSelect.value=String(month);let out='';for(let i=0;i<cells;i++){const day=i-offset+1;if(day<1||day>daysInMonth){out+='<div class="calendar-day muted" aria-hidden="true"></div>';continue;}const date=localDateString(new Date(year,month,day)),pages=totals.get(date)||0,level=pages>=25?3:pages>=10?2:pages>0?1:0,today=date===localDateString();out+=`<div class="calendar-day level-${level} ${today?'today':''}" title="${date}: ${pages} pages"><span class="day-number">${day}</span><span class="day-pages">${pages?pages+' pages':''}</span></div>`;}$('calendarGrid').innerHTML=out;}
+function renderCalendar(){const totals=readingDayTotals(),year=calendarMonth.getFullYear(),month=calendarMonth.getMonth(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,daysInMonth=new Date(year,month+1,0).getDate(),cells=Math.ceil((offset+daysInMonth)/7)*7;$('calendarMonthLabel').textContent=calendarMonth.toLocaleDateString(undefined,{month:'long',year:'numeric'});let out='';for(let i=0;i<cells;i++){const day=i-offset+1;if(day<1||day>daysInMonth){out+='<div class="calendar-day muted" aria-hidden="true"></div>';continue;}const date=localDateString(new Date(year,month,day)),pages=totals.get(date)||0,level=pages>=25?3:pages>=10?2:pages>0?1:0,today=date===localDateString();out+=`<div class="calendar-day level-${level} ${today?'today':''}" title="${date}: ${pages} pages"><span class="day-number">${day}</span><span class="day-pages">${pages?pages+' pages':''}</span></div>`;}$('calendarGrid').innerHTML=out;}
 function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.sessions>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');renderCalendar();renderAdvancedAnalytics();}
 
 function renderAdvancedAnalytics(){
@@ -1095,9 +847,7 @@ $('generalNotes').addEventListener('blur',()=>{
 });
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function pct(b){return b.totalPages?Math.min(100,Math.round((b.currentPage/b.totalPages)*100)):0}
-function ratingHTML(rating,bookId){const n=Number(rating)||0;return `<div class="rating-display" aria-label="${n?`${n} out of 5 stars`:'Not rated'}"><span class="rating-stars" role="group" aria-label="Set rating">${[1,2,3,4,5].map(star=>`<button type="button" class="rating-star-button ${star<=n?'is-filled':'is-empty'}" onclick="setBookRating('${bookId}',${star})" aria-label="Rate ${star} out of 5 stars" title="Rate ${star} out of 5 stars">${star<=n?'★':'☆'}</button>`).join('')}</span><span>${n?`${n}/5`:'Not rated'}</span>${n?`<button type="button" class="rating-clear-button" onclick="clearBookRating('${bookId}')" aria-label="Clear rating" title="Clear rating">×</button>`:''}</div>`}
-async function setBookRating(bookId,rating){const book=books.find(item=>String(item.id)===String(bookId));if(!book)return;const next=Number(book.rating)===Number(rating)?null:Number(rating);book.rating=next;await persist();message(next?`Rated "${book.title}" ${next} out of 5 stars.`:`Cleared the rating for "${book.title}".`)}
-async function clearBookRating(bookId){const book=books.find(item=>String(item.id)===String(bookId));if(!book)return;book.rating=null;await persist();message(`Cleared the rating for "${book.title}".`)}
+function ratingHTML(rating){const n=Number(rating)||0;return `<div class="rating-display" aria-label="${n?`${n} out of 5 stars`:'Not rated'}"><span class="rating-stars">${'★'.repeat(n)}<span class="rating-empty">${'☆'.repeat(5-n)}</span></span><span>${n?`${n}/5`:'Not rated'}</span></div>`}
 
 function knowledgeFor(bookId){return bookKnowledge[String(bookId)]||{summary:'',keyConcepts:'',takeaways:'',applications:'',reflectionQuestions:''};}
 function selectKnowledgeBook(id){if(knowledgeSaveTimer){clearTimeout(knowledgeSaveTimer);saveBookKnowledge(false);}selectedKnowledgeBook=String(id||'');$('knowledgeBookSelect').value=selectedKnowledgeBook;renderKnowledge();}
@@ -1210,7 +960,7 @@ function bookCardHTML(b){
  const action=st==='completed'?`<button class="mini" onclick="startBook('${b.id}')">Read again</button>`:st==='reading'?`<button class="mini" onclick="editBook('${b.id}')">Update</button>`:`<button class="mini" onclick="startBook('${b.id}')">Start reading</button>`;
  const progress=b.totalPages?`<div class="progress"><div style="width:${pct(b)}%"></div></div><p style="margin-top:5px">Page ${b.currentPage||0} of ${b.totalPages} · ${pct(b)}% complete</p>`:`<p style="margin-top:5px">Page ${b.currentPage||0} · total pages not set</p>`;
  const quick=st==='reading'?`<div class="quick-progress"><input id="quickPage-${b.id}" type="number" min="0" max="${b.totalPages||999999}" value="${b.currentPage||0}" aria-label="Current page for ${esc(b.title)}"><button class="quick-save" onclick="quickSaveProgress('${b.id}','quickPage-${b.id}')">Save page</button><button onclick="quickAddProgress('${b.id}',5)">+5</button><button onclick="quickAddProgress('${b.id}',10)">+10</button></div>`:'';
- return `<article class="book">${coverHTML(b)}<div class="book-details" style="min-width:0;flex:1"><span class="status-badge status-${st}">${statusLabel(b.status)}</span><h4>${esc(b.title)}</h4><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p>${ratingHTML(b.rating,b.id)}${progress}${bookDatesHTML(b)}${quick}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button><button class="mini" onclick="removeBook('${b.id}')">Remove</button></div></div></article>`;
+ return `<article class="book">${coverHTML(b)}<div class="book-details" style="min-width:0;flex:1"><span class="status-badge status-${st}">${statusLabel(b.status)}</span><h4>${esc(b.title)}</h4><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p>${ratingHTML(b.rating)}${progress}${bookDatesHTML(b)}${quick}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button><button class="mini" onclick="removeBook('${b.id}')">Remove</button></div></div></article>`;
 }
 function renderGoalProgress(){
  const el=$('goalProgress');if(!el)return;
@@ -1234,7 +984,7 @@ function render(){
  if(focusBook){
   const isReading=statusKey(focusBook.status)==='reading';
   $('focusHint').textContent=focusLabel;
-  cc.innerHTML=`${coverHTML(focusBook)}<div class="reading-info"><h4>${esc(focusBook.title)}</h4><p>${esc(focusBook.author||'Author not added')} · ${esc(categoryText(focusBook))}</p>${ratingHTML(focusBook.rating,focusBook.id)}<div class="progress"><div style="width:${pct(focusBook)}%"></div></div><div class="progress-meta"><span>Page ${focusBook.currentPage||0}${focusBook.totalPages?' of '+focusBook.totalPages:''}</span><span>${focusBook.totalPages?pct(focusBook)+'%':'Page count not set'}</span></div>${bookDatesHTML(focusBook)}${isReading?`<div class="quick-progress"><input id="quickPage-current" type="number" min="0" max="${focusBook.totalPages||999999}" value="${focusBook.currentPage||0}" aria-label="Current page for ${esc(focusBook.title)}"><button class="quick-save" onclick="quickSaveProgress('${focusBook.id}','quickPage-current')">Save page</button><button onclick="quickAddProgress('${focusBook.id}',5)">+5</button><button onclick="quickAddProgress('${focusBook.id}',10)">+10</button></div>`:`<div class="book-actions" style="margin-top:10px"><button class="mini" onclick="startBook('${focusBook.id}')">${statusKey(focusBook.status)==='completed'?'Read again':'Start reading'}</button><button class="mini" onclick="editBook('${focusBook.id}')">Edit</button></div>`}</div>`;
+  cc.innerHTML=`${coverHTML(focusBook)}<div class="reading-info"><h4>${esc(focusBook.title)}</h4><p>${esc(focusBook.author||'Author not added')} · ${esc(categoryText(focusBook))}</p>${ratingHTML(focusBook.rating)}<div class="progress"><div style="width:${pct(focusBook)}%"></div></div><div class="progress-meta"><span>Page ${focusBook.currentPage||0}${focusBook.totalPages?' of '+focusBook.totalPages:''}</span><span>${focusBook.totalPages?pct(focusBook)+'%':'Page count not set'}</span></div>${bookDatesHTML(focusBook)}${isReading?`<div class="quick-progress"><input id="quickPage-current" type="number" min="0" max="${focusBook.totalPages||999999}" value="${focusBook.currentPage||0}" aria-label="Current page for ${esc(focusBook.title)}"><button class="quick-save" onclick="quickSaveProgress('${focusBook.id}','quickPage-current')">Save page</button><button onclick="quickAddProgress('${focusBook.id}',5)">+5</button><button onclick="quickAddProgress('${focusBook.id}',10)">+10</button></div>`:`<div class="book-actions" style="margin-top:10px"><button class="mini" onclick="startBook('${focusBook.id}')">${statusKey(focusBook.status)==='completed'?'Read again':'Start reading'}</button><button class="mini" onclick="editBook('${focusBook.id}')">Edit</button></div>`}</div>`;
  }else{cc.innerHTML='<div class="empty">No book selected yet. Add a book and choose “Start reading” to make it your current focus.</div>';}
  const statusBooks=books.filter(b=>filter==='all'||statusKey(b.status)===filter);
  const categoryCounts=[...new Set(statusBooks.flatMap(book=>parseCategories(book.categories??book.category)))].sort((a,b)=>a.localeCompare(b)).map(category=>({category,count:statusBooks.filter(book=>parseCategories(book.categories??book.category).some(value=>value.toLowerCase()===category.toLowerCase())).length}));
@@ -1257,8 +1007,8 @@ function render(){
 function setFilter(f,el){filter=['all','want','reading','completed'].includes(f)?f:'all';selectedCategoryFilters=[];render()}
 function toggleCategoryFilter(value,checked){const key=String(value).toLowerCase();selectedCategoryFilters=selectedCategoryFilters.filter(item=>item.toLowerCase()!==key);if(checked)selectedCategoryFilters.push(value);render()}
 function clearCategorySelection(){selectedCategoryFilters=[];render()}
-function openAdd(){if(!currentUser){const warning=$('addBookLoginWarning');if(warning)warning.hidden=false;return;}const warning=$('addBookLoginWarning');if(warning)warning.hidden=true;$('bookForm').reset();$('bookId').value='';$('currentPage').value=0;$('startedAt').value='';$('finishedAt').value='';$('coverUrl').value='';$('coverPreview').innerHTML='';$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';renderCategoryOptions(['Other']);$('modalTitle').textContent='Add a book';$('modal').classList.add('show');$('addBookHeaderButton').classList.add('is-modal-open')}
-function closeModal(){$('modal').classList.remove('show');$('addBookHeaderButton').classList.remove('is-modal-open')}
+function openAdd(){$('bookForm').reset();$('bookId').value='';$('currentPage').value=0;$('startedAt').value='';$('finishedAt').value='';$('coverUrl').value='';$('coverPreview').innerHTML='';$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';renderCategoryOptions(['Other']);$('modalTitle').textContent='Add a book';$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show')}
 function editBook(id){let b=books.find(x=>x.id===id);if(!b)return;$('bookId').value=b.id;$('title').value=b.title;$('author').value=b.author||'';renderCategoryOptions(b.categories??b.category);$('totalPages').value=b.totalPages||'';$('status').value=b.status;$('rating').value=b.rating||'';$('currentPage').value=b.currentPage||0;$('startedAt').value=b.startedAt?String(b.startedAt).slice(0,10):'';$('finishedAt').value=b.completedAt?String(b.completedAt).slice(0,10):'';$('coverUrl').value=b.coverUrl||'';updateCoverPreview();$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';$('modalTitle').textContent='Update book';$('modal').classList.add('show')}
 async function quickSaveProgress(id,inputId){
  const book=books.find(b=>b.id===id),input=$(inputId);if(!book||!input)return;
@@ -1340,9 +1090,6 @@ function loadXlsxLibrary(){
  return xlsxLoadPromise;
 }
 async function exportExcel(){
- const exportButton=$('exportExcelButton');
- if(exportButton){exportButton.classList.add('is-exporting');exportButton.disabled=true;exportButton.setAttribute('aria-busy','true');}
- try{
  if(!books.length){showNotice('Nothing to export','Your bookshelf is empty. Add a book before exporting.');return}
  if(!window.XLSX){
   message('Loading the Excel export library…');
@@ -1397,7 +1144,6 @@ async function exportExcel(){
  XLSX.utils.book_append_sheet(workbook,sessionSheet,'Reading History');
  const date=new Date().toISOString().slice(0,10);
  XLSX.writeFile(workbook,`reading-shelf-export-${date}.xlsx`);
- }finally{if(exportButton){exportButton.classList.remove('is-exporting');exportButton.disabled=false;exportButton.removeAttribute('aria-busy');}}
 }
 
 
@@ -1406,7 +1152,6 @@ function planLocalSave(){
  localStorage.setItem('readingShelfPlansV1',JSON.stringify(readingPlans));
  localStorage.setItem('readingShelfPlanBooksV1',JSON.stringify(readingPlanBooks));
  localStorage.setItem('readingShelfSelectedPlanV1',selectedReadingPlanId||'');
- localStorage.setItem('readingShelfDefaultPlanV1',defaultReadingPlanId||'');
 }
 function activeReadingPlan(){return readingPlans.find(p=>String(p.id)===String(selectedReadingPlanId))||null;}
 function planDateValue(value){
@@ -1434,8 +1179,7 @@ async function loadReadingPlans(){
   const {data:plans,error}=await db.from('reading_plans').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
   if(error)throw error;
   readingPlans=plans||[];
-  if(defaultReadingPlanId&&readingPlans.some(p=>String(p.id)===String(defaultReadingPlanId)))selectedReadingPlanId=defaultReadingPlanId;
-  else if(!selectedReadingPlanId||!readingPlans.some(p=>String(p.id)===String(selectedReadingPlanId)))selectedReadingPlanId='';
+  if(!selectedReadingPlanId||!readingPlans.some(p=>String(p.id)===String(selectedReadingPlanId)))selectedReadingPlanId=readingPlans[0]?.id||'';
   if(selectedReadingPlanId){
    const {data:items,error:itemError}=await db.from('reading_plan_books').select('*').eq('user_id',currentUser.id).eq('plan_id',selectedReadingPlanId).order('sequence_number',{ascending:true});
    if(itemError)throw itemError;
@@ -1448,101 +1192,13 @@ async function loadReadingPlans(){
  }
  renderReadingPlans();
 }
-
-let planBooksPage=1;
-const PLAN_BOOKS_PAGE_SIZE=10;
-let draggedPlanBookId=null;
-function startPlanBookDrag(event,id){draggedPlanBookId=String(id);if(event.dataTransfer){event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));}}
-function allowPlanBookDrop(event){event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';}
-async function dropPlanBook(event,targetId){event.preventDefault();const sourceId=draggedPlanBookId||(event.dataTransfer&&event.dataTransfer.getData('text/plain'));draggedPlanBookId=null;if(!sourceId||String(sourceId)===String(targetId))return;await placePlanBookAt(sourceId,targetId);}
-function endPlanBookDrag(){draggedPlanBookId=null;}
-async function placePlanBookAt(bookItemId,targetItemId){
- const plan=activeReadingPlan();if(!plan)return;
- const ordered=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).slice().sort((a,b)=>(Number(a.sequence_number)||0)-(Number(b.sequence_number)||0));
- const from=ordered.findIndex(i=>String(i.id)===String(bookItemId)),to=ordered.findIndex(i=>String(i.id)===String(targetItemId));if(from<0||to<0||from===to)return;
- const [moving]=ordered.splice(from,1);ordered.splice(to,0,moving);ordered.forEach((item,index)=>item.sequence_number=index+1);
- await savePlanBookOrder();planBooksPage=Math.floor(to/PLAN_BOOKS_PAGE_SIZE)+1;renderReadingPlans();message('Reading order updated.');
-}
-async function setPlanBookPosition(id,value){
- const plan=activeReadingPlan();if(!plan)return;
- const ordered=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).slice().sort((a,b)=>(Number(a.sequence_number)||0)-(Number(b.sequence_number)||0));
- const from=ordered.findIndex(i=>String(i.id)===String(id));if(from<0)return;
- const target=Math.max(1,Math.min(ordered.length,Math.floor(Number(value)||1)))-1;
- if(from===target){renderReadingPlans();return;}
- const [moving]=ordered.splice(from,1);ordered.splice(target,0,moving);ordered.forEach((item,index)=>item.sequence_number=index+1);
- await savePlanBookOrder();planBooksPage=Math.floor(target/PLAN_BOOKS_PAGE_SIZE)+1;renderReadingPlans();message('Reading order updated.');
-}
-function changePlanBooksPage(delta){const plan=activeReadingPlan();if(!plan)return;const count=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).length;const pages=Math.max(1,Math.ceil(count/PLAN_BOOKS_PAGE_SIZE));planBooksPage=Math.max(1,Math.min(pages,planBooksPage+delta));renderReadingPlans();}
-function showExistingPlansPicker(){
- const picker=$('existingPlansPicker');
- const select=$('readingPlanSelect');
- if(picker)picker.hidden=false;
- if(select){select.focus();if(readingPlans.length)select.click();}
-}
-function closeReadingPlanMenus(){
- document.querySelectorAll('#plansView details.plan-action-dropdown[open]').forEach(menu=>menu.open=false);
- document.querySelectorAll('#plansView .plan-edit-actions.is-visible').forEach(menu=>menu.classList.remove('is-visible'));
-}
-function installReadingPlanMenuDismissal(){
- if(window.__readingPlanMenuDismissalInstalled)return;
- window.__readingPlanMenuDismissalInstalled=true;
- document.addEventListener('pointerdown',event=>{
-  if(!event.target.closest('#plansView .plan-action-dropdown'))closeReadingPlanMenus();
- });
- document.addEventListener('click',event=>{
-  const summary=event.target.closest('#plansView details.plan-action-dropdown > summary');
-  if(summary){
-   const current=summary.parentElement;
-   document.querySelectorAll('#plansView details.plan-action-dropdown[open]').forEach(menu=>{
-    if(menu!==current)menu.open=false;
-   });
-  }
-  const menuItem=event.target.closest('#plansView .plan-action-menu button');
-  if(menuItem){
-   const parent=menuItem.closest('details.plan-action-dropdown');
-   if(parent)parent.open=false;
-  }
- });
-}
-installReadingPlanMenuDismissal();
-
-async function selectPlanFromCascade(planId,action){
- const plan=readingPlans.find(p=>String(p.id)===String(planId));if(!plan)return;
- selectedReadingPlanId=plan.id;planBooksPage=1;planLocalSave();
- if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){
-  const {data,error}=await db.from('reading_plan_books').select('*').eq('user_id',currentUser.id).eq('plan_id',plan.id).order('sequence_number',{ascending:true});
-  if(error){message('Could not load books for this plan: '+error.message,true);return;}
-  readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id)).concat(data||[]);
- }
- closeReadingPlanMenus();
- renderReadingPlans();
- if(action==='add')renderPlanSetupPanel('add',plan.id);
-}
-function renderPlanCascadeMenus(){
- const editRoot=$('editPlanCascade'),addRoot=$('addBooksPlanCascade');
- const makePlanRows=(action)=>readingPlans.length?readingPlans.map(p=>{
-  const id=String(p.id),name=esc(p.name||'Untitled plan');
-  const assigned=readingPlanBooks.filter(i=>String(i.plan_id)===id);
-  const completed=assigned.filter(planBookDone).length;
-  const countLabel=`${assigned.length} book${assigned.length===1?'':'s'} · ${completed} completed`;
-  const selected=String(selectedReadingPlanId)===id;
-  const isDefault=String(defaultReadingPlanId)===id;const planButton=`<span class="plan-cascade-name">${name}${isDefault?' <span class="default-plan-star" title="Default plan">★</span>':''}</span><small class="plan-cascade-meta">${countLabel}${isDefault?' · Default':''}</small>`;
-  return `<button type="button" class="plan-cascade-choice ${selected?'is-selected':''}" aria-pressed="${selected}" onclick="selectPlanFromCascade('${esc(id)}','${action}')">${planButton}</button>`;
- }).join(''):'<div class="plan-cascade-empty">No reading plans yet</div>';
- if(editRoot)editRoot.innerHTML=makePlanRows('edit');
- if(addRoot)addRoot.innerHTML=makePlanRows('add');
-}
 function renderReadingPlans(){
  const root=$('readingPlanContent');if(!root)return;
  const select=$('readingPlanSelect');
  if(select){select.innerHTML=readingPlans.length?readingPlans.map(p=>`<option value="${esc(p.id)}" ${String(p.id)===String(selectedReadingPlanId)?'selected':''}>${esc(p.name||'Untitled plan')}</option>`).join(''):'<option value="">No plans yet</option>';select.value=selectedReadingPlanId||'';}
- renderPlanCascadeMenus();
  const plan=activeReadingPlan();
- if(!plan){root.innerHTML='<div class="plan-empty">No reading plan selected. You can still view the general daily calendar below. Select a plan to see its book-specific schedule and editing tools.</div><div id="planDailySchedule"></div>';renderDailyPlan();return;}
- const allItems=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).slice().sort((a,b)=>(Number(a.sequence_number)||0)-(Number(b.sequence_number)||0));
- const totalPlanPages=Math.max(1,Math.ceil(allItems.length/PLAN_BOOKS_PAGE_SIZE));planBooksPage=Math.max(1,Math.min(planBooksPage,totalPlanPages));
- const pageItems=allItems.slice((planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE,planBooksPage*PLAN_BOOKS_PAGE_SIZE);
- const items=allItems;
+ if(!plan){root.innerHTML='<div class="plan-empty">No reading plan selected. Create a plan from your unread books or start with an empty plan. Your existing books and reading history will not be changed.</div>';return;}
+ const items=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).slice().sort((a,b)=>(Number(a.sequence_number)||0)-(Number(b.sequence_number)||0));
  const done=items.filter(planBookDone).length,percent=items.length?Math.round(done/items.length*100):0;
  const unfinished=items.find(i=>!planBookDone(i)&&books.some(b=>String(b.id)===String(i.book_id)));
  const currentBook=unfinished?books.find(b=>String(b.id)===String(unfinished.book_id)):null;
@@ -1557,18 +1213,17 @@ function renderReadingPlans(){
  else if(!Number(currentBook.totalPages))todayText=`Up next: ${currentBook.title}. A page count has not been entered. Add one by editing the book, or choose a chapter or manual schedule.`;
  else {const start=Number(currentBook.currentPage||0)+1,end=Math.min(Number(currentBook.totalPages),Number(currentBook.currentPage||0)+perDay);todayText=`Today's suggested reading: ${currentBook.title} · Pages ${start}–${end}. Update the current page in My Library after reading; this suggestion will move forward automatically.`;}
  const activeItem=items.find(i=>!planBookDone(i));
- const rows=pageItems.map((item,pageIndex)=>{const index=(planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE+pageIndex;const b=books.find(x=>String(x.id)===String(item.book_id));const title=b?b.title:'Book missing from library';const mode=item.schedule_mode||'pages';const current=!!activeItem&&String(activeItem.id)===String(item.id);return `<article class="plan-book ${current?'current-focus':''}" draggable="true" ondragstart="startPlanBookDrag(event,'${esc(item.id)}')" ondragover="allowPlanBookDrop(event)" ondrop="dropPlanBook(event,'${esc(item.id)}')" ondragend="endPlanBookDrag()"><div class="plan-book-main"><div class="plan-book-order"><span class="plan-drag-handle" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><label class="plan-order-label"><span class="sr-only">No.</span><input class="plan-order-input" type="number" min="1" max="${items.length}" value="${index+1}" aria-label="No." onchange="setPlanBookPosition('${esc(item.id)}',this.value)"></label></div><div class="plan-book-copy"><h4>${esc(title)}${current?'<span class="plan-current-tag">CURRENT READING</span>':''}</h4><p>${esc(planBookStatus(item))}${b&&b.rating?` · ${'★'.repeat(Number(b.rating))}`:''}</p></div></div><div class="plan-book-actions">${!current?`<button class="mini plan-icon-button" title="Make current" aria-label="Make current" onclick="makePlanBookCurrent('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.2v14.8M12 6.2c-2.2-1.5-5.1-2-8-1.5v14.8c2.9-.5 5.8 0 8 1.5M12 6.2c2.2-1.5 5.1-2 8-1.5v14.8c-2.9-.5-5.8 0-8 1.5"/></svg></button>`:''}<button class="mini plan-icon-button" title="Move up" aria-label="Move up" ${index===0?'disabled':''} onclick="movePlanBook('${esc(item.id)}',-1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button><button class="mini plan-icon-button" title="Move down" aria-label="Move down" ${index===items.length-1?'disabled':''} onclick="movePlanBook('${esc(item.id)}',1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>${mode==='chapters'&&Number(item.chapter_count)>0?`<button class="mini" onclick="advancePlanChapters('${esc(item.id)}')">Mark chapters read</button>`:''}<button class="mini plan-icon-button" title="Schedule" aria-label="Schedule" onclick="configurePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></button><button class="mini plan-icon-button" title="Remove" aria-label="Remove" onclick="removePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg></button></div></article>`}).join('');
- root.innerHTML=`<section class="plan-panel"><div class="selected-plan-banner"><div><small>CURRENT READING PLAN</small><strong>${esc(plan.name||'Personal Reading Plan')}</strong><span>Your calendar and reading schedule are showing this plan.</span></div><span class="selected-plan-status">${esc(plan.status||'active')}</span></div>
+ const rows=items.map((item,index)=>{const b=books.find(x=>String(x.id)===String(item.book_id));const title=b?b.title:'Book missing from library';const mode=item.schedule_mode||'pages';const current=!!activeItem&&String(activeItem.id)===String(item.id);return `<article class="plan-book ${current?'current-focus':''}"><div><h4>${index+1}. ${esc(title)}${current?'<span class="plan-current-tag">CURRENT READING</span>':''}</h4><p>${esc(planBookStatus(item))}${b&&b.rating?` · ${'★'.repeat(Number(b.rating))}`:''}</p></div><div class="plan-book-actions">${!current?`<button class="mini" onclick="makePlanBookCurrent('${esc(item.id)}')">Make current</button>`:''}<button class="mini" ${index===0?'disabled':''} onclick="movePlanBook('${esc(item.id)}',-1)">Move up</button><button class="mini" ${index===items.length-1?'disabled':''} onclick="movePlanBook('${esc(item.id)}',1)">Move down</button>${mode==='chapters'&&Number(item.chapter_count)>0?`<button class="mini" onclick="advancePlanChapters('${esc(item.id)}')">Mark chapters read</button>`:''}<button class="mini" onclick="configurePlanBook('${esc(item.id)}')">Schedule</button><button class="mini" onclick="removePlanBook('${esc(item.id)}')">Remove</button></div></article>`}).join('');
+ root.innerHTML=`<section class="plan-panel"><div class="section-head" style="margin:0 0 12px"><h3>${esc(plan.name||'Personal Reading Plan')}</h3><span>${esc(plan.status||'active')}</span></div>
  <div class="plan-stats"><div class="plan-stat"><small>Books in plan</small><strong>${items.length}</strong></div><div class="plan-stat"><small>Completed</small><strong>${done}</strong></div><div class="plan-stat"><small>Plan progress</small><strong>${percent}%</strong></div><div class="plan-stat"><small>Known pages left</small><strong>${knownRemaining.toLocaleString()}</strong></div></div>
  <div class="plan-progress"><span style="width:${percent}%"></span></div><div class="plan-today"><strong>Reading focus</strong><br>${esc(todayText)}</div>
  <div id="planDailySchedule"></div>
- <div class="section-head" id="planSettingsSection"><h3>Plan settings</h3><span>Saved to your account when signed in</span></div>
+ <div class="section-head"><h3>Plan settings</h3><span>Saved to your account when signed in</span></div>
  <div class="plan-settings"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Target end date<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label><label>Plan pace (pages/day)<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div><div class="plan-note">Reading days: ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].filter((d,i)=>(plan.reading_days||[1,2,3,4,5]).includes(i+1)).join(', ')||'Not set'} (the current schedule uses your saved reading-day settings).</div>
- <div class="plan-toolbar"><button class="secondary" onclick="saveReadingPlanSettings()">Save settings</button><button class="secondary" type="button" onclick="setDefaultReadingPlan('${esc(plan.id)}')">${String(defaultReadingPlanId)===String(plan.id)?'★ Current default':'☆ Set as default'}</button><span class="plan-note">Estimated finish based on known remaining pages: ${knownRemaining?planDateValue(finishDate):'not available'} · assumes ${perDay} pages every calendar day</span></div>
- <div class="section-head" id="planBooksSection"><h3>Books in this plan</h3><span>${items.length} assigned</span></div>
- <div class="plan-book-scroll"><div class="plan-book-list">${rows||'<div class="plan-empty">No books have been added yet.</div>'}</div></div>
- <div class="plan-pagination"><span class="plan-note">Showing ${allItems.length?((planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE+1):0}–${Math.min(planBooksPage*PLAN_BOOKS_PAGE_SIZE,allItems.length)} of ${allItems.length} books</span><div class="plan-pagination-controls"><button class="mini" type="button" onclick="changePlanBooksPage(-1)" ${planBooksPage<=1?'disabled':''}>Previous</button><span>Page ${planBooksPage} of ${totalPlanPages}</span><button class="mini" type="button" onclick="changePlanBooksPage(1)" ${planBooksPage>=totalPlanPages?'disabled':''}>Next</button></div></div>
- <p class="plan-note">Drag a book to reorder it, or edit its order number. You can also use the Move up and Move down controls. The first unfinished book is your current reading focus. Use “Make current” to switch to any book, or move books up and down to change the sequence. Carry-over is shown separately from your new daily page goal. Books without page counts remain in your plan. Edit the book in My Library to add its page count later, or set a chapter-based or manual schedule. Completing a book in My Library automatically counts it as complete here.</p>
+ <div class="plan-toolbar"><button class="secondary" onclick="saveReadingPlanSettings()">Save settings</button><span class="plan-note">Estimated finish based on known remaining pages: ${knownRemaining?planDateValue(finishDate):'not available'} · assumes ${perDay} pages every calendar day</span></div>
+ <div class="section-head"><h3>Books in this plan</h3><span>${items.length} assigned</span></div>
+ <div class="plan-book-list">${rows||'<div class="plan-empty">No books have been added yet.</div>'}</div>
+ <p class="plan-note">The first unfinished book is your current reading focus. Use “Make current” to switch to any book, or move books up and down to change the sequence. Carry-over is shown separately from your new daily page goal. Books without page counts remain in your plan. Edit the book in My Library to add its page count later, or set a chapter-based or manual schedule. Completing a book in My Library automatically counts it as complete here.</p>
  <div class="plan-toolbar"><button class="primary" onclick="addBooksToPlan()">Add books</button><button class="secondary" onclick="markPlanCompleted()">Mark plan completed</button><button class="secondary" onclick="deleteReadingPlan()">Delete plan</button></div></section>`;
  renderDailyPlan();
 }
@@ -1620,29 +1275,8 @@ function renderPlanCalendar(plan,date){
  }
  return `<div class="plan-calendar">${html}</div>`;
 }
-function renderGeneralPlanCalendar(date){
- const month=planCalendarMonth.getMonth(),year=planCalendarMonth.getFullYear(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,days=new Date(year,month+1,0).getDate();
- const labels=['M','T','W','T','F','S','S'];let html=labels.map(x=>`<div class="plan-calendar-label">${x}</div>`).join('');
- for(let i=0;i<offset;i++)html+='<div></div>';
- for(let day=1;day<=days;day++){
-  const key=planDateValue(new Date(year,month,day)),today=key===localDateString(),selected=key===date;
-  html+=`<button type="button" class="plan-calendar-day ${selected?'selected':''} ${today?'today':''}" onclick="selectGeneralPlanDay('${key}')">${day}</button>`;
- }
- return `<div class="plan-calendar">${html}</div>`;
-}
-function selectGeneralPlanDay(date){
- if(!date)return;
- selectedPlanDay=date;
- const d=new Date(date+'T12:00:00');
- planCalendarMonth=new Date(d.getFullYear(),d.getMonth(),1);
- renderDailyPlan();
-}
 function renderDailyPlan(){
- const root=$('planDailySchedule'),plan=activeReadingPlan();if(!root)return;if(!plan){
- const date=selectedPlanDay||localDateString(),today=localDateString();
- root.innerHTML=`<section class="plan-day-panel general-daily-calendar"><div class="plan-day-head"><h3>General daily reading</h3><label style="font:11px Arial;color:var(--muted)">Selected date <input type="date" value="${date}" onchange="selectGeneralPlanDay(this.value)"></label></div><div class="calendar-controls plan-calendar-controls" aria-label="Choose calendar month and year"><button class="secondary calendar-today-button" type="button" onclick="goToCurrentPlanCalendarDate()">Today</button><label class="calendar-select-wrap"><span class="sr-only">Month</span><select id="planCalendarMonthSelect" aria-label="Select month" onchange="setPlanCalendarMonthYear()"></select></label><label class="calendar-select-wrap"><span class="sr-only">Year</span><select id="planCalendarYearSelect" aria-label="Select year" onchange="setPlanCalendarMonthYear()"></select></label></div>${renderGeneralPlanCalendar(date)}<div class="plan-day-summary">A general calendar view, not tied to a book or reading plan. Select a reading plan to see assigned books, daily page targets, carry-over reading, and completion controls.</div><div class="plan-assignment-group"><h4>Daily reading</h4><div class="plan-empty-small">No book has been assigned. Choose a reading plan when you're ready to follow a book-specific schedule.</div></div></section>`;
- syncPlanCalendarSelectors();return;
- }
+ const root=$('planDailySchedule'),plan=activeReadingPlan();if(!root||!plan)return;
  const today=localDateString(),start=planDateValue(plan.start_date)||today;let date=selectedPlanDay||today;
  if(date<start)date=start;if(date>today){};
  if(date<=today)ensurePlanRecordsThrough(plan,date);
@@ -1658,23 +1292,9 @@ function renderDailyPlan(){
  let catchup='';if(streak>=3)catchup=`<div class="plan-catchup"><strong>Catch-up review:</strong> ${streak} consecutive scheduled reading days have outstanding assignments. This first version flags the need to adjust your pace; it will not erase reading, double your workload, or change your plan automatically.</div>`;
  const carryHtml=carry.length?carry.map(a=>renderAssignment(a,'carry')).join(''):'<div class="plan-empty-small">No outstanding carry-over reading.</div>';
  const plannedHtml=assignments.length?assignments.map(a=>renderAssignment(a,'planned')).join(''):'<div class="plan-empty-small">No page-based assignment for this day. Chapter and manual books remain available in the book schedule below.</div>';
- root.innerHTML=`<section class="plan-day-panel"><div class="plan-day-head"><h3>Daily reading plan</h3><label style="font:11px Arial;color:var(--muted)">Selected date <input type="date" value="${date}" max="${'9999-12-31'}" onchange="selectPlanDay(this.value)"></label></div><div class="calendar-controls plan-calendar-controls" aria-label="Choose reading plan calendar month and year">
-      <button class="secondary calendar-today-button" type="button" onclick="goToCurrentPlanCalendarDate()">Today</button>
-      <label class="calendar-select-wrap"><span class="sr-only">Month</span><select id="planCalendarMonthSelect" aria-label="Select month" onchange="setPlanCalendarMonthYear()"></select></label>
-      <label class="calendar-select-wrap"><span class="sr-only">Year</span><select id="planCalendarYearSelect" aria-label="Select year" onchange="setPlanCalendarMonthYear()"></select></label>
-    </div>${renderPlanCalendar(plan,date)}<div class="plan-day-summary">${future?'Future assignments are for preview only. You cannot mark them complete early.':`${carry.length} carry-over item(s) · ${carryPages} carry-over pages shown separately · ${assignments.length} planned item(s) · ${totalPages} new pages.`} Reading days: ${((plan.reading_days||[1,2,3,4,5]).length)} days per week.</div>${catchup}<div class="plan-assignment-group"><h4>Carry-over reading</h4>${carryHtml}</div><div class="plan-assignment-group"><h4>Planned daily reading</h4>${plannedHtml}</div><p class="plan-note">Mark a page assignment Completed after reading. Unable assignments stay outstanding and appear as carry-over on the next reading day. Your book's current page is updated when you mark an assignment complete.</p></section>`;
- syncPlanCalendarSelectors();
+ root.innerHTML=`<section class="plan-day-panel"><div class="plan-day-head"><h3>Daily reading plan</h3><label style="font:11px Arial;color:var(--muted)">Selected date <input type="date" value="${date}" max="${'9999-12-31'}" onchange="selectPlanDay(this.value)"></label></div><div class="plan-day-head" style="margin-top:8px"><button class="mini" type="button" onclick="changePlanCalendarMonth(-1)">‹</button><strong style="font:13px Arial;color:var(--green)">${planCalendarMonth.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</strong><button class="mini" type="button" onclick="changePlanCalendarMonth(1)">›</button></div>${renderPlanCalendar(plan,date)}<div class="plan-day-summary">${future?'Future assignments are for preview only. You cannot mark them complete early.':`${carry.length} carry-over item(s) · ${carryPages} carry-over pages shown separately · ${assignments.length} planned item(s) · ${totalPages} new pages.`} Reading days: ${((plan.reading_days||[1,2,3,4,5]).length)} days per week.</div>${catchup}<div class="plan-assignment-group"><h4>Carry-over reading</h4>${carryHtml}</div><div class="plan-assignment-group"><h4>Planned daily reading</h4>${plannedHtml}</div><p class="plan-note">Mark a page assignment Completed after reading. Unable assignments stay outstanding and appear as carry-over on the next reading day. Your book's current page is updated when you mark an assignment complete.</p></section>`;
 }
-function selectPlanDay(date){if(!activeReadingPlan()||!date)return;selectedPlanDay=date;const d=new Date(date+'T12:00:00');planCalendarMonth=new Date(d.getFullYear(),d.getMonth(),1);renderDailyPlan();}
-function syncPlanCalendarSelectors(){
- const monthSelect=$('planCalendarMonthSelect'),yearSelect=$('planCalendarYearSelect');if(!monthSelect||!yearSelect)return;
- if(!monthSelect.options.length)monthSelect.innerHTML=Array.from({length:12},(_,m)=>`<option value="${m}">${new Date(2000,m,1).toLocaleDateString(undefined,{month:'long'})}</option>`).join('');
- const currentYear=new Date().getFullYear(),minYear=currentYear-10,maxYear=currentYear+10;
- yearSelect.innerHTML=Array.from({length:maxYear-minYear+1},(_,i)=>{const y=minYear+i;return `<option value="${y}">${y}</option>`}).join('');
- monthSelect.value=String(planCalendarMonth.getMonth());yearSelect.value=String(planCalendarMonth.getFullYear());
-}
-function setPlanCalendarMonthYear(){const month=Number($('planCalendarMonthSelect').value),year=Number($('planCalendarYearSelect').value);if(Number.isFinite(month)&&Number.isFinite(year)){planCalendarMonth=new Date(year,month,1);renderDailyPlan();}}
-function goToCurrentPlanCalendarDate(){const today=localDateString();planCalendarMonth=new Date(Number(today.slice(0,4)),Number(today.slice(5,7))-1,1);selectedPlanDay=today;renderDailyPlan();}
+function selectPlanDay(date){if(!date)return;selectedPlanDay=date;const d=new Date(date+'T12:00:00');planCalendarMonth=new Date(d.getFullYear(),d.getMonth(),1);renderDailyPlan();}
 function changePlanCalendarMonth(amount){planCalendarMonth=new Date(planCalendarMonth.getFullYear(),planCalendarMonth.getMonth()+amount,1);renderDailyPlan();}
 async function updatePlanAssignment(sourceDate,bookId,start,end,status){
  const plan=activeReadingPlan();if(!plan)return;const record=planDayRecords[planDayKey(plan.id,sourceDate)];if(!record)return;
@@ -1739,98 +1359,38 @@ async function selectReadingPlan(id){
  else if(!selectedReadingPlanId)readingPlanBooks=[];
  planLocalSave();renderReadingPlans();
 }
-function renderPlanSetupPanel(mode,planId){
- if(mode==='add'&&planId)selectedReadingPlanId=planId;
- const root=$('readingPlanContent');if(!root)return;
- const isUnread=mode==='unread',isAdd=mode==='add',isEmpty=mode==='empty';
- const active=activeReadingPlan();
- if(isAdd&&!active){message('Create or select a reading plan first.',true);return;}
- const existing=isAdd?new Set(readingPlanBooks.filter(i=>String(i.plan_id)===String(active.id)).map(i=>String(i.book_id))):new Set();
- const candidates=isAdd
-  ?books.filter(b=>statusKey(b.status)!=='completed'&&!existing.has(String(b.id)))
-  :isUnread?books.filter(b=>statusKey(b.status)!=='completed'&&!/^AWS Training Notes 2023$/i.test(String(b.title||'').trim())):[];
- if((isUnread||isAdd)&&!candidates.length){
-  root.innerHTML=`<div class="plan-setup-panel"><h3>${isAdd?'Add books to plan':'Plan with unread books'}</h3><p>${isAdd?'There are no additional unread books available to add to this plan.':'No unread books were found in your library.'}</p><div class="plan-setup-actions"><button class="secondary" type="button" onclick="renderReadingPlans()">Back</button></div></div>`;
-  return;
- }
- const title=isUnread?'Create a plan with unread books':isEmpty?'Create an empty plan':'Add books to your plan';
- const description=isUnread?'Choose the unread books you want to include. All unread books are selected by default; uncheck any you want to leave out.':isEmpty?'Give your plan a name. You can add books to it afterward.':'Select the books you want to add to the currently selected plan.';
- root.innerHTML=`<section class="plan-setup-panel">
-  <h3>${title}</h3><p>${description}</p>
-  ${!isAdd?`<div class="plan-setup-fields"><label>Plan name<input id="inlinePlanName" maxlength="100" value="Personal Reading Curriculum" placeholder="Enter a plan name"></label></div>`:''}
-  ${isEmpty?'':`<div class="plan-setup-actions"><button class="mini secondary" type="button" onclick="setPlanSetupSelection(true)">Select all</button><button class="mini secondary" type="button" onclick="setPlanSetupSelection(false)">Clear selection</button><span class="plan-setup-count" id="planSetupCount"></span></div>
-  <div class="plan-setup-list" id="planSetupBookList">${candidates.map((b,i)=>`<label class="plan-setup-book"><input type="checkbox" class="plan-setup-book-check" value="${i}" ${isUnread?'checked':''}><span><strong>${esc(b.title||'Untitled book')}</strong><small>${esc(b.author||'Author not listed')}${Number(b.totalPages)?' · '+Number(b.totalPages)+' pages':' · Page count not entered'}</small></span></label>`).join('')}</div>`}
-  <div class="plan-setup-actions"><button class="primary" type="button" onclick="submitPlanSetup('${mode}')">${isAdd?'Add selected books':isEmpty?'Create empty plan':'Create plan'}</button><button class="secondary" type="button" onclick="renderReadingPlans()">Cancel</button></div>
- </section>`;
- if(!isEmpty){
-  const updateCount=()=>{const count=root.querySelectorAll('.plan-setup-book-check:checked').length;const el=$('planSetupCount');if(el)el.textContent=`${count} selected`;};
-  root.querySelectorAll('.plan-setup-book-check').forEach(el=>el.addEventListener('change',updateCount));
-  updateCount();
- }
+async function createEmptyReadingPlan(){
+ const name=await askInput('Name your reading plan','Give your new plan a name.','Plan name','Personal Reading Curriculum','Create plan');if(name===null)return;
+ const draft={name:name.trim()||'Personal Reading Curriculum',start_date:planDateValue(new Date()),target_end_date:null,daily_page_goal:25,reading_days:[1,2,3,4,5],status:'active'};
+ if(currentUser){const {data,error}=await db.from('reading_plans').insert({...draft,user_id:currentUser.id}).select('*').single();if(error){message('Could not create plan: '+error.message,true);return;}readingPlans.unshift(data);selectedReadingPlanId=data.id;readingPlanBooks=[];}
+ else{const id='local-plan-'+Date.now();readingPlans.unshift({id,...draft,created_at:new Date().toISOString()});selectedReadingPlanId=id;readingPlanBooks=[];}
+ planLocalSave();renderReadingPlans();message('Reading plan created.');
 }
-function setPlanSetupSelection(checked){
- document.querySelectorAll('#planSetupBookList .plan-setup-book-check').forEach(el=>el.checked=checked);
- const count=document.querySelectorAll('#planSetupBookList .plan-setup-book-check:checked').length;
- const el=$('planSetupCount');if(el)el.textContent=`${count} selected`;
-}
-async function submitPlanSetup(mode){
- const isAdd=mode==='add',isEmpty=mode==='empty',isUnread=mode==='unread';
- const nameEl=$('inlinePlanName');
- const name=(nameEl?.value||'').trim()||'Personal Reading Curriculum';
- if(isAdd){
-  const plan=activeReadingPlan();if(!plan){message('Create or select a reading plan first.',true);return;}
-  const existing=new Set(readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).map(i=>String(i.book_id)));
-  const candidates=books.filter(b=>statusKey(b.status)!=='completed'&&!existing.has(String(b.id)));
-  const selected=[...document.querySelectorAll('#planSetupBookList .plan-setup-book-check:checked')].map(el=>Number(el.value)).filter(i=>Number.isInteger(i)&&i>=0&&i<candidates.length);
-  const chosen=[...new Set(selected)].map(i=>candidates[i]);if(!chosen.length){message('Select at least one book to add.',true);return;}
-  const next=readingPlanBooks.reduce((m,i)=>Math.max(m,Number(i.sequence_number)||0),0)+1;
-  if(currentUser&&plansCloudReady){
-   const rows=chosen.filter(b=>planIsUuid(b.id)).map((b,i)=>({user_id:currentUser.id,plan_id:plan.id,book_id:b.id,sequence_number:next+i,schedule_mode:Number(b.totalPages)>0?'pages':'manual'}));
-   if(rows.length){const {data,error}=await db.from('reading_plan_books').insert(rows).select('*');if(error){message('Could not add books: '+error.message,true);return;}readingPlanBooks.push(...(data||[]));}
-  }else chosen.forEach((b,i)=>readingPlanBooks.push({id:`local-plan-book-${Date.now()}-${i}`,plan_id:plan.id,book_id:b.id,sequence_number:next+i,schedule_mode:Number(b.totalPages)>0?'pages':'manual',chapter_count:null,current_chapter:0,chapters_per_day:1,manual_assignment:null}));
-  planLocalSave();renderReadingPlans();message(`${chosen.length} book${chosen.length===1?'':'s'} added.`);return;
- }
- let chosenUnread=[];
- if(isUnread){
-  const candidates=books.filter(b=>statusKey(b.status)!=='completed'&&!/^AWS Training Notes 2023$/i.test(String(b.title||'').trim()));
-  const selected=[...document.querySelectorAll('#planSetupBookList .plan-setup-book-check:checked')].map(el=>Number(el.value)).filter(i=>Number.isInteger(i)&&i>=0&&i<candidates.length);
-  chosenUnread=[...new Set(selected)].map(i=>candidates[i]);
-  if(!chosenUnread.length){message('Select at least one book for your plan.',true);return;}
- }
+async function createPlanFromUnread(){
+ const candidates=books.filter(b=>statusKey(b.status)!=='completed'&&!/^AWS Training Notes 2023$/i.test(String(b.title||'').trim()));
+ if(!candidates.length){message('No unread books found to add to a plan.',true);return;}
+ const name=await askInput('Name your reading plan','Give your new plan a name.','Plan name','Personal Reading Curriculum','Create plan');if(name===null)return;
+ const draft={name:name.trim()||'Personal Reading Curriculum',start_date:planDateValue(new Date()),target_end_date:null,daily_page_goal:25,reading_days:[1,2,3,4,5],status:'active'};
  let plan;
- const draft={name,start_date:planDateValue(new Date()),target_end_date:null,daily_page_goal:25,reading_days:[1,2,3,4,5],status:'active'};
- if(currentUser){
-  const {data,error}=await db.from('reading_plans').insert({...draft,user_id:currentUser.id}).select('*').single();
-  if(error){message('Could not create plan: '+error.message,true);return;}plan=data;
- }else plan={id:'local-plan-'+Date.now(),...draft,created_at:new Date().toISOString()};
- let items=[];
- if(isUnread){
-  if(currentUser){
-   const rows=chosenUnread.filter(b=>planIsUuid(b.id)).map((b,i)=>({user_id:currentUser.id,plan_id:plan.id,book_id:b.id,sequence_number:i+1,schedule_mode:Number(b.totalPages)>0?'pages':'manual'}));
-   if(rows.length){const {data,error}=await db.from('reading_plan_books').insert(rows).select('*');if(error){message('Plan created, but its books could not be added: '+error.message,true);readingPlans.unshift(plan);selectedReadingPlanId=plan.id;planLocalSave();renderReadingPlans();return;}items=data||[];}
-  }else items=chosenUnread.map((b,i)=>({id:`local-plan-book-${Date.now()}-${i}`,plan_id:plan.id,book_id:b.id,user_id:null,sequence_number:i+1,schedule_mode:Number(b.totalPages)>0?'pages':'manual',chapter_count:null,current_chapter:0,chapters_per_day:1,manual_assignment:null}));
- }
- readingPlans.unshift(plan);selectedReadingPlanId=plan.id;readingPlanBooks=items;planLocalSave();renderReadingPlans();
- message(isEmpty?'Empty reading plan created.':`Created a plan with ${items.length} book${items.length===1?'':'s'}.`);
+ if(currentUser){const {data,error}=await db.from('reading_plans').insert({...draft,user_id:currentUser.id}).select('*').single();if(error){message('Could not create plan: '+error.message,true);return;}plan=data;}
+ else plan={id:'local-plan-'+Date.now(),...draft,created_at:new Date().toISOString()};
+ let items;
+ if(currentUser){const rows=candidates.filter(b=>planIsUuid(b.id)).map((b,i)=>({user_id:currentUser.id,plan_id:plan.id,book_id:b.id,sequence_number:i+1,schedule_mode:Number(b.totalPages)>0?'pages':'manual'}));if(rows.length){const {data,error}=await db.from('reading_plan_books').insert(rows).select('*');if(error){message('Plan created, but its books could not be added: '+error.message,true);readingPlans.unshift(plan);selectedReadingPlanId=plan.id;planLocalSave();renderReadingPlans();return;}items=data||[];}}
+ else items=candidates.map((b,i)=>({id:`local-plan-book-${Date.now()}-${i}`,plan_id:plan.id,book_id:b.id,user_id:null,sequence_number:i+1,schedule_mode:Number(b.totalPages)>0?'pages':'manual',chapter_count:null,current_chapter:0,chapters_per_day:1,manual_assignment:null}));
+ readingPlans.unshift(plan);selectedReadingPlanId=plan.id;readingPlanBooks=items;planLocalSave();renderReadingPlans();message(`Created a plan with ${items.length} book${items.length===1?'':'s'}.`);
 }
-function createEmptyReadingPlan(){renderPlanSetupPanel('empty');}
-function createPlanFromUnread(){renderPlanSetupPanel('unread');}
-function addBooksToPlan(planId){renderPlanSetupPanel('add',planId||selectedReadingPlanId);}
-function showExistingPlansPicker(){
- const picker=$('existingPlansPicker');
- const select=$('readingPlanSelect');
- if(picker)picker.hidden=false;
- if(select)select.focus();
-}
-function setDefaultReadingPlan(planId){
- const plan=readingPlans.find(p=>String(p.id)===String(planId));if(!plan)return;
- // One scalar ID enforces exactly one default; choosing another replaces the previous default.
- defaultReadingPlanId=String(plan.id);
- selectedReadingPlanId=plan.id;
- planLocalSave();
- renderReadingPlans();
- renderPlanCascadeMenus();
- message(`"${plan.name||'Reading plan'}" is now your default reading plan. Any previous default has been replaced.`);
+async function addBooksToPlan(){
+ const plan=activeReadingPlan();if(!plan){message('Create or select a reading plan first.',true);return;}
+ const existing=new Set(readingPlanBooks.map(i=>String(i.book_id)));
+ const candidates=books.filter(b=>statusKey(b.status)!=='completed'&&!existing.has(String(b.id)));
+ if(!candidates.length){message('There are no additional unread books to add.');return;}
+ const selected=await showConfirmDialog({title:'Add books to plan',message:'Choose the books to add to this plan.',choices:candidates.map((b,i)=>({value:String(i),label:b.title+(Number(b.totalPages)?'':' (page count missing)')})),confirmLabel:'Add books'});
+ if(!selected||!selected.length)return;
+ const chosen=[...new Set(selected.map(v=>Number(v)).filter(i=>Number.isInteger(i)&&i>=0&&i<candidates.length))].map(i=>candidates[i]);if(!chosen.length){message('No valid books selected.',true);return;}
+ const next=readingPlanBooks.reduce((m,i)=>Math.max(m,Number(i.sequence_number)||0),0)+1;
+ if(currentUser&&plansCloudReady){const rows=chosen.filter(b=>planIsUuid(b.id)).map((b,i)=>({user_id:currentUser.id,plan_id:plan.id,book_id:b.id,sequence_number:next+i,schedule_mode:Number(b.totalPages)>0?'pages':'manual'}));if(rows.length){const {data,error}=await db.from('reading_plan_books').insert(rows).select('*');if(error){message('Could not add books: '+error.message,true);return;}readingPlanBooks.push(...(data||[]));}}
+ else chosen.forEach((b,i)=>readingPlanBooks.push({id:`local-plan-book-${Date.now()}-${i}`,plan_id:plan.id,book_id:b.id,sequence_number:next+i,schedule_mode:Number(b.totalPages)>0?'pages':'manual',chapter_count:null,current_chapter:0,chapters_per_day:1,manual_assignment:null}));
+ planLocalSave();renderReadingPlans();message(`${chosen.length} book${chosen.length===1?'':'s'} added.`);
 }
 async function saveReadingPlanSettings(){
  const plan=activeReadingPlan();if(!plan)return;
@@ -1881,10 +1441,10 @@ async function removePlanBook(id){
  readingPlanBooks=readingPlanBooks.filter(i=>String(i.id)!==String(id));planLocalSave();renderReadingPlans();
 }
 async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Mark plan completed?','Mark this reading plan as completed? This will not change the status of any books.','Mark completed')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').update({status:'completed'}).eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not update plan: '+error.message,true);return;}}plan.status='completed';planLocalSave();renderReadingPlans();message('Plan marked completed.');}
-async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its plan assignments? Your books and reading history will remain untouched.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
+async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its plan assignments? Your books and reading history will remain untouched.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId=readingPlans[0]?.id||'';if(currentUser&&plansCloudReady&&selectedReadingPlanId){const {data,error}=await db.from('reading_plan_books').select('*').eq('user_id',currentUser.id).eq('plan_id',selectedReadingPlanId).order('sequence_number',{ascending:true});if(!error)readingPlanBooks=data||[];}planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,removeBook,setFilter,exportExcel,quickSaveProgress,quickAddProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,selectPlanFromCascade,openSelectedPlanSection,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
+Object.assign(window,{openAdd,closeModal,saveBook,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,removeBook,setFilter,exportExcel,quickSaveProgress,quickAddProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
 async function init(){
  // Show the locally saved shelf immediately, before waiting on the session,
  // so the page never sits on hardcoded zeros.
@@ -1918,5 +1478,5 @@ init();
 // A failed registration is swallowed so it can never break the app.
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
 </script>
-<input type='hidden' name='ntsp_block_page' value='https://block.canopy.us/?a=block/block1&level=-30&url=http%3A%2F%2Fchatgpt.com%2Fbackend-api%2Festuary%2Fcontent%3Fid%3Dfile_000000002d488212a4e2b0e8454c4612%26ts%3D498721%26p%3Dfs%26cid%3D1%26sig%3Dba1f7ac40fc7b8f73b035a4fa6eea3220b9f9bb4a28e6f95f5bd36b1ea95d4f1%26v%3D0&user_id=1446607&sigid=fb9d6f408e50f592e90110bb238e8f79f4b3b60829429d121c9881c2ff9b7ec6&startm=0&keyword=&referer=https%3A%2F%2Fchatgpt.com%2F&category=24&cause=Quiltingjs'/><input type='hidden' name='ntsp_is_etrog' value='0'/><input type='hidden' name='ntsp_url_category' value='24'/><input type='hidden' name='ntsp_quilting' value='3'/><input type='hidden' name='ntsp_media_level' value='-30'/><input type='hidden' name='ntsp_user_level' value='-30'/><input type='hidden' name='ntsp_url_level' value='20'/><input type='hidden' name='ntsp_block_wa_status' value='0'/><script src='/jsQuilting/server/jsDict_utf8.js?v=1&k=23898278c1850f536d688db3614128a0' type='text/javascript' defer></script></body>
+</body>
 </html>
