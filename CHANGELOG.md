@@ -138,6 +138,14 @@ The plan field is relabelled **"Plan pace (pages/day)"** and the plans intro now
 
 **How it was found:** Ronnie pasted a browser Console error naming `localDateString is not defined` at the plan-data line.
 
+## Fix 23 — Revert Fix 22 (Ronnie did not like the stacked phone layout)
+
+**Files:** `index.html` (CHANGELOG only).
+
+**What changed:** all four Fix 22 rules removed — the header no longer stacks at 760px and below, the hero no longer stacks at 600px and below, the nav tabs are back to min-width 78px at 440px and below, and the `overflow-x:clip` safety net on `body` is removed. The file is back to the Fix 21 state (154,918 bytes). The reason it looked different is that Fix 22 changed the header and the hero from side-by-side rows into stacked columns on a phone so everything would fit; Ronnie preferred the original single-row look.
+
+**After deploying:** the phone layout is back to how it was before Fix 22 — the header is one row again, which can run off the right edge on a narrow phone (Export cut off, Add a book off screen, sideways scrolling), as it did before.
+
 ## Fix 22 — Responsive phone layout: header stacks, hero stacks, narrower tabs (Ronnie's request)
 
 **Files:** `index.html` (CHANGELOG only).
