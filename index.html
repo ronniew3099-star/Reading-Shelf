@@ -68,7 +68,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .auth-row{display:flex;align-items:end;gap:9px;flex-wrap:wrap}.auth-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:180px}.auth-field label{font-size:11px;color:var(--muted)}.auth-field input{padding:10px;border:1px solid var(--line);border-radius:5px;background:#fff;font:13px Arial}.auth-actions{display:flex;gap:7px;flex-wrap:wrap}.auth-message{margin:9px 0 0;color:var(--green);font:12px/1.45 Arial}.auth-account{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.auth-account strong{color:var(--green)}
 
 .main-nav{display:flex;gap:7px;overflow-x:auto;padding:7px;margin:0 0 24px;background:rgba(255,250,240,.72);border:1px solid var(--line);border-radius:8px;scrollbar-width:thin}
-.nav-item{flex:1;min-width:90px;border:0;border-radius:6px;background:transparent;color:var(--muted);padding:11px 12px;font:12px Arial;white-space:nowrap}
+.nav-item{flex:1;min-width:90px;min-height:44px;border:0;border-radius:6px;background:transparent;color:var(--muted);padding:11px 12px;font:12px Arial;white-space:nowrap}
 .nav-item.active{background:var(--green);color:#fff;box-shadow:0 3px 9px #294b3b22}
 .nav-item:first-letter{font-size:15px}
 .app-view[hidden]{display:none!important}
@@ -317,15 +317,15 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 /* Responsive navigation: compact labels on tablets, icon-only on phones */
 @media (max-width: 760px) {
   .main-nav { gap: 5px; padding: 5px; }
-  .nav-item { min-width: 0; padding: 10px 7px; font-size: 11px; }
-  .nav-item span { font-size: 11px; }
+  .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 0; min-height: 52px; padding: 8px 4px; font-size: 15px; line-height: 1.2; white-space: normal; }
+  .nav-item span { display: block; font-size: 12px; line-height: 1.2; }
 }
 @media (max-width: 560px) {
   .main-nav {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 4px;
-    padding: 5px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
     overflow: visible;
   }
   .nav-item {
@@ -333,19 +333,20 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0;
+    gap: 2px;
     min-width: 0;
-    min-height: 44px;
-    padding: 8px 2px;
-    font-size: 17px;
-    line-height: 1;
+    min-height: 48px;
+    padding: 8px 4px;
+    font-size: 16px;
+    line-height: 1.2;
     white-space: normal;
   }
-  .nav-item span { display: none; }
+  .nav-item span { display: block; font-size: 11px; line-height: 1.2; }
 }
 @media (max-width: 360px) {
-  .main-nav { gap: 2px; padding: 4px; }
-  .nav-item { min-height: 40px; font-size: 16px; border-radius: 5px; }
+  .main-nav { gap: 4px; padding: 4px; }
+  .nav-item { min-height: 44px; font-size: 15px; border-radius: 5px; padding: 6px 2px; }
+  .nav-item span { font-size: 10px; }
 }
 
 /* Quick month/year navigation for the reading calendar */
@@ -1005,12 +1006,12 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 </div>
 </section>
 <nav class="main-nav" aria-label="Main navigation">
-  <button class="nav-item active" type="button" data-view="home" onclick="setView('home',this)">⌂ <span>Home</span></button>
-  <button class="nav-item" type="button" data-view="library" onclick="setView('library',this)">▤ <span>My Library</span></button>
-  <button class="nav-item" type="button" data-view="insights" onclick="setView('insights',this)">◷ <span>Insights</span></button>
-  <button class="nav-item" type="button" data-view="knowledge" onclick="setView('knowledge',this)">✎ <span>Knowledge</span></button>
-  <button class="nav-item" type="button" data-view="plans" onclick="setView('plans',this)">▦ <span>Reading Plans</span></button>
-  <button class="nav-item" type="button" data-view="settings" onclick="setView('settings',this)">⚙ <span>Settings</span></button>
+  <button class="nav-item active" type="button" data-view="home" onclick="setView('home',this)" aria-current="page" aria-label="Home">⌂ <span>Home</span></button>
+  <button class="nav-item" type="button" data-view="library" onclick="setView('library',this)" aria-label="My Library">▤ <span>My Library</span></button>
+  <button class="nav-item" type="button" data-view="insights" onclick="setView('insights',this)" aria-label="Insights">◷ <span>Insights</span></button>
+  <button class="nav-item" type="button" data-view="knowledge" onclick="setView('knowledge',this)" aria-label="Knowledge">✎ <span>Knowledge</span></button>
+  <button class="nav-item" type="button" data-view="plans" onclick="setView('plans',this)" aria-label="Reading Plans">▦ <span>Reading Plans</span></button>
+  <button class="nav-item" type="button" data-view="settings" onclick="setView('settings',this)" aria-label="Settings">⚙ <span>Settings</span></button>
 </nav>
 <section id="homeView" class="app-view">
 <div class="section-head" style="margin-top:0"><h3>Pick up where you left off</h3><span id="focusHint">Your current focus</span></div>
@@ -1583,7 +1584,7 @@ async function saveGoal(){
  message(currentUser?'Daily goal saved to your cloud shelf.':'Daily goal saved on this device.');
 }
 async function saveGoalFromSettings(){ $('goalInput').value=$('settingsGoalInput').value; await saveGoal(); }
-function setView(view,button){activeView=view;document.querySelectorAll('.app-view').forEach(el=>el.hidden=true);const target=$(view+'View');if(target)target.hidden=false;document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.view===view));if(view==='home'){render();renderReadingPlans()}else if(view==='library')render();else if(view==='insights')renderInsights();else if(view==='knowledge'){renderKnowledge();renderKnowledgeSearch()}else if(view==='plans')renderReadingPlans();window.scrollTo({top:0,behavior:'smooth'});}
+function setView(view,button){activeView=view;document.querySelectorAll('.app-view').forEach(el=>el.hidden=true);const target=$(view+'View');if(target)target.hidden=false;document.querySelectorAll('.nav-item').forEach(el=>{const isActive=el.dataset.view===view;el.classList.toggle('active',isActive);if(isActive)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});if(view==='home'){render();renderReadingPlans()}else if(view==='library')render();else if(view==='insights')renderInsights();else if(view==='knowledge'){renderKnowledge();renderKnowledgeSearch()}else if(view==='plans')renderReadingPlans();window.scrollTo({top:0,behavior:'smooth'});}
 function goToCurrentCalendarDate(){const now=new Date();calendarMonth=new Date(now.getFullYear(),now.getMonth(),1);renderCalendar();}
 function setCalendarMonthYear(){const month=Number($('calendarMonthSelect').value),year=Number($('calendarYearSelect').value);if(Number.isFinite(month)&&Number.isFinite(year)){calendarMonth=new Date(year,month,1);renderCalendar();}}
 function changeCalendarMonth(delta){calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+delta,1);renderCalendar();}
