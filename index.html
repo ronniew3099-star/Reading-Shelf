@@ -1021,14 +1021,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 <div class="stat"><small>Books owned</small><strong id="total">0</strong></div><div class="stat"><small>Currently reading</small><strong id="readingCount">0</strong></div><div class="stat"><small>Books completed</small><strong id="completed">0</strong></div>
 </section>
 <section class="history-panel" aria-labelledby="historyTitle">
-  <div class="section-head" style="margin:0 0 8px"><h3 id="historyTitle">Reading Activity</h3><span id="historyRange">Last 7 days</span></div>
-  <div class="history-summary">
-    <div class="history-metric"><small>Pages this week</small><strong id="weekPages">0</strong></div>
-    <div class="history-metric"><small>Reading sessions</small><strong id="weekSessions">0</strong></div>
-    <div class="history-metric"><small>Active days</small><strong id="activeDays">0/7</strong></div>
-  </div>
-  <div class="week-chart" id="weekChart" aria-label="Pages read over the last seven days"></div>
-  <div class="section-head" style="margin:18px 0 8px"><h3 style="font-size:17px">Recent sessions</h3><span>Progress increases are recorded here</span></div>
+  <div class="section-head" style="margin:0 0 8px"><h3 id="historyTitle">Recent sessions</h3><span>Progress increases are recorded here</span></div>
   <div class="history-list" id="historyList"><div class="history-empty">Your reading sessions will appear here when you update a book's page number.</div></div>
 </section>
 </section>
@@ -1790,13 +1783,6 @@ function renderKnowledgeSearch(){
 }
 
 function renderReadingHistory(){
- const now=new Date(),days=[];
- for(let i=6;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);days.push({date:localDateString(d),label:d.toLocaleDateString(undefined,{weekday:'short'}),pages:0,sessions:0})}
- const byDate=new Map(days.map(d=>[d.date,d]));
- readingSessions.forEach(s=>{const item=byDate.get(s.sessionDate);if(item){item.pages+=Number(s.pagesRead)||0;item.sessions++}});
- const weekPages=days.reduce((n,d)=>n+d.pages,0),weekSessions=days.reduce((n,d)=>n+d.sessions,0),activeDays=days.filter(d=>d.sessions>0).length,maxPages=Math.max(1,...days.map(d=>d.pages));
- $('weekPages').textContent=weekPages.toLocaleString();$('weekSessions').textContent=weekSessions.toLocaleString();$('activeDays').textContent=activeDays+'/7';
- $('weekChart').innerHTML=days.map(d=>`<div class="week-day" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/maxPages*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');
  const recent=readingSessions.slice().sort((a,b)=>(b.sessionDate||'').localeCompare(a.sessionDate||'')||(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,6);
  $('historyList').innerHTML=recent.length?recent.map(s=>`<div class="history-entry"><span><strong>${esc(s.bookTitle||books.find(b=>b.id===s.bookId)?.title||'Book')}</strong><br><span style="color:var(--muted)">${esc(s.sessionDate||'')}</span></span><span>Pages ${Number(s.startPage)||0}–${Number(s.endPage)||0} · <strong>+${Number(s.pagesRead)||0}</strong></span></div>`).join(''):'<div class="history-empty">No reading sessions yet. Edit a book and increase its current page to record your first session.</div>';
 }
@@ -2008,7 +1994,7 @@ async function exportExcel(){
   {'Metric':'Books Completed','Value':books.filter(b=>b.status==='completed').length},
    {'Metric':'Books Rated','Value':books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).length},
    {'Metric':'Average Rating','Value':books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).length?Number((books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).reduce((sum,b)=>sum+Number(b.rating),0)/books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).length).toFixed(2)):''},
-  {'Metric':'Pages Read','Value':books.reduce((sum,b)=>sum+(Number(b.currentPage)||0),0)},
+  {'Metric':'Pages Reached','Value':books.reduce((sum,b)=>sum+(Number(b.currentPage)||0),0)},
   {'Metric':'Annual Book Target','Value':annualBookGoal},
   {'Metric':'Known Total Pages','Value':books.reduce((sum,b)=>sum+(Number(b.totalPages)||0),0)},
   {'Metric':'Pages Remaining (where total pages are known)','Value':books.reduce((sum,b)=>sum+Math.max(0,(Number(b.totalPages)||0)-(Number(b.currentPage)||0)),0)}
