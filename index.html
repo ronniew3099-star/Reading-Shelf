@@ -1170,12 +1170,12 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 </section>
 <section id="plansView" class="app-view" hidden>
   <div class="section-head"><h3>Reading Plans</h3><span>Build a realistic path through your reading list</span></div>
-  <div class="plan-intro"><h3>Turn your reading intentions into a plan.</h3><p>Create a curriculum from unread books, set a pace, track chapter-based books, and use manual assignments when a page count is not available. Your bookshelf stays the source of book details and progress.</p></div>
+  <div class="plan-intro"><h3>Turn your reading intentions into a plan.</h3><p>Create a reading list from unread books, set your pages a day, track chapter-based books, and use your own targets when a page count is not available. Your bookshelf stays the source of book details and progress.</p></div>
   <div class="plan-toolbar plan-menu-toolbar">
     <details class="plan-action-dropdown">
       <summary class="primary">Create Plan <span aria-hidden="true">▾</span></summary>
       <div class="plan-action-menu">
-        <button type="button" onclick="createPlanFromUnread();closeReadingPlanMenus()" >Plan with Unread Books</button>
+        <button type="button" onclick="createPlanFromUnread();closeReadingPlanMenus()" >New plan from unread books</button>
         <button type="button" onclick="createEmptyReadingPlan();closeReadingPlanMenus()" >Empty Plan</button>
       </div>
     </details>
@@ -2112,8 +2112,8 @@ function planBookStatus(item){
  const b=books.find(x=>String(x.id)===String(item.book_id));if(!b)return 'Book is no longer in your library';
  if(planBookDone(item))return 'Completed';
  if(item.schedule_mode==='chapters'&&Number(item.chapter_count)>0)return `Chapter ${Number(item.current_chapter||0)} of ${Number(item.chapter_count)} · ${Number(item.chapters_per_day)||1} per reading day`;
- if(item.schedule_mode==='manual')return item.manual_assignment?`Manual assignment: ${item.manual_assignment}`:'Manual tracking · add an assignment';
- if(!Number(b.totalPages))return 'Page count missing · add it in Edit Book or use a manual assignment';
+ if(item.schedule_mode==='manual')return item.manual_assignment?`My own target: ${item.manual_assignment}`:'Tracking it myself · add a target';
+ if(!Number(b.totalPages))return 'Page count missing · add it in Edit Book or set your own target';
  return `${Math.max(0,Number(b.totalPages)-Number(b.currentPage||0))} pages remaining`;
 }
 async function loadReadingPlans(){
@@ -2240,24 +2240,24 @@ function renderReadingPlans(){
  let todayText='';
  if(!items.length)todayText='This plan is empty. Add books from your library to begin.';
  else if(!unfinished)todayText='All books in this plan are complete. You can add more books or mark this plan completed.';
- else if(unfinished.schedule_mode==='chapters'&&Number(unfinished.chapter_count)>0){const start=Number(unfinished.current_chapter||0)+1,end=Math.min(Number(unfinished.chapter_count),Number(unfinished.current_chapter||0)+Number(unfinished.chapters_per_day||1));todayText=`Today's reading: ${currentBook.title} · Chapters ${start}–${end}. Use “Mark chapters read” when done.`;}
- else if(unfinished.schedule_mode==='manual')todayText=`Today's focus: ${currentBook.title}. ${unfinished.manual_assignment||'Add a manual assignment for this book.'}`;
+ else if(unfinished.schedule_mode==='chapters'&&Number(unfinished.chapter_count)>0){const start=Number(unfinished.current_chapter||0)+1,end=Math.min(Number(unfinished.chapter_count),Number(unfinished.current_chapter||0)+Number(unfinished.chapters_per_day||1));todayText=`Today's reading: ${currentBook.title} · Chapters ${start}–${end}. Use “I read today's chapters” when done.`;}
+ else if(unfinished.schedule_mode==='manual')todayText=`Today's focus: ${currentBook.title}. ${unfinished.manual_assignment||'Add your own target for this book.'}`;
  else if(!Number(currentBook.totalPages))todayText=`Up next: ${currentBook.title}. No page count yet. Add one in Edit Book, or choose a chapter or manual schedule.`;
  else {const start=Number(currentBook.currentPage||0)+1,end=Math.min(Number(currentBook.totalPages),Number(currentBook.currentPage||0)+perDay);todayText=`Today's reading: ${currentBook.title} · Pages ${start}–${end}. Update the page in My Library after reading; it moves forward automatically.`;}
  const activeItem=items.find(i=>!planBookDone(i));
- const rows=pageItems.map((item,pageIndex)=>{const index=(planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE+pageIndex;const b=books.find(x=>String(x.id)===String(item.book_id));const title=b?b.title:'Book missing from library';const mode=item.schedule_mode||'pages';const current=!!activeItem&&String(activeItem.id)===String(item.id);return `<article class="plan-book ${current?'current-focus':''}" draggable="true" ondragstart="startPlanBookDrag(event,'${esc(item.id)}')" ondragover="allowPlanBookDrop(event)" ondrop="dropPlanBook(event,'${esc(item.id)}')" ondragend="endPlanBookDrag()"><div class="plan-book-main"><div class="plan-book-order"><span class="plan-drag-handle" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><label class="plan-order-label"><span class="sr-only">No.</span><input class="plan-order-input" type="number" min="1" max="${items.length}" value="${index+1}" aria-label="No." onchange="setPlanBookPosition('${esc(item.id)}',this.value)"></label></div><div class="plan-book-copy"><h4>${esc(title)}${current?'<span class="plan-current-tag">CURRENT READING</span>':''}</h4><p>${esc(planBookStatus(item))}${b&&b.rating?` · ${'★'.repeat(Number(b.rating))}`:''}</p></div></div><div class="plan-book-actions">${!current?`<button class="mini plan-icon-button" title="Make current" aria-label="Make current" onclick="makePlanBookCurrent('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.2v14.8M12 6.2c-2.2-1.5-5.1-2-8-1.5v14.8c2.9-.5 5.8 0 8 1.5M12 6.2c2.2-1.5 5.1-2 8-1.5v14.8c-2.9-.5-5.8 0-8 1.5"/></svg></button>`:''}<button class="mini plan-icon-button" title="Move up" aria-label="Move up" ${index===0?'disabled':''} onclick="movePlanBook('${esc(item.id)}',-1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button><button class="mini plan-icon-button" title="Move down" aria-label="Move down" ${index===items.length-1?'disabled':''} onclick="movePlanBook('${esc(item.id)}',1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>${mode==='chapters'&&Number(item.chapter_count)>0?`<button class="mini" onclick="advancePlanChapters('${esc(item.id)}')">Mark chapters read</button>`:''}<button class="mini plan-icon-button" title="Schedule" aria-label="Schedule" onclick="configurePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></button><button class="mini plan-icon-button" title="Remove" aria-label="Remove" onclick="removePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg></button></div></article>`}).join('');
- root.innerHTML=`<section class="plan-panel"><div class="selected-plan-banner"><div><small>CURRENT READING PLAN</small><strong>${esc(plan.name||'Personal Reading Plan')}</strong><span>Your calendar and schedule show this plan.</span></div><span class="selected-plan-status">${esc(plan.status||'active')}</span></div>
- <div class="plan-stats"><div class="plan-stat"><small>Books in plan</small><strong>${items.length}</strong></div><div class="plan-stat"><small>Completed</small><strong>${done}</strong></div><div class="plan-stat"><small>Plan progress</small><strong>${percent}%</strong></div><div class="plan-stat"><small>Known pages left</small><strong>${knownRemaining.toLocaleString()}</strong></div></div>
+ const rows=pageItems.map((item,pageIndex)=>{const index=(planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE+pageIndex;const b=books.find(x=>String(x.id)===String(item.book_id));const title=b?b.title:'Book missing from library';const mode=item.schedule_mode||'pages';const current=!!activeItem&&String(activeItem.id)===String(item.id);return `<article class="plan-book ${current?'current-focus':''}" draggable="true" ondragstart="startPlanBookDrag(event,'${esc(item.id)}')" ondragover="allowPlanBookDrop(event)" ondrop="dropPlanBook(event,'${esc(item.id)}')" ondragend="endPlanBookDrag()"><div class="plan-book-main"><div class="plan-book-order"><span class="plan-drag-handle" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><label class="plan-order-label"><span class="sr-only">No.</span><input class="plan-order-input" type="number" min="1" max="${items.length}" value="${index+1}" aria-label="No." onchange="setPlanBookPosition('${esc(item.id)}',this.value)"></label></div><div class="plan-book-copy"><h4>${esc(title)}${current?'<span class="plan-current-tag">Reading now</span>':''}</h4><p>${esc(planBookStatus(item))}${b&&b.rating?` · ${'★'.repeat(Number(b.rating))}`:''}</p></div></div><div class="plan-book-actions">${!current?`<button class="mini plan-icon-button" title="Read this one now" aria-label="Read this one now" onclick="makePlanBookCurrent('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.2v14.8M12 6.2c-2.2-1.5-5.1-2-8-1.5v14.8c2.9-.5 5.8 0 8 1.5M12 6.2c2.2-1.5 5.1-2 8-1.5v14.8c-2.9-.5-5.8 0-8 1.5"/></svg></button>`:''}<button class="mini plan-icon-button" title="Move up" aria-label="Move up" ${index===0?'disabled':''} onclick="movePlanBook('${esc(item.id)}',-1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button><button class="mini plan-icon-button" title="Move down" aria-label="Move down" ${index===items.length-1?'disabled':''} onclick="movePlanBook('${esc(item.id)}',1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>${mode==='chapters'&&Number(item.chapter_count)>0?`<button class="mini" onclick="advancePlanChapters('${esc(item.id)}')">I read today's chapters</button>`:''}<button class="mini plan-icon-button" title="Schedule" aria-label="Schedule" onclick="configurePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></button><button class="mini plan-icon-button" title="Remove" aria-label="Remove" onclick="removePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg></button></div></article>`}).join('');
+ root.innerHTML=`<section class="plan-panel"><div class="selected-plan-banner"><div><small>This plan</small><strong>${esc(plan.name||'Personal Reading Plan')}</strong><span>Your calendar and schedule show this plan.</span></div><span class="selected-plan-status">${esc(plan.status||'active')}</span></div>
+ <div class="plan-stats"><div class="plan-stat"><small>Books in plan</small><strong>${items.length}</strong></div><div class="plan-stat"><small>Completed</small><strong>${done}</strong></div><div class="plan-stat"><small>Finished</small><strong>${percent}%</strong></div><div class="plan-stat"><small>Pages left (books with page counts)</small><strong>${knownRemaining.toLocaleString()}</strong></div></div>
  <div class="plan-progress"><span style="width:${percent}%"></span></div><div class="plan-today"><strong>Reading focus</strong><br>${esc(todayText)}</div>
  <div id="planDailySchedule"></div>
  <div class="section-head" id="planSettingsSection"><h3>Plan settings</h3><span>Saved to your account when signed in</span></div>
- <div class="plan-settings plan-settings-main"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Plan pace (pages/day)<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div>
- <details class="plan-advanced"><summary>Advanced options</summary><div class="plan-advanced-body"><div class="plan-settings plan-settings-single"><label>Target end date<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label></div><fieldset class="plan-days-fieldset"><legend>Reading days</legend><div class="plan-day-picker">${planDayPickerHTML('plan-settings-day-check',plan.reading_days)}</div></fieldset></div></details>
- <div class="plan-toolbar plan-settings-toolbar"><button class="secondary" onclick="saveReadingPlanSettings()">Save settings</button><button class="secondary" type="button" onclick="setDefaultReadingPlan('${esc(plan.id)}')">${String(defaultReadingPlanId)===String(plan.id)?'★ Current default':'☆ Set as default'}</button><span class="plan-note">Estimated finish based on known remaining pages: ${knownRemaining?planDateValue(finishDate):'not available'} · assumes ${perDay} pages every calendar day</span></div>
+ <div class="plan-settings plan-settings-main"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Pages a day<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div>
+ <details class="plan-advanced"><summary>Advanced options</summary><div class="plan-advanced-body"><div class="plan-settings plan-settings-single"><label>Finish by (optional)<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label></div><fieldset class="plan-days-fieldset"><legend>Days I read</legend><div class="plan-day-picker">${planDayPickerHTML('plan-settings-day-check',plan.reading_days)}</div></fieldset></div></details>
+ <div class="plan-toolbar plan-settings-toolbar"><button class="secondary" onclick="saveReadingPlanSettings()">Save settings</button><button class="secondary" type="button" onclick="setDefaultReadingPlan('${esc(plan.id)}')">${String(defaultReadingPlanId)===String(plan.id)?'★ Your starting plan':'☆ Start with this plan'}</button><span class="plan-note">Estimated finish based on known remaining pages: ${knownRemaining?planDateValue(finishDate):'not available'} · assumes ${perDay} pages every calendar day</span></div>
  <div class="section-head plan-books-heading" id="planBooksSection"><h3>Books in this plan</h3><span>${items.length} assigned</span><div class="plan-pagination-controls"><button class="mini" type="button" onclick="changePlanBooksPage(-1)" ${planBooksPage<=1?'disabled':''}>Previous</button><span>Page ${planBooksPage} of ${totalPlanPages}</span><button class="mini" type="button" onclick="changePlanBooksPage(1)" ${planBooksPage>=totalPlanPages?'disabled':''}>Next</button></div></div>
  <div class="plan-book-scroll"><div class="plan-book-list">${rows||'<div class="plan-empty">No books have been added yet.</div>'}</div></div>
  <div class="plan-pagination"><span class="plan-note">Showing ${allItems.length?((planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE+1):0}–${Math.min(planBooksPage*PLAN_BOOKS_PAGE_SIZE,allItems.length)} of ${allItems.length} books</span></div>
- <p class="plan-note">Drag a book to reorder it, or edit its order number. The first unfinished book is your current reading focus. Carry-over is shown separately from your daily page goal. Books without page counts stay in your plan; add the count in My Library, or set a chapter or manual schedule. Completing a book in My Library counts it as complete here.</p>
+ <p class="plan-note">Drag a book to reorder it, or edit its order number. The first unfinished book is your current reading focus. Pages still to read from earlier days are shown separately from your daily page goal. Books without page counts stay in your plan; add the count in My Library, or set a chapter or manual schedule. Completing a book in My Library counts it as complete here.</p>
  <div class="plan-toolbar"><button class="primary" onclick="addBooksToPlan()">Add books</button><button class="secondary" onclick="markPlanCompleted()">Mark plan completed</button><button class="secondary" onclick="deleteReadingPlan()">Delete plan</button></div></section>`;
  renderDailyPlan();
 }
@@ -2329,7 +2329,7 @@ function selectGeneralPlanDay(date){
 function renderDailyPlan(){
  const root=$('planDailySchedule'),plan=activeReadingPlan();if(!root)return;if(!plan){
  const date=selectedPlanDay||localDateString(),today=localDateString();
- root.innerHTML=`<section class="plan-day-panel general-daily-calendar"><div class="plan-day-head"><h3>General daily reading</h3><label style="font:11px Arial;color:var(--muted)" aria-label="Selected date"><input type="date" value="${date}" onchange="selectGeneralPlanDay(this.value)"></label></div><div class="calendar-controls plan-calendar-controls" aria-label="Choose calendar month and year"><button class="secondary calendar-today-button" type="button" onclick="goToCurrentPlanCalendarDate()">Today</button><label class="calendar-select-wrap"><span class="calendar-short-label">M</span><select id="planCalendarMonthSelect" aria-label="Select month" onchange="setPlanCalendarMonthYear()"></select></label><label class="calendar-select-wrap"><span class="calendar-short-label">Y</span><select id="planCalendarYearSelect" aria-label="Select year" onchange="setPlanCalendarMonthYear()"></select></label></div>${renderGeneralPlanCalendar(date)}<div class="plan-day-summary">A general calendar, not tied to a book or plan. Select a plan to see its assigned books, page targets, carry-over, and completion controls.</div><div class="plan-assignment-group"><h4>Daily reading</h4><div class="plan-empty-small">No book assigned yet. Choose a reading plan to follow a book schedule.</div></div></section>`;
+ root.innerHTML=`<section class="plan-day-panel general-daily-calendar"><div class="plan-day-head"><h3>Calendar only</h3><label style="font:11px Arial;color:var(--muted)" aria-label="Selected date"><input type="date" value="${date}" onchange="selectGeneralPlanDay(this.value)"></label></div><div class="calendar-controls plan-calendar-controls" aria-label="Choose calendar month and year"><button class="secondary calendar-today-button" type="button" onclick="goToCurrentPlanCalendarDate()">Today</button><label class="calendar-select-wrap"><span class="calendar-short-label">M</span><select id="planCalendarMonthSelect" aria-label="Select month" onchange="setPlanCalendarMonthYear()"></select></label><label class="calendar-select-wrap"><span class="calendar-short-label">Y</span><select id="planCalendarYearSelect" aria-label="Select year" onchange="setPlanCalendarMonthYear()"></select></label></div>${renderGeneralPlanCalendar(date)}<div class="plan-day-summary">A general calendar, not tied to a book or plan. Select a plan to see its assigned books, page targets, pages still to read from earlier days, and completion controls.</div><div class="plan-assignment-group"><h4>Daily reading</h4><div class="plan-empty-small">No book assigned yet. Choose a reading plan to follow a book schedule.</div></div></section>`;
  syncPlanCalendarSelectors();return;
  }
  const today=localDateString(),start=planDateValue(plan.start_date)||today;let date=selectedPlanDay||today;
@@ -2339,19 +2339,19 @@ function renderDailyPlan(){
  const assignments=record?.assignments||[];
  const renderAssignment=(a,kind)=>{
   const isFuture=future||date>today,disabled=isFuture||a.status==='completed'||a.status==='adjusted';
-  const state=a.status==='completed'?'Completed':a.status==='unable'?'Unable to complete':a.status==='adjusted'?'Adjusted':'Outstanding';
-  return `<article class="plan-assignment"><div><strong>${esc(assignmentBookTitle(a))}</strong><small>${kind==='carry'?'Carry-over from '+esc(a.source_date):'Planned for '+esc(date)} · Pages ${a.start_page}–${a.end_page} · ${state}</small></div><div class="plan-assignment-actions"><button ${disabled?'disabled':''} onclick="completePlanAssignment('${date}','${kind}','${a.source_date||date}','${a.book_id}',${a.start_page},${a.end_page})">Completed</button><button ${disabled?'disabled':''} onclick="unablePlanAssignment('${date}','${kind}','${a.source_date||date}','${a.book_id}',${a.start_page},${a.end_page})">Unable</button></div></article>`;
+  const state=a.status==='completed'?'Completed':a.status==='unable'?'Unable to complete':a.status==='adjusted'?'Changed':'Not done yet';
+  return `<article class="plan-assignment"><div><strong>${esc(assignmentBookTitle(a))}</strong><small>${kind==='carry'?'Still to read · from '+esc(a.source_date):'Planned for '+esc(date)} · Pages ${a.start_page}–${a.end_page} · ${state}</small></div><div class="plan-assignment-actions"><button ${disabled?'disabled':''} onclick="completePlanAssignment('${date}','${kind}','${a.source_date||date}','${a.book_id}',${a.start_page},${a.end_page})">Completed</button><button ${disabled?'disabled':''} onclick="unablePlanAssignment('${date}','${kind}','${a.source_date||date}','${a.book_id}',${a.start_page},${a.end_page})">Unable</button></div></article>`;
  };
  const totalPages=assignments.reduce((n,a)=>n+a.end_page-a.start_page+1,0),carryPages=carry.reduce((n,a)=>n+a.end_page-a.start_page+1,0);
  const streak=missedPlanDayStreak(plan,today);
- let catchup='';if(streak>=3)catchup=`<div class="plan-catchup"><strong>Catch-up review:</strong> ${streak} scheduled reading days have outstanding assignments. Nothing is erased or changed automatically; consider adjusting your pace.</div>`;
- const carryHtml=carry.length?carry.map(a=>renderAssignment(a,'carry')).join(''):'<div class="plan-empty-small">No outstanding carry-over reading.</div>';
- const plannedHtml=assignments.length?assignments.map(a=>renderAssignment(a,'planned')).join(''):'<div class="plan-empty-small">No page-based assignment for this day. Chapter and manual books are in the schedule below.</div>';
- root.innerHTML=`<section class="plan-day-panel"><div class="plan-day-head"><h3>Daily reading plan</h3><label style="font:11px Arial;color:var(--muted)" aria-label="Selected date"><input type="date" value="${date}" max="${'9999-12-31'}" onchange="selectPlanDay(this.value)"></label></div><div class="calendar-controls plan-calendar-controls" aria-label="Choose reading plan calendar month and year">
+ let catchup='';if(streak>=3)catchup=`<div class="plan-catchup"><strong>You have reading waiting.</strong> ${streak} scheduled reading days have reading not done yet. Nothing is erased or changed automatically; consider adjusting your pace.</div>`;
+ const carryHtml=carry.length?carry.map(a=>renderAssignment(a,'carry')).join(''):'<div class="plan-empty-small">Nothing still to read from earlier days.</div>';
+ const plannedHtml=assignments.length?assignments.map(a=>renderAssignment(a,'planned')).join(''):'<div class="plan-empty-small">No pages planned for this day. Chapter and manual books are in the schedule below.</div>';
+ root.innerHTML=`<section class="plan-day-panel"><div class="plan-day-head"><h3>Today in this plan</h3><label style="font:11px Arial;color:var(--muted)" aria-label="Selected date"><input type="date" value="${date}" max="${'9999-12-31'}" onchange="selectPlanDay(this.value)"></label></div><div class="calendar-controls plan-calendar-controls" aria-label="Choose reading plan calendar month and year">
       <button class="secondary calendar-today-button" type="button" onclick="goToCurrentPlanCalendarDate()">Today</button>
       <label class="calendar-select-wrap"><span class="calendar-short-label">M</span><select id="planCalendarMonthSelect" aria-label="Select month" onchange="setPlanCalendarMonthYear()"></select></label>
       <label class="calendar-select-wrap"><span class="calendar-short-label">Y</span><select id="planCalendarYearSelect" aria-label="Select year" onchange="setPlanCalendarMonthYear()"></select></label>
-    </div>${renderPlanCalendar(plan,date)}<div class="plan-day-summary">${future?'Future assignments are preview only. You cannot mark them complete early.':`${carry.length} carry-over item(s) · ${carryPages} carry-over pages shown separately · ${assignments.length} planned item(s) · ${totalPages} new pages.`} Reading days: ${((plan.reading_days||[1,2,3,4,5]).length)} days per week.</div>${catchup}<div class="plan-assignment-group"><h4>Carry-over reading</h4>${carryHtml}</div><div class="plan-assignment-group"><h4>Planned daily reading</h4>${plannedHtml}</div><p class="plan-note">Mark an assignment Completed after reading. Unable ones stay outstanding and appear as carry-over the next reading day. Your book's page updates when you mark an assignment complete.</p></section>`;
+    </div>${renderPlanCalendar(plan,date)}<div class="plan-day-summary">${future?'Future reading is preview only. You cannot mark it complete early.':`${carryPages} pages still to read from earlier days (${carry.length} item(s)), shown separately · ${assignments.length} planned item(s) · ${totalPages} new pages.`} Days I read: ${((plan.reading_days||[1,2,3,4,5]).length)} days per week.</div>${catchup}<div class="plan-assignment-group"><h4>Still to read from earlier days</h4>${carryHtml}</div><div class="plan-assignment-group"><h4>Pages for today</h4>${plannedHtml}</div><p class="plan-note">Mark today's reading Completed after reading. Unable ones are not done yet and appear under Still to read from earlier days the next reading day. Your book's page updates when you mark today's reading complete.</p></section>`;
  syncPlanCalendarSelectors();
 }
 function selectPlanDay(date){if(!activeReadingPlan()||!date)return;selectedPlanDay=date;const d=new Date(date+'T12:00:00');planCalendarMonth=new Date(d.getFullYear(),d.getMonth(),1);renderDailyPlan();}
@@ -2419,7 +2419,7 @@ async function makePlanBookCurrent(id){
  const [chosen]=ordered.splice(index,1);if(planBookDone(chosen)){message('That book is already complete. Choose an unfinished book.',true);return;}
  ordered.unshift(chosen);ordered.forEach((item,i)=>item.sequence_number=i+1);
  await savePlanBookOrder();refreshTodayPlanForCurrentBook(plan,chosen);renderReadingPlans();
- const book=books.find(b=>String(b.id)===String(chosen.book_id));message(`${book?.title||'Book'} is now your current reading focus. Today's and future assignments now follow this book.`);
+ const book=books.find(b=>String(b.id)===String(chosen.book_id));message(`${book?.title||'Book'} is now your current reading focus. Today's and future reading now follow this book.`);
 }
 
 async function selectReadingPlan(id){
@@ -2472,19 +2472,19 @@ function renderPlanSetupPanel(mode,planId){
   root.innerHTML=`<section class="plan-setup-panel">
   <div class="plan-setup-step" id="planSetupStep1">
   <h3 id="planSetupStep1Heading" tabindex="-1">${title}</h3><p>${description}</p>
-  <div class="plan-setup-fields"><label>Plan name<input id="inlinePlanName" maxlength="100" value="Personal Reading Curriculum" placeholder="Enter a plan name"></label></div>
+  <div class="plan-setup-fields"><label>Plan name<input id="inlinePlanName" maxlength="100" value="My reading plan" placeholder="Enter a plan name"></label></div>
   ${bookList}
   <div class="plan-setup-actions"><button class="primary" type="button" onclick="planSetupContinue('${mode}')">Continue</button><button class="secondary" type="button" onclick="renderReadingPlans()">Cancel</button></div>
   </div>
   <div class="plan-setup-step" id="planSetupStep2" hidden>
   <h3 id="planSetupStep2Heading" tabindex="-1">Pace and dates</h3><p>Set how many pages to read on each reading day, and when the plan starts. The values shown are the usual defaults — keep them, or change any of them.</p>
   <div class="plan-setup-fields plan-setup-fields-2">
-  <label>Plan pace (pages/day)<input id="planSetupGoal" type="number" min="1" max="200" value="25"></label>
+  <label>Pages a day<input id="planSetupGoal" type="number" min="1" max="200" value="25"></label>
   <label>Start date<input id="planSetupStart" type="date" value="${planDateValue(new Date())}"></label>
   </div>
   <details class="plan-advanced"><summary>Advanced options</summary><div class="plan-advanced-body">
-  <div class="plan-setup-fields"><label>Target end date (optional)<input id="planSetupEnd" type="date" value=""></label></div>
-  <fieldset class="plan-days-fieldset"><legend>Reading days</legend><div class="plan-day-picker">${planDayPickerHTML('plan-setup-day-check',[1,2,3,4,5])}</div></fieldset>
+  <div class="plan-setup-fields"><label>Finish by (optional)<input id="planSetupEnd" type="date" value=""></label></div>
+  <fieldset class="plan-days-fieldset"><legend>Days I read</legend><div class="plan-day-picker">${planDayPickerHTML('plan-setup-day-check',[1,2,3,4,5])}</div></fieldset>
   </div></details>
   <div class="plan-setup-actions"><button class="primary" type="button" onclick="submitPlanSetup('${mode}')">${isEmpty?'Create empty plan':'Create plan'}</button><button class="secondary" type="button" onclick="planSetupBack()">Back</button></div>
   </div>
@@ -2504,7 +2504,7 @@ function setPlanSetupSelection(checked){
 async function submitPlanSetup(mode){
  const isAdd=mode==='add',isEmpty=mode==='empty',isUnread=mode==='unread';
  const nameEl=$('inlinePlanName');
- const name=(nameEl?.value||'').trim()||'Personal Reading Curriculum';
+ const name=(nameEl?.value||'').trim()||'My reading plan';
  if(isAdd){
   const plan=activeReadingPlan();if(!plan){message('Create or select a reading plan first.',true);return;}
   const existing=new Set(readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).map(i=>String(i.book_id)));
@@ -2530,7 +2530,7 @@ async function submitPlanSetup(mode){
  const daily_page_goal=Number.isFinite(paceInput)&&paceInput>0?Math.max(1,Math.min(200,Math.round(paceInput))):25;
  const start_date=$('planSetupStart')?.value||planDateValue(new Date());
  const target_end_date=$('planSetupEnd')?.value||null;
- if(target_end_date&&target_end_date<start_date){message('Target end date cannot be before the start date.',true);return;}
+ if(target_end_date&&target_end_date<start_date){message('Finish by date cannot be before the start date.',true);return;}
  const reading_days=readPlanDayPicker('plan-setup-day-check');
  if(!reading_days.length){message('Choose at least one reading day.',true);return;}
  const draft={name,start_date,target_end_date,daily_page_goal,reading_days,status:'active'};
@@ -2565,12 +2565,12 @@ function setDefaultReadingPlan(planId){
  planLocalSave();
  renderReadingPlans();
  renderPlanCascadeMenus();
- message(`"${plan.name||'Reading plan'}" is now your default reading plan.`);
+ message(`"${plan.name||'Reading plan'}" is now your starting plan.`);
 }
 async function saveReadingPlanSettings(){
  const plan=activeReadingPlan();if(!plan)return;
- const name=$('planNameInput').value.trim()||'Personal Reading Curriculum',start_date=$('planStartInput').value||planDateValue(new Date()),target_end_date=$('planEndInput').value||null,daily_page_goal=Math.max(1,Math.min(200,Number($('planGoalInput').value)||25));
- if(target_end_date&&target_end_date<start_date){message('Target end date cannot be before the start date.',true);return;}
+ const name=$('planNameInput').value.trim()||'My reading plan',start_date=$('planStartInput').value||planDateValue(new Date()),target_end_date=$('planEndInput').value||null,daily_page_goal=Math.max(1,Math.min(200,Number($('planGoalInput').value)||25));
+ if(target_end_date&&target_end_date<start_date){message('Finish by date cannot be before the start date.',true);return;}
  const reading_days=readPlanDayPicker('plan-settings-day-check');
  if(!reading_days.length){message('Choose at least one reading day.',true);return;}
  const patch={name,start_date,target_end_date,daily_page_goal,reading_days};
@@ -2579,7 +2579,7 @@ async function saveReadingPlanSettings(){
 }
 async function configurePlanBook(id){
  const item=readingPlanBooks.find(i=>String(i.id)===String(id));if(!item)return;
- const picked=await showConfirmDialog({title:'Book schedule',message:'Choose how this book is scheduled in the plan.',choices:[{value:'pages',label:'Pages'},{value:'chapters',label:'Chapters'},{value:'manual',label:'Manual'}],choiceType:'radio',selectedValue:item.schedule_mode||'pages',confirmLabel:'Continue'});
+ const picked=await showConfirmDialog({title:'How to track this book',message:'Choose how this book is scheduled in the plan.',choices:[{value:'pages',label:'Pages'},{value:'chapters',label:'Chapters'},{value:'manual',label:'Manual'}],choiceType:'radio',selectedValue:item.schedule_mode||'pages',confirmLabel:'Continue'});
  if(!picked||!picked.length)return;
  const mode=picked[0];
  const patch={schedule_mode:mode};
@@ -2595,11 +2595,11 @@ async function configurePlanBook(id){
   const per=Number(perText);if(!Number.isInteger(per)||per<1){showNotice('Check the chapters per day','Enter a positive chapters-per-day target.');return;}
   Object.assign(patch,{chapter_count:total,current_chapter:current,chapters_per_day:per,manual_assignment:null});
  }else if(mode==='manual'){
-  const assignment=await askInput('Manual assignment','Enter a manual assignment, e.g. “Read chapters 1–2”.','Assignment',item.manual_assignment||'','Save');
+  const assignment=await askInput('My own target','Enter your own target, e.g. “Read chapters 1–2”.','Target',item.manual_assignment||'','Save');
   if(assignment===null)return;
   Object.assign(patch,{manual_assignment:assignment.trim()||null});
  }else Object.assign(patch,{manual_assignment:null});
- Object.assign(item,patch);await savePlanBookItem(item);renderReadingPlans();message('Book schedule saved.');
+ Object.assign(item,patch);await savePlanBookItem(item);renderReadingPlans();message('How you track this book is saved.');
 }
 async function savePlanBookItem(item){
  if(currentUser&&plansCloudReady&&planIsUuid(item.id)){const patch={schedule_mode:item.schedule_mode,chapter_count:item.chapter_count||null,current_chapter:Number(item.current_chapter)||0,chapters_per_day:Number(item.chapters_per_day)||1,manual_assignment:item.manual_assignment||null};const {error}=await db.from('reading_plan_books').update(patch).eq('id',item.id).eq('user_id',currentUser.id);if(error){message('Saved on this device, but cloud sync failed: '+error.message,true);}}
@@ -2608,7 +2608,7 @@ async function savePlanBookItem(item){
 async function advancePlanChapters(id){
  const item=readingPlanBooks.find(i=>String(i.id)===String(id));if(!item||!Number(item.chapter_count))return;
  const next=Math.min(Number(item.chapter_count),Number(item.current_chapter||0)+Number(item.chapters_per_day||1));
- if(!(await askConfirm('Mark chapters read?',`Mark chapters ${Number(item.current_chapter||0)+1}–${next} as read?`,'Mark read')))return;
+ if(!(await askConfirm("I read today's chapters?",`Mark chapters ${Number(item.current_chapter||0)+1}–${next} as read?`,'Mark read')))return;
  item.current_chapter=next;await savePlanBookItem(item);renderReadingPlans();message('Chapter progress updated.');
 }
 async function removePlanBook(id){
