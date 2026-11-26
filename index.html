@@ -61,6 +61,9 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .category-tile strong{display:block;font:13px Arial;color:var(--green);line-height:1.35}
 .category-tile span{display:block;font:11px Arial;color:var(--muted);margin-top:5px}
 .category-tile .category-number{font:inherit;color:var(--green);margin-right:4px}
+.category-tile.disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.category-tile.disabled:hover{border-color:var(--line);transform:none}
+.category-tile.disabled input{cursor:not-allowed}
 @media(max-width:440px){.category-options{grid-template-columns:1fr}}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.currently{grid-template-columns:1fr}.books{grid-template-columns:1fr 1fr}.hero h2{font-size:18px}.app{padding:20px 14px 45px}}
 @media(max-width:440px){.books{grid-template-columns:1fr}.reading-card{align-items:flex-start}.brand h1{font-size:18px}.top-actions{gap:6px}.top-actions .icon-action{width:40px;height:40px;min-width:40px}}
@@ -550,15 +553,15 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .library-pagination button:disabled{opacity:.4;cursor:default}
 @media(min-width:641px) and (max-width:1100px){
  #libraryView{display:grid;grid-template-columns:1fr;align-content:start}
- #libraryView>.section-head:nth-of-type(2){order:1}
+ #libraryView>.section-head:nth-of-type(4){order:1}
  #libraryView>#categoryOverview{order:2}
  #libraryView>.section-head:nth-of-type(1){order:3}
- #libraryView>.tabs{order:4}
+ #libraryView>.section-head:nth-of-type(2),#libraryView>#statusOverview{order:4}
  #libraryView>.category-filter{order:5}
  #libraryView>.library-search{order:6}
  #libraryView>.library-books-heading{order:7}
  #libraryView>#books{order:8}
- #libraryView>.section-head,#libraryView>.tabs,#libraryView>#categoryOverview,#libraryView>.category-filter,#libraryView>.library-search,#libraryView>.library-books-heading,#libraryView>#books{grid-column:1}
+ #libraryView>.section-head,#libraryView>#statusOverview,#libraryView>#categoryOverview,#libraryView>.category-filter,#libraryView>.library-search,#libraryView>.library-books-heading,#libraryView>#books{grid-column:1}
  #categoryOverview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
  .category-tile{min-width:0}
  .books{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1029,20 +1032,8 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 </section>
 <section id="libraryView" class="app-view" hidden>
 <div class="section-head"><h3>My bookshelf</h3><span id="bookCount">0 of 0 books displayed</span></div>
-<div class="tabs shelf-status-tabs" role="group" aria-label="Filter books by reading status">
-<button class="tab active" data-filter="all" onclick="setFilter('all',this)" aria-pressed="true">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5zM4 5.5v16M8 7h8M8 11h8"/></svg><span class="tab-label">All books</span><span class="tab-count" id="filterCountAll">0</span>
-</button>
-<button class="tab" data-filter="want" onclick="setFilter('want',this)" aria-pressed="false">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h12v17l-6-3.5-6 3.5zM9 8h6"/></svg><span class="tab-label">Want to read</span><span class="tab-count" id="filterCountWant">0</span>
-</button>
-<button class="tab" data-filter="reading" onclick="setFilter('reading',this)" aria-pressed="false">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5zM4 5.5v16M8 7h8M8 11h5"/></svg><span class="tab-label">Reading</span><span class="tab-count" id="filterCountReading">0</span>
-</button>
-<button class="tab" data-filter="completed" onclick="setFilter('completed',this)" aria-pressed="false">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span class="tab-label">Completed</span><span class="tab-count" id="filterCountCompleted">0</span>
-</button>
-</div>
+<div class="section-head"><h3>Filter by status</h3><span>Choose one or more statuses</span></div>
+<div class="category-overview" id="statusOverview" aria-label="Select one or more reading statuses"></div>
 <div class="section-head"><h3>Browse by category</h3><span>Choose one or more categories</span></div>
 <div class="category-overview" id="categoryOverview" aria-label="Select one or more book categories"></div>
 <div class="category-filter"><span id="categoryResultCount" aria-live="polite">Showing all books</span><button type="button" id="clearCategorySelection" onclick="clearCategorySelection()" disabled>Clear selection</button></div><input id="librarySearchInput" class="library-search" type="search" placeholder="Search your books by title or author" aria-label="Search your books by title or author" oninput="setLibrarySearch(this.value)">
@@ -1328,7 +1319,7 @@ async function recordReadingSession(book,fromPage,toPage){
 function safeParseArray(key){try{const v=JSON.parse(localStorage.getItem(key));return Array.isArray(v)?v:[];}catch(e){return[];}}
 function safeParseObject(key){try{const v=JSON.parse(localStorage.getItem(key));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch(e){return{};}}
 let bookKnowledge=safeParseObject('readingShelfKnowledgeV1'), knowledgeQuotes=safeParseArray('readingShelfQuotesV1'), selectedKnowledgeBook='', knowledgeSaveTimer=null;
-let books=safeParseArray(KEY).map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=safeParseArray('readingShelfSessionsV1'), filter='all', selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
+let books=safeParseArray(KEY).map(b=>({...b,categories:parseCategories(b.categories??b.category)})), readingSessions=safeParseArray('readingShelfSessionsV1'), selectedStatusFilters=[], selectedCategoryFilters=[], goal=Number(localStorage.getItem('readingShelfGoal')||5), annualBookGoal=Number(localStorage.getItem('readingShelfAnnualBookGoal')||12), currentUser=null, syncing=false, calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1), activeView='home';
 let readingPlans=safeParseArray('readingShelfPlansV1'), readingPlanBooks=safeParseArray('readingShelfPlanBooksV1'), selectedReadingPlanId=localStorage.getItem('readingShelfSelectedPlanV1')||'', defaultReadingPlanId=localStorage.getItem('readingShelfDefaultPlanV1')||'', plansCloudReady=false;
 let planDayRecords=safeParseObject('readingShelfPlanDaysV1'), selectedPlanDay=localDateString(), planCalendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 $('goalInput').value=goal;
@@ -1833,10 +1824,6 @@ function render(){
  $('total').textContent=books.length;
  $('readingCount').textContent=books.filter(b=>statusKey(b.status)==='reading').length;
  $('completed').textContent=books.filter(b=>statusKey(b.status)==='completed').length;
- $('filterCountAll').textContent=books.length;
- $('filterCountWant').textContent=books.filter(b=>statusKey(b.status)==='want').length;
- $('filterCountReading').textContent=books.filter(b=>statusKey(b.status)==='reading').length;
- $('filterCountCompleted').textContent=books.filter(b=>statusKey(b.status)==='completed').length;
  const focusBook=books.find(b=>statusKey(b.status)==='reading')||books.filter(b=>statusKey(b.status)==='completed').slice().sort((a,b)=>String(b.completedAt||'').localeCompare(String(a.completedAt||'')))[0]||books[0]||null;
  const focusLabel=focusBook?(statusKey(focusBook.status)==='reading'?'Your current focus':statusKey(focusBook.status)==='completed'?'Last finished':'Continue'):'';
  const cc=$('currentCard');
@@ -1845,22 +1832,24 @@ function render(){
   $('focusHint').textContent=focusLabel;
   cc.innerHTML=`${coverHTML(focusBook)}<div class="reading-info"><h4>${esc(focusBook.title)}</h4><p>${esc(focusBook.author||'Author not added')} · ${esc(categoryText(focusBook))}</p>${ratingHTML(focusBook.rating,focusBook.id)}<div class="progress"><div style="width:${pct(focusBook)}%"></div></div><div class="progress-meta"><span>Page ${focusBook.currentPage||0}${focusBook.totalPages?' of '+focusBook.totalPages:''}</span><span>${focusBook.totalPages?pct(focusBook)+'%':'Page count not set'}</span></div>${bookDatesHTML(focusBook)}${isReading?`<div class="quick-progress"><input id="quickPage-current" type="number" min="0" max="${focusBook.totalPages||999999}" value="${focusBook.currentPage||0}" aria-label="Current page for ${esc(focusBook.title)}"><button class="quick-save" onclick="quickSaveProgress('${focusBook.id}','quickPage-current')">Save page</button><button onclick="quickAddProgress('${focusBook.id}',5)">+5</button><button onclick="quickAddProgress('${focusBook.id}',10)">+10</button></div>`:`<div class="book-actions" style="margin-top:10px"><button class="mini" onclick="startBook('${focusBook.id}')">${statusKey(focusBook.status)==='completed'?'Read again':'Start reading'}</button><button class="mini" onclick="editBook('${focusBook.id}')">Edit</button></div>`}</div>`;
  }else{cc.innerHTML='<div class="empty">No book selected yet. Add a book and choose “Start reading” to set your focus.</div>';}
- const statusBooks=books.filter(b=>filter==='all'||statusKey(b.status)===filter);
- const categoryCounts=[...new Set(statusBooks.flatMap(book=>parseCategories(book.categories??book.category)))].sort((a,b)=>a.localeCompare(b)).map(category=>({category,count:statusBooks.filter(book=>parseCategories(book.categories??book.category).some(value=>value.toLowerCase()===category.toLowerCase())).length}));
- const availableCategories=categoryCounts.map(item=>item.category.toLowerCase());
- selectedCategoryFilters=selectedCategoryFilters.filter(selected=>availableCategories.includes(selected.toLowerCase()));
- document.querySelectorAll('#libraryView .tab').forEach(x=>{
-  const active=x.dataset.filter===filter;
-  x.classList.toggle('active',active);
-  x.setAttribute('aria-pressed',String(active));
- });
+ const bookCats=b=>parseCategories(b.categories??b.category).map(value=>String(value).toLowerCase());
+ const matchesCats=(b,selected)=>selected.every(sel=>bookCats(b).includes(String(sel).toLowerCase()));
+ const matchesStats=(b,selected)=>!selected.length||selected.includes(statusKey(b.status));
+ const allCategoryNames=[...new Set(books.flatMap(book=>parseCategories(book.categories??book.category)))].sort((a,b)=>a.localeCompare(b));
+ selectedCategoryFilters=selectedCategoryFilters.filter(sel=>allCategoryNames.some(name=>name.toLowerCase()===String(sel).toLowerCase()));
+ selectedStatusFilters=selectedStatusFilters.filter(sel=>books.some(b=>statusKey(b.status)===sel));
+ const statusOptions=[{key:'want',label:'Want to read',countId:'filterCountWant'},{key:'reading',label:'Reading',countId:'filterCountReading'},{key:'completed',label:'Completed',countId:'filterCountCompleted'}];
+ const statusCounts=statusOptions.map(option=>({...option,count:books.filter(b=>statusKey(b.status)===option.key&&matchesCats(b,selectedCategoryFilters)).length}));
+ const allStatusCount=books.filter(b=>matchesCats(b,selectedCategoryFilters)).length;
+ $('statusOverview').innerHTML=`<label class="category-tile ${selectedStatusFilters.length?'':'active'}"><input class="category-check" type="checkbox" ${selectedStatusFilters.length?'':'checked'} onchange="selectAllStatuses()"><strong>All books</strong><span><b class="category-number" id="filterCountAll">${allStatusCount}</b> ${allStatusCount===1?'book':'books'}</span></label>`+statusCounts.map(item=>{const checked=selectedStatusFilters.includes(item.key);const disabled=!checked&&item.count===0;return `<label class="category-tile ${checked?'active':''}${disabled?' disabled':''}"><input class="category-check" type="checkbox" value="${item.key}" ${checked?'checked':''} ${disabled?'disabled':''} onchange="toggleStatusFilter(this.value,this.checked)"><strong>${item.label}</strong><span><b class="category-number" id="${item.countId}">${item.count}</b> ${item.count===1?'book':'books'}</span></label>`}).join('');
+ const categoryCounts=allCategoryNames.map(category=>({category,count:books.filter(b=>matchesStats(b,selectedStatusFilters)&&matchesCats(b,selectedCategoryFilters.filter(sel=>sel.toLowerCase()!==category.toLowerCase()))&&bookCats(b).includes(category.toLowerCase())).length}));
  $('categoryOverview').innerHTML=categoryCounts.length
- ? categoryCounts.map(item=>{const checked=selectedCategoryFilters.some(value=>value.toLowerCase()===item.category.toLowerCase());return `<label class="category-tile ${checked?'active':''}"><input class="category-check" type="checkbox" value="${esc(item.category)}" ${checked?'checked':''} onchange="toggleCategoryFilter(this.value,this.checked)"><strong>${esc(item.category)}</strong><span><b class="category-number">${item.count}</b> ${item.count===1?'book':'books'}</span></label>`}).join('')
- : '<div class="empty">No books in this status yet.</div>';
- const shown=statusBooks.filter(b=>!selectedCategoryFilters.length||parseCategories(b.categories??b.category).some(value=>selectedCategoryFilters.some(selected=>value.toLowerCase()===selected.toLowerCase()))).filter(b=>!librarySearch||((b.title||'')+' '+(b.author||'')).toLowerCase().includes(librarySearch));
+ ? categoryCounts.map(item=>{const checked=selectedCategoryFilters.some(value=>value.toLowerCase()===item.category.toLowerCase());const disabled=!checked&&item.count===0;return `<label class="category-tile ${checked?'active':''}${disabled?' disabled':''}"><input class="category-check" type="checkbox" value="${esc(item.category)}" ${checked?'checked':''} ${disabled?'disabled':''} onchange="toggleCategoryFilter(this.value,this.checked)"><strong>${esc(item.category)}</strong><span><b class="category-number">${item.count}</b> ${item.count===1?'book':'books'}</span></label>`}).join('')
+ : '<div class="empty">No books yet. Add a book to start your shelf.</div>';
+ const shown=books.filter(b=>matchesStats(b,selectedStatusFilters)&&matchesCats(b,selectedCategoryFilters)).filter(b=>!librarySearch||((b.title||'')+' '+(b.author||'')).toLowerCase().includes(librarySearch));
  $('bookCount').textContent=`${shown.length} of ${books.length} books displayed`;
- $('categoryResultCount').textContent=(selectedCategoryFilters.length||filter!=='all')?[selectedCategoryFilters.length?selectedCategoryFilters.length+(selectedCategoryFilters.length===1?' category':' categories')+' selected':null,filter!=='all'?({want:'Want to read',reading:'Reading',completed:'Completed'}[filter]):null].filter(Boolean).join(' · '):'Showing all books';
- $('clearCategorySelection').disabled=selectedCategoryFilters.length===0;
+ $('categoryResultCount').textContent=(selectedCategoryFilters.length||selectedStatusFilters.length)?[selectedCategoryFilters.length?selectedCategoryFilters.length+(selectedCategoryFilters.length===1?' category':' categories')+' selected':null,selectedStatusFilters.length?selectedStatusFilters.map(sel=>({want:'Want to read',reading:'Reading',completed:'Completed'}[sel])).join(', '):null].filter(Boolean).join(' · '):'Showing all books';
+ $('clearCategorySelection').disabled=selectedCategoryFilters.length===0&&selectedStatusFilters.length===0;
  const booksPerPage=libraryBooksPerPage();
  const totalPages=Math.max(1,Math.ceil(shown.length/booksPerPage));
  libraryBooksPage=Math.min(libraryBooksPage,totalPages);
@@ -1870,9 +1859,10 @@ function render(){
  const range=$('libraryRange');if(range)range.textContent=`Showing ${shown.length?start+1:0}–${Math.min(start+booksPerPage,shown.length)} of ${shown.length}`;
  const pager=$('libraryPagination');if(pager){pager.innerHTML=shown.length>booksPerPage?`<button type="button" class="page-arrow" onclick="changeLibraryBooksPage(-1)" ${libraryBooksPage===1?'disabled':''} aria-label="Previous page">‹</button>${Array.from({length:totalPages},(_,i)=>i+1).map(n=>`<button type="button" class="page-number ${n===libraryBooksPage?'active':''}" onclick="libraryBooksPage=${n};render()" aria-label="Page ${n}" aria-current="${n===libraryBooksPage?'page':'false'}">${n}</button>`).join('')}<button type="button" class="page-arrow" onclick="changeLibraryBooksPage(1)" ${libraryBooksPage===totalPages?'disabled':''} aria-label="Next page">›</button>`:'';}
 }
-function setFilter(f,el){filter=['all','want','reading','completed'].includes(f)?f:'all';selectedCategoryFilters=[];libraryBooksPage=1;render()}
+function toggleStatusFilter(value,checked){const key=statusKey(value);selectedStatusFilters=selectedStatusFilters.filter(item=>item!==key);if(checked)selectedStatusFilters.push(key);libraryBooksPage=1;render()}
+function selectAllStatuses(){selectedStatusFilters=[];libraryBooksPage=1;render()}
 function toggleCategoryFilter(value,checked){const key=String(value).toLowerCase();selectedCategoryFilters=selectedCategoryFilters.filter(item=>item.toLowerCase()!==key);if(checked)selectedCategoryFilters.push(value);libraryBooksPage=1;render()}
-function clearCategorySelection(){selectedCategoryFilters=[];libraryBooksPage=1;render()}
+function clearCategorySelection(){selectedCategoryFilters=[];selectedStatusFilters=[];libraryBooksPage=1;render()}
 function openAdd(){if(!currentUser){const warning=$('addBookLoginWarning');if(warning)warning.hidden=false;return;}const warning=$('addBookLoginWarning');if(warning)warning.hidden=true;$('bookForm').reset();$('removeBookButton').hidden=true;$('bookId').value='';$('currentPage').value=0;$('startedAt').value='';$('finishedAt').value='';$('coverUrl').value='';$('coverPreview').innerHTML='';$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';renderCategoryOptions(['Other']);$('modalTitle').textContent='Add a book';$('modal').classList.add('show');$('addBookHeaderButton').classList.add('is-modal-open')}
 function closeModal(){$('modal').classList.remove('show');$('addBookHeaderButton').classList.remove('is-modal-open')}
 function editBook(id){let b=books.find(x=>x.id===id);if(!b)return;$('bookId').value=b.id;$('title').value=b.title;$('author').value=b.author||'';renderCategoryOptions(b.categories??b.category);$('totalPages').value=b.totalPages||'';$('status').value=b.status;$('rating').value=b.rating||'';$('currentPage').value=b.currentPage||0;$('startedAt').value=b.startedAt?String(b.startedAt).slice(0,10):'';$('finishedAt').value=b.completedAt?String(b.completedAt).slice(0,10):'';$('coverUrl').value=b.coverUrl||'';updateCoverPreview();$('coverResults').innerHTML='';$('coverLookupStatus').textContent='Search by title and author, then choose the matching edition.';$('modalTitle').textContent='Update book';$('removeBookButton').hidden=false;$('modal').classList.add('show')}
@@ -2501,7 +2491,7 @@ async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)retur
 async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its assignments? Your books and reading history will remain.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,removeBook,removeBookFromForm,setFilter,exportExcel,quickSaveProgress,quickAddProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
+Object.assign(window,{openAdd,closeModal,saveBook,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,removeBook,removeBookFromForm,toggleStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
 async function init(){
  // Show the locally saved shelf immediately, before waiting on the session,
  // so the page never sits on hardcoded zeros.
