@@ -302,6 +302,20 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .plan-empty-small{font:12px/1.5 Arial;color:var(--muted);padding:8px 0}
 @media(max-width:560px){.plan-assignment{align-items:flex-start;flex-direction:column}.plan-day-head{align-items:flex-start}.plan-calendar-day{min-height:36px}}
 
+.plan-advanced{margin:12px 0;border:1px solid var(--line);border-radius:8px;background:#fffaf0}
+.plan-advanced>summary{cursor:pointer;padding:11px 13px;font:600 13px Arial,sans-serif;color:var(--green)}
+.plan-advanced-body{padding:2px 13px 13px}
+.plan-days-fieldset{border:0;padding:0;margin:12px 0 0}
+.plan-days-fieldset legend{font:600 12px Arial,sans-serif;color:var(--muted);padding:0;margin-bottom:6px}
+.plan-day-picker{display:flex;flex-wrap:wrap;gap:7px}
+.plan-day-picker label{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;font:12px Arial,sans-serif;color:var(--ink);cursor:pointer}
+.plan-day-picker input{accent-color:var(--green);margin:0}
+.plan-setup-fields-2{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.plan-settings-main{grid-template-columns:repeat(3,minmax(0,1fr))}
+.plan-settings-single{grid-template-columns:minmax(200px,320px)}
+@media(max-width:760px){.plan-settings-main{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-settings-single{grid-template-columns:1fr}}
+@media(max-width:440px){.plan-settings-main{grid-template-columns:1fr}}
+.plan-setup-step h3:focus{outline:2px solid var(--green);outline-offset:3px}
 .status-badge{display:inline-block;font:600 11px Arial;color:var(--green);background:var(--green2);border-radius:4px;padding:3px 7px;margin-bottom:6px}
 .status-badge.status-completed{background:#e7e0c8}
 .status-badge.status-want{background:#efe9da}
@@ -2237,7 +2251,8 @@ function renderReadingPlans(){
  <div class="plan-progress"><span style="width:${percent}%"></span></div><div class="plan-today"><strong>Reading focus</strong><br>${esc(todayText)}</div>
  <div id="planDailySchedule"></div>
  <div class="section-head" id="planSettingsSection"><h3>Plan settings</h3><span>Saved to your account when signed in</span></div>
- <div class="plan-settings"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Target end date<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label><label>Plan pace (pages/day)<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div><div class="plan-note">Reading days: ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].filter((d,i)=>(plan.reading_days||[1,2,3,4,5]).includes(i+1)).join(', ')||'Not set'} (the current schedule uses your saved reading-day settings).</div>
+ <div class="plan-settings plan-settings-main"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Plan pace (pages/day)<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div>
+ <details class="plan-advanced"><summary>Advanced options</summary><div class="plan-advanced-body"><div class="plan-settings plan-settings-single"><label>Target end date<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label></div><fieldset class="plan-days-fieldset"><legend>Reading days</legend><div class="plan-day-picker">${planDayPickerHTML('plan-settings-day-check',plan.reading_days)}</div></fieldset></div></details>
  <div class="plan-toolbar plan-settings-toolbar"><button class="secondary" onclick="saveReadingPlanSettings()">Save settings</button><button class="secondary" type="button" onclick="setDefaultReadingPlan('${esc(plan.id)}')">${String(defaultReadingPlanId)===String(plan.id)?'★ Current default':'☆ Set as default'}</button><span class="plan-note">Estimated finish based on known remaining pages: ${knownRemaining?planDateValue(finishDate):'not available'} · assumes ${perDay} pages every calendar day</span></div>
  <div class="section-head plan-books-heading" id="planBooksSection"><h3>Books in this plan</h3><span>${items.length} assigned</span><div class="plan-pagination-controls"><button class="mini" type="button" onclick="changePlanBooksPage(-1)" ${planBooksPage<=1?'disabled':''}>Previous</button><span>Page ${planBooksPage} of ${totalPlanPages}</span><button class="mini" type="button" onclick="changePlanBooksPage(1)" ${planBooksPage>=totalPlanPages?'disabled':''}>Next</button></div></div>
  <div class="plan-book-scroll"><div class="plan-book-list">${rows||'<div class="plan-empty">No books have been added yet.</div>'}</div></div>
@@ -2413,6 +2428,22 @@ async function selectReadingPlan(id){
  else if(!selectedReadingPlanId)readingPlanBooks=[];
  planLocalSave();renderReadingPlans();
 }
+function planDayPickerHTML(cls,selected){
+ const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],sel=Array.isArray(selected)&&selected.length?selected:[1,2,3,4,5];
+ return names.map((n,i)=>`<label><input type="checkbox" class="${cls}" value="${i+1}" ${sel.includes(i+1)?'checked':''}>${n}</label>`).join('');
+}
+function readPlanDayPicker(cls){
+ return [...document.querySelectorAll('.'+cls+':checked')].map(el=>Number(el.value)).filter(n=>Number.isInteger(n)&&n>=1&&n<=7).sort((a,b)=>a-b);
+}
+function planSetupContinue(mode){
+ if(mode==='unread'&&!document.querySelector('#planSetupBookList .plan-setup-book-check:checked')){message('Select at least one book for your plan.',true);return;}
+ const s1=$('planSetupStep1'),s2=$('planSetupStep2');if(!s1||!s2)return;
+ s1.hidden=true;s2.hidden=false;const h=$('planSetupStep2Heading');if(h)h.focus({preventScroll:true});
+}
+function planSetupBack(){
+ const s1=$('planSetupStep1'),s2=$('planSetupStep2');if(!s1||!s2)return;
+ s2.hidden=true;s1.hidden=false;const h=$('planSetupStep1Heading');if(h)h.focus({preventScroll:true});
+}
 function renderPlanSetupPanel(mode,planId){
  if(mode==='add'&&planId)selectedReadingPlanId=planId;
  const root=$('readingPlanContent');if(!root)return;
@@ -2422,20 +2453,43 @@ function renderPlanSetupPanel(mode,planId){
  const existing=isAdd?new Set(readingPlanBooks.filter(i=>String(i.plan_id)===String(active.id)).map(i=>String(i.book_id))):new Set();
  const candidates=isAdd
   ?books.filter(b=>statusKey(b.status)!=='completed'&&!existing.has(String(b.id)))
-  :isUnread?books.filter(b=>statusKey(b.status)!=='completed'&&!/^AWS Training Notes 2023$/i.test(String(b.title||'').trim())):[];
+  :isUnread?books.filter(b=>statusKey(b.status)!=='completed'):[];
  if((isUnread||isAdd)&&!candidates.length){
   root.innerHTML=`<div class="plan-setup-panel"><h3>${isAdd?'Add books to plan':'Plan with unread books'}</h3><p>${isAdd?'No more unread books to add to this plan.':'No unread books in your library.'}</p><div class="plan-setup-actions"><button class="secondary" type="button" onclick="renderReadingPlans()">Back</button></div></div>`;
   return;
  }
  const title=isUnread?'Create a plan with unread books':isEmpty?'Create an empty plan':'Add books to your plan';
  const description=isUnread?'Choose the unread books to include. All are selected by default; uncheck any to leave out.':isEmpty?'Give your plan a name. You can add books later.':'Select books to add to the current plan.';
- root.innerHTML=`<section class="plan-setup-panel">
+ const bookList=isEmpty?'':`<div class="plan-setup-actions"><button class="mini secondary" type="button" onclick="setPlanSetupSelection(true)">Select all</button><button class="mini secondary" type="button" onclick="setPlanSetupSelection(false)">Clear selection</button><span class="plan-setup-count" id="planSetupCount"></span></div>
+  <div class="plan-setup-list" id="planSetupBookList">${candidates.map((b,i)=>`<label class="plan-setup-book"><input type="checkbox" class="plan-setup-book-check" value="${i}" ${isUnread?'checked':''}><span><strong>${esc(b.title||'Untitled book')}</strong><small>${esc(b.author||'Author not listed')}${Number(b.totalPages)?' · '+Number(b.totalPages)+' pages':' · Page count not entered'}</small></span></label>`).join('')}</div>`;
+ if(isAdd){
+  root.innerHTML=`<section class="plan-setup-panel">
   <h3>${title}</h3><p>${description}</p>
-  ${!isAdd?`<div class="plan-setup-fields"><label>Plan name<input id="inlinePlanName" maxlength="100" value="Personal Reading Curriculum" placeholder="Enter a plan name"></label></div>`:''}
-  ${isEmpty?'':`<div class="plan-setup-actions"><button class="mini secondary" type="button" onclick="setPlanSetupSelection(true)">Select all</button><button class="mini secondary" type="button" onclick="setPlanSetupSelection(false)">Clear selection</button><span class="plan-setup-count" id="planSetupCount"></span></div>
-  <div class="plan-setup-list" id="planSetupBookList">${candidates.map((b,i)=>`<label class="plan-setup-book"><input type="checkbox" class="plan-setup-book-check" value="${i}" ${isUnread?'checked':''}><span><strong>${esc(b.title||'Untitled book')}</strong><small>${esc(b.author||'Author not listed')}${Number(b.totalPages)?' · '+Number(b.totalPages)+' pages':' · Page count not entered'}</small></span></label>`).join('')}</div>`}
-  <div class="plan-setup-actions"><button class="primary" type="button" onclick="submitPlanSetup('${mode}')">${isAdd?'Add selected books':isEmpty?'Create empty plan':'Create plan'}</button><button class="secondary" type="button" onclick="renderReadingPlans()">Cancel</button></div>
+  ${bookList}
+  <div class="plan-setup-actions"><button class="primary" type="button" onclick="submitPlanSetup('${mode}')">Add selected books</button><button class="secondary" type="button" onclick="renderReadingPlans()">Cancel</button></div>
  </section>`;
+ }else{
+  root.innerHTML=`<section class="plan-setup-panel">
+  <div class="plan-setup-step" id="planSetupStep1">
+  <h3 id="planSetupStep1Heading" tabindex="-1">${title}</h3><p>${description}</p>
+  <div class="plan-setup-fields"><label>Plan name<input id="inlinePlanName" maxlength="100" value="Personal Reading Curriculum" placeholder="Enter a plan name"></label></div>
+  ${bookList}
+  <div class="plan-setup-actions"><button class="primary" type="button" onclick="planSetupContinue('${mode}')">Continue</button><button class="secondary" type="button" onclick="renderReadingPlans()">Cancel</button></div>
+  </div>
+  <div class="plan-setup-step" id="planSetupStep2" hidden>
+  <h3 id="planSetupStep2Heading" tabindex="-1">Pace and dates</h3><p>Set how many pages to read on each reading day, and when the plan starts. The values shown are the usual defaults — keep them, or change any of them.</p>
+  <div class="plan-setup-fields plan-setup-fields-2">
+  <label>Plan pace (pages/day)<input id="planSetupGoal" type="number" min="1" max="200" value="25"></label>
+  <label>Start date<input id="planSetupStart" type="date" value="${planDateValue(new Date())}"></label>
+  </div>
+  <details class="plan-advanced"><summary>Advanced options</summary><div class="plan-advanced-body">
+  <div class="plan-setup-fields"><label>Target end date (optional)<input id="planSetupEnd" type="date" value=""></label></div>
+  <fieldset class="plan-days-fieldset"><legend>Reading days</legend><div class="plan-day-picker">${planDayPickerHTML('plan-setup-day-check',[1,2,3,4,5])}</div></fieldset>
+  </div></details>
+  <div class="plan-setup-actions"><button class="primary" type="button" onclick="submitPlanSetup('${mode}')">${isEmpty?'Create empty plan':'Create plan'}</button><button class="secondary" type="button" onclick="planSetupBack()">Back</button></div>
+  </div>
+ </section>`;
+ }
  if(!isEmpty){
   const updateCount=()=>{const count=root.querySelectorAll('.plan-setup-book-check:checked').length;const el=$('planSetupCount');if(el)el.textContent=`${count} selected`;};
   root.querySelectorAll('.plan-setup-book-check').forEach(el=>el.addEventListener('change',updateCount));
@@ -2466,13 +2520,20 @@ async function submitPlanSetup(mode){
  }
  let chosenUnread=[];
  if(isUnread){
-  const candidates=books.filter(b=>statusKey(b.status)!=='completed'&&!/^AWS Training Notes 2023$/i.test(String(b.title||'').trim()));
+  const candidates=books.filter(b=>statusKey(b.status)!=='completed');
   const selected=[...document.querySelectorAll('#planSetupBookList .plan-setup-book-check:checked')].map(el=>Number(el.value)).filter(i=>Number.isInteger(i)&&i>=0&&i<candidates.length);
   chosenUnread=[...new Set(selected)].map(i=>candidates[i]);
   if(!chosenUnread.length){message('Select at least one book for your plan.',true);return;}
  }
  let plan;
- const draft={name,start_date:planDateValue(new Date()),target_end_date:null,daily_page_goal:25,reading_days:[1,2,3,4,5],status:'active'};
+ const paceInput=Number($('planSetupGoal')?.value);
+ const daily_page_goal=Number.isFinite(paceInput)&&paceInput>0?Math.max(1,Math.min(200,Math.round(paceInput))):25;
+ const start_date=$('planSetupStart')?.value||planDateValue(new Date());
+ const target_end_date=$('planSetupEnd')?.value||null;
+ if(target_end_date&&target_end_date<start_date){message('Target end date cannot be before the start date.',true);return;}
+ const reading_days=readPlanDayPicker('plan-setup-day-check');
+ if(!reading_days.length){message('Choose at least one reading day.',true);return;}
+ const draft={name,start_date,target_end_date,daily_page_goal,reading_days,status:'active'};
  if(currentUser){
   const {data,error}=await db.from('reading_plans').insert({...draft,user_id:currentUser.id}).select('*').single();
   if(error){message('Could not create plan: '+error.message,true);return;}plan=data;
@@ -2510,7 +2571,9 @@ async function saveReadingPlanSettings(){
  const plan=activeReadingPlan();if(!plan)return;
  const name=$('planNameInput').value.trim()||'Personal Reading Curriculum',start_date=$('planStartInput').value||planDateValue(new Date()),target_end_date=$('planEndInput').value||null,daily_page_goal=Math.max(1,Math.min(200,Number($('planGoalInput').value)||25));
  if(target_end_date&&target_end_date<start_date){message('Target end date cannot be before the start date.',true);return;}
- const patch={name,start_date,target_end_date,daily_page_goal};
+ const reading_days=readPlanDayPicker('plan-settings-day-check');
+ if(!reading_days.length){message('Choose at least one reading day.',true);return;}
+ const patch={name,start_date,target_end_date,daily_page_goal,reading_days};
  if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').update(patch).eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not save plan settings: '+error.message,true);return;}}
  Object.assign(plan,patch);planLocalSave();renderReadingPlans();message('Plan settings saved.');
 }
@@ -2558,7 +2621,7 @@ async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)retur
 async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its assignments? Your books and reading history will remain.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
+Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
 async function init(){
  // Show the locally saved shelf immediately, before waiting on the session,
  // so the page never sits on hardcoded zeros.
