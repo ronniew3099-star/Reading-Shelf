@@ -248,11 +248,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .plan-action-menu{position:absolute;z-index:30;top:calc(100% + 6px);left:0;min-width:210px;padding:6px;background:var(--card,#fff);border:1px solid var(--line,#d9dfd5);border-radius:10px;box-shadow:0 8px 24px rgba(25,40,25,.14)}
 .plan-action-menu button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-radius:7px;background:transparent;color:var(--ink);font:inherit;cursor:pointer}
 .plan-action-menu button:hover,.plan-action-menu button:focus-visible{background:var(--soft,#eef3eb);outline:none}
-.existing-plans-picker{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.existing-plans-picker[hidden]{display:none}
-.existing-plans-picker label{font:600 12px Arial,sans-serif;color:var(--muted)}
-.existing-plans-picker select{min-width:190px}
-@media(max-width:440px){.plan-menu-toolbar{align-items:stretch}.plan-action-dropdown,.plan-action-dropdown>summary{width:100%}.plan-action-dropdown>summary{justify-content:space-between}.plan-action-menu{width:100%;box-sizing:border-box}.existing-plans-picker{width:100%}.existing-plans-picker select{width:100%}}
+@media(max-width:440px){.plan-menu-toolbar{align-items:stretch}.plan-action-dropdown,.plan-action-dropdown>summary{width:100%}.plan-action-dropdown>summary{justify-content:space-between}.plan-action-menu{width:100%;box-sizing:border-box}}
 /* Stage 3.4 — Reading Plans */
 .plan-intro{background:linear-gradient(120deg,#203d30,#355b46 65%,#64765a);color:#fff;border:1px solid #a58b5b;border-radius:9px;padding:22px 24px;margin:14px 0 20px}
 .plan-intro h3{font:normal 24px Georgia,serif;margin:0 0 7px}.plan-intro p{font:13px/1.55 Arial;color:#eee9dc;margin:0;max-width:760px}
@@ -434,6 +430,9 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
  .plan-book-main{align-items:flex-start}
  .plan-book-scroll{max-height:460px}
  .plan-pagination{align-items:flex-start;flex-direction:column}
+ .plan-book-order{gap:8px}
+ .plan-order-input{width:58px;min-height:40px;font-size:15px}
+ .plan-drag-handle{font-size:17px;opacity:.55}
 }
 
 .rating-clear-button{border:0;background:transparent;color:var(--muted);font:16px/1 Arial;padding:1px 4px;cursor:pointer;border-radius:4px}
@@ -2129,6 +2128,12 @@ async function loadReadingPlans(){
    if(itemError)throw itemError;
    readingPlanBooks=items||[];
   }else readingPlanBooks=[];
+  loadedPlanBookIds.clear();planBookCountCache={};
+  if(selectedReadingPlanId)loadedPlanBookIds.add(String(selectedReadingPlanId));
+  try{
+   const {data:countRows,error:countError}=await db.from('reading_plan_books').select('id,plan_id,book_id,schedule_mode,chapter_count,current_chapter').eq('user_id',currentUser.id);
+   if(!countError&&countRows)countRows.forEach(row=>{const key=String(row.plan_id);(planBookCountCache[key]=planBookCountCache[key]||[]).push(row);});
+  }catch(countErr){/* Cascade counts fall back to the loaded items. */}
   plansCloudReady=true;planLocalSave();
  }catch(err){
   plansCloudReady=false;
@@ -2139,6 +2144,12 @@ async function loadReadingPlans(){
 
 let planBooksPage=1;
 const PLAN_BOOKS_PAGE_SIZE=10;
+// Signed in, plan books load lazily — only the selected plan's items are in
+// readingPlanBooks. planBookCountCache holds light rows for the other plans
+// so cascade counts stay true; loadedPlanBookIds tracks which plans' full
+// items are actually in readingPlanBooks.
+let planBookCountCache={};
+const loadedPlanBookIds=new Set();
 let draggedPlanBookId=null;
 function startPlanBookDrag(event,id){draggedPlanBookId=String(id);if(event.dataTransfer){event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));}}
 function allowPlanBookDrop(event){event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';}
@@ -2161,12 +2172,6 @@ async function setPlanBookPosition(id,value){
  await savePlanBookOrder();planBooksPage=Math.floor(target/PLAN_BOOKS_PAGE_SIZE)+1;renderReadingPlans();message('Reading order updated.');
 }
 function changePlanBooksPage(delta){const plan=activeReadingPlan();if(!plan)return;const count=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).length;const pages=Math.max(1,Math.ceil(count/PLAN_BOOKS_PAGE_SIZE));planBooksPage=Math.max(1,Math.min(pages,planBooksPage+delta));renderReadingPlans();}
-function showExistingPlansPicker(){
- const picker=$('existingPlansPicker');
- const select=$('readingPlanSelect');
- if(picker)picker.hidden=false;
- if(select){select.focus();if(readingPlans.length)select.click();}
-}
 function closeReadingPlanMenus(){
  document.querySelectorAll('#plansView details.plan-action-dropdown[open]').forEach(menu=>menu.open=false);
  document.querySelectorAll('#plansView .plan-edit-actions.is-visible').forEach(menu=>menu.classList.remove('is-visible'));
@@ -2201,6 +2206,7 @@ async function selectPlanFromCascade(planId,action){
   const {data,error}=await db.from('reading_plan_books').select('*').eq('user_id',currentUser.id).eq('plan_id',plan.id).order('sequence_number',{ascending:true});
   if(error){message('Could not load books for this plan: '+error.message,true);return;}
   readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id)).concat(data||[]);
+  loadedPlanBookIds.add(String(plan.id));
  }
  closeReadingPlanMenus();
  renderReadingPlans();
@@ -2210,7 +2216,8 @@ function renderPlanCascadeMenus(){
  const editRoot=$('editPlanCascade'),addRoot=$('addBooksPlanCascade');
  const makePlanRows=(action)=>readingPlans.length?readingPlans.map(p=>{
   const id=String(p.id),name=esc(p.name||'Untitled plan');
-  const assigned=readingPlanBooks.filter(i=>String(i.plan_id)===id);
+  const loadedItems=readingPlanBooks.filter(i=>String(i.plan_id)===id);
+  const assigned=(!currentUser||loadedPlanBookIds.has(id))?loadedItems:(planBookCountCache[id]||loadedItems);
   const completed=assigned.filter(planBookDone).length;
   const countLabel=`${assigned.length} book${assigned.length===1?'':'s'} · ${completed} completed`;
   const selected=String(selectedReadingPlanId)===id;
@@ -2222,8 +2229,6 @@ function renderPlanCascadeMenus(){
 }
 function renderReadingPlans(){
  const root=$('readingPlanContent');if(!root)return;
- const select=$('readingPlanSelect');
- if(select){select.innerHTML=readingPlans.length?readingPlans.map(p=>`<option value="${esc(p.id)}" ${String(p.id)===String(selectedReadingPlanId)?'selected':''}>${esc(p.name||'Untitled plan')}</option>`).join(''):'<option value="">No plans yet</option>';select.value=selectedReadingPlanId||'';}
  renderPlanCascadeMenus();
  const plan=activeReadingPlan();
  if(!plan){root.innerHTML='<div class="plan-empty">No reading plan selected. Select a plan to see its schedule and editing tools.</div><div id="planDailySchedule"></div>';renderDailyPlan();return;}
@@ -2245,13 +2250,14 @@ function renderReadingPlans(){
  else if(!Number(currentBook.totalPages))todayText=`Up next: ${currentBook.title}. No page count yet. Add one in Edit Book, or choose a chapter or manual schedule.`;
  else {const start=Number(currentBook.currentPage||0)+1,end=Math.min(Number(currentBook.totalPages),Number(currentBook.currentPage||0)+perDay);todayText=`Today's reading: ${currentBook.title} · Pages ${start}–${end}. Update the page in My Library after reading; it moves forward automatically.`;}
  const activeItem=items.find(i=>!planBookDone(i));
- const rows=pageItems.map((item,pageIndex)=>{const index=(planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE+pageIndex;const b=books.find(x=>String(x.id)===String(item.book_id));const title=b?b.title:'Book missing from library';const mode=item.schedule_mode||'pages';const current=!!activeItem&&String(activeItem.id)===String(item.id);return `<article class="plan-book ${current?'current-focus':''}" draggable="true" ondragstart="startPlanBookDrag(event,'${esc(item.id)}')" ondragover="allowPlanBookDrop(event)" ondrop="dropPlanBook(event,'${esc(item.id)}')" ondragend="endPlanBookDrag()"><div class="plan-book-main"><div class="plan-book-order"><span class="plan-drag-handle" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><label class="plan-order-label"><span class="sr-only">No.</span><input class="plan-order-input" type="number" min="1" max="${items.length}" value="${index+1}" aria-label="No." onchange="setPlanBookPosition('${esc(item.id)}',this.value)"></label></div><div class="plan-book-copy"><h4>${esc(title)}${current?'<span class="plan-current-tag">Reading now</span>':''}</h4><p>${esc(planBookStatus(item))}${b&&b.rating?` · ${'★'.repeat(Number(b.rating))}`:''}</p></div></div><div class="plan-book-actions">${!current?`<button class="mini plan-icon-button" title="Read this one now" aria-label="Read this one now" onclick="makePlanBookCurrent('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.2v14.8M12 6.2c-2.2-1.5-5.1-2-8-1.5v14.8c2.9-.5 5.8 0 8 1.5M12 6.2c2.2-1.5 5.1-2 8-1.5v14.8c-2.9-.5-5.8 0-8 1.5"/></svg></button>`:''}<button class="mini plan-icon-button" title="Move up" aria-label="Move up" ${index===0?'disabled':''} onclick="movePlanBook('${esc(item.id)}',-1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button><button class="mini plan-icon-button" title="Move down" aria-label="Move down" ${index===items.length-1?'disabled':''} onclick="movePlanBook('${esc(item.id)}',1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>${mode==='chapters'&&Number(item.chapter_count)>0?`<button class="mini" onclick="advancePlanChapters('${esc(item.id)}')">I read today's chapters</button>`:''}<button class="mini plan-icon-button" title="Schedule" aria-label="Schedule" onclick="configurePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></button><button class="mini plan-icon-button" title="Remove" aria-label="Remove" onclick="removePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg></button></div></article>`}).join('');
+ const rows=pageItems.map((item,pageIndex)=>{const index=(planBooksPage-1)*PLAN_BOOKS_PAGE_SIZE+pageIndex;const b=books.find(x=>String(x.id)===String(item.book_id));const title=b?b.title:'Book missing from library';const mode=item.schedule_mode||'pages';const current=!!activeItem&&String(activeItem.id)===String(item.id);return `<article class="plan-book ${current?'current-focus':''}" draggable="true" ondragstart="startPlanBookDrag(event,'${esc(item.id)}')" ondragover="allowPlanBookDrop(event)" ondrop="dropPlanBook(event,'${esc(item.id)}')" ondragend="endPlanBookDrag()"><div class="plan-book-main"><div class="plan-book-order"><span class="plan-drag-handle" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><label class="plan-order-label"><span class="sr-only">No.</span><input class="plan-order-input" type="number" min="1" max="${items.length}" value="${index+1}" aria-label="Order position" title="Order position" onchange="setPlanBookPosition('${esc(item.id)}',this.value)"></label></div><div class="plan-book-copy"><h4>${esc(title)}${current?'<span class="plan-current-tag">Reading now</span>':''}</h4><p>${esc(planBookStatus(item))}${b&&b.rating?` · ${'★'.repeat(Number(b.rating))}`:''}</p></div></div><div class="plan-book-actions">${!current?`<button class="mini plan-icon-button" title="Read this one now" aria-label="Read this one now" onclick="makePlanBookCurrent('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.2v14.8M12 6.2c-2.2-1.5-5.1-2-8-1.5v14.8c2.9-.5 5.8 0 8 1.5M12 6.2c2.2-1.5 5.1-2 8-1.5v14.8c-2.9-.5-5.8 0-8 1.5"/></svg></button>`:''}<button class="mini plan-icon-button" title="Move up" aria-label="Move up" ${index===0?'disabled':''} onclick="movePlanBook('${esc(item.id)}',-1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button><button class="mini plan-icon-button" title="Move down" aria-label="Move down" ${index===items.length-1?'disabled':''} onclick="movePlanBook('${esc(item.id)}',1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>${mode==='chapters'&&Number(item.chapter_count)>0?`<button class="mini" onclick="advancePlanChapters('${esc(item.id)}')">I read today's chapters</button>`:''}<button class="mini plan-icon-button" title="Schedule" aria-label="Schedule" onclick="configurePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></button><button class="mini plan-icon-button" title="Remove" aria-label="Remove" onclick="removePlanBook('${esc(item.id)}')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg></button></div></article>`}).join('');
  root.innerHTML=`<section class="plan-panel"><div class="selected-plan-banner"><div><small>This plan</small><strong>${esc(plan.name||'Personal Reading Plan')}</strong><span>Your calendar and schedule show this plan.</span></div><span class="selected-plan-status">${esc(plan.status||'active')}</span></div>
  <div class="plan-stats"><div class="plan-stat"><small>Books in plan</small><strong>${items.length}</strong></div><div class="plan-stat"><small>Completed</small><strong>${done}</strong></div><div class="plan-stat"><small>Finished</small><strong>${percent}%</strong></div><div class="plan-stat"><small>Pages left (books with page counts)</small><strong>${knownRemaining.toLocaleString()}</strong></div></div>
  <div class="plan-progress"><span style="width:${percent}%"></span></div><div class="plan-today"><strong>Reading focus</strong><br>${esc(todayText)}</div>
  <div id="planDailySchedule"></div>
  <div class="section-head" id="planSettingsSection"><h3>Plan settings</h3><span>Saved to your account when signed in</span></div>
  <div class="plan-settings plan-settings-main"><label>Plan name<input id="planNameInput" maxlength="100" value="${esc(plan.name||'Personal Reading Plan')}"></label><label>Start date<input id="planStartInput" type="date" value="${esc(planDateValue(plan.start_date))}"></label><label>Pages a day<input id="planGoalInput" type="number" min="1" max="200" value="${perDay}"></label></div>
+ <p class="plan-note">Changing Pages a day applies to days that have not been made yet. Today and past days stay as they are. If today still has pages that are not started, saving will offer to rebuild today's pages at the new pace.</p>
  <details class="plan-advanced"><summary>Advanced options</summary><div class="plan-advanced-body"><div class="plan-settings plan-settings-single"><label>Finish by (optional)<input id="planEndInput" type="date" value="${esc(planDateValue(plan.target_end_date))}"></label></div><fieldset class="plan-days-fieldset"><legend>Days I read</legend><div class="plan-day-picker">${planDayPickerHTML('plan-settings-day-check',plan.reading_days)}</div></fieldset></div></details>
  <div class="plan-toolbar plan-settings-toolbar"><button class="secondary" onclick="saveReadingPlanSettings()">Save settings</button><button class="secondary" type="button" onclick="setDefaultReadingPlan('${esc(plan.id)}')">${String(defaultReadingPlanId)===String(plan.id)?'★ Your starting plan':'☆ Start with this plan'}</button><span class="plan-note">Estimated finish based on known remaining pages: ${knownRemaining?planDateValue(finishDate):'not available'} · assumes ${perDay} pages every calendar day</span></div>
  <div class="section-head plan-books-heading" id="planBooksSection"><h3>Books in this plan</h3><span>${items.length} assigned</span><div class="plan-pagination-controls"><button class="mini" type="button" onclick="changePlanBooksPage(-1)" ${planBooksPage<=1?'disabled':''}>Previous</button><span>Page ${planBooksPage} of ${totalPlanPages}</span><button class="mini" type="button" onclick="changePlanBooksPage(1)" ${planBooksPage>=totalPlanPages?'disabled':''}>Next</button></div></div>
@@ -2351,7 +2357,7 @@ function renderDailyPlan(){
       <button class="secondary calendar-today-button" type="button" onclick="goToCurrentPlanCalendarDate()">Today</button>
       <label class="calendar-select-wrap"><span class="calendar-short-label">M</span><select id="planCalendarMonthSelect" aria-label="Select month" onchange="setPlanCalendarMonthYear()"></select></label>
       <label class="calendar-select-wrap"><span class="calendar-short-label">Y</span><select id="planCalendarYearSelect" aria-label="Select year" onchange="setPlanCalendarMonthYear()"></select></label>
-    </div>${renderPlanCalendar(plan,date)}<div class="plan-day-summary">${future?'Future reading is preview only. You cannot mark it complete early.':`${carryPages} pages still to read from earlier days (${carry.length} item(s)), shown separately · ${assignments.length} planned item(s) · ${totalPages} new pages.`} Days I read: ${((plan.reading_days||[1,2,3,4,5]).length)} days per week.</div>${catchup}<div class="plan-assignment-group"><h4>Still to read from earlier days</h4>${carryHtml}</div><div class="plan-assignment-group"><h4>Pages for today</h4>${plannedHtml}</div><p class="plan-note">Mark today's reading Completed after reading. Unable ones are not done yet and appear under Still to read from earlier days the next reading day. Your book's page updates when you mark today's reading complete.</p></section>`;
+    </div>${renderPlanCalendar(plan,date)}<div class="plan-day-summary">${future?'Future reading is preview only. You cannot mark it complete early.':`${carryPages} pages still to read from earlier days (${carry.length} item(s)) · ${assignments.length} planned item(s) · ${totalPages} new pages. <strong>Total for this day: ${carryPages+totalPages} pages</strong> — ${totalPages} new pages plus ${carryPages} pages still to read from earlier days.`} Days I read: ${((plan.reading_days||[1,2,3,4,5]).length)} days per week.</div>${catchup}<div class="plan-assignment-group"><h4>Still to read from earlier days</h4>${carryHtml}</div><div class="plan-assignment-group"><h4>Pages for today</h4>${plannedHtml}</div><p class="plan-note">Mark today's reading Completed after reading. Unable ones are not done yet and appear under Still to read from earlier days the next reading day. Your book's page updates when you mark today's reading complete.</p></section>`;
  syncPlanCalendarSelectors();
 }
 function selectPlanDay(date){if(!activeReadingPlan()||!date)return;selectedPlanDay=date;const d=new Date(date+'T12:00:00');planCalendarMonth=new Date(d.getFullYear(),d.getMonth(),1);renderDailyPlan();}
@@ -2412,20 +2418,56 @@ function refreshTodayPlanForCurrentBook(plan,chosen){
  }
  record.assignments=[...preserved,...next];savePlanDayRecords();
 }
+function rebuildTodayPendingAtPace(plan){
+ const today=localDateString(),record=planDayRecords[planDayKey(plan.id,today)];if(!record)return false;
+ const preserved=(record.assignments||[]).filter(a=>a.status!=='pending');
+ if(preserved.length===(record.assignments||[]).length)return false;
+ const coveredToday=new Map();
+ preserved.forEach(a=>{const key=String(a.book_id);coveredToday.set(key,Math.max(coveredToday.get(key)||0,Number(a.end_page)||0));});
+ const preservedPages=preserved.reduce((n,a)=>n+Math.max(0,Number(a.end_page)-Number(a.start_page)+1),0);
+ let remaining=Math.max(0,(Number(plan.daily_page_goal)||25)-preservedPages);
+ const items=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).slice().sort((a,b)=>(Number(a.sequence_number)||0)-(Number(b.sequence_number)||0));
+ const next=[];
+ for(const item of items){
+  if(remaining<=0)break;
+  if((item.schedule_mode||'pages')!=='pages')continue;
+  const book=books.find(b=>String(b.id)===String(item.book_id));if(!book||planBookDone(item)||!Number(book.totalPages))continue;
+  const start=Math.max(Number(book.currentPage)||0,maxReservedPage(plan.id,item.book_id,today),coveredToday.get(String(item.book_id))||0)+1;
+  if(start>Number(book.totalPages))continue;
+  const end=Math.min(Number(book.totalPages),start+remaining-1);
+  next.push({book_id:item.book_id,start_page:start,end_page:end,status:'pending'});
+  remaining-=end-start+1;
+ }
+ record.assignments=[...preserved,...next];savePlanDayRecords();return true;
+}
+async function offerTodayRebuildAfterPaceChange(plan,oldGoal,newGoal){
+ const today=localDateString(),start=planDateValue(plan.start_date)||today;
+ if(today<start||!planIsReadingDay(plan,today))return false;
+ ensurePlanRecordsThrough(plan,today);
+ const record=planDayRecords[planDayKey(plan.id,today)];if(!record)return false;
+ if(!(record.assignments||[]).some(a=>a.status==='pending'))return false;
+ if(!(await askConfirm('Rebuild today at the new pace?',`You changed Pages a day from ${oldGoal} to ${newGoal}. Today's pages that are not started yet were planned at the old pace. Rebuild them at ${newGoal} pages a day? Pages already read today, and all past days, stay as they are.`,'Rebuild today')))return false;
+ return rebuildTodayPendingAtPace(plan);
+}
 async function makePlanBookCurrent(id){
  const plan=activeReadingPlan();if(!plan)return;
  const ordered=readingPlanBooks.filter(i=>String(i.plan_id)===String(plan.id)).slice().sort((a,b)=>(Number(a.sequence_number)||0)-(Number(b.sequence_number)||0));
  const index=ordered.findIndex(i=>String(i.id)===String(id));if(index<0)return;
- const [chosen]=ordered.splice(index,1);if(planBookDone(chosen)){message('That book is already complete. Choose an unfinished book.',true);return;}
- ordered.unshift(chosen);ordered.forEach((item,i)=>item.sequence_number=i+1);
+ const chosen=ordered[index];
+ if(planBookDone(chosen)){message('That book is already complete. Choose an unfinished book.',true);return;}
+ const book=books.find(b=>String(b.id)===String(chosen.book_id));
+ const title=book?.title||'this book';
+ if(!(await askConfirm('Read this one now?',`Make ${title} your current book? It moves to the top of your plan, and today's planned pages switch to ${title}.`,'Read this one now')))return;
+ ordered.splice(index,1);ordered.unshift(chosen);ordered.forEach((item,i)=>item.sequence_number=i+1);
  await savePlanBookOrder();refreshTodayPlanForCurrentBook(plan,chosen);renderReadingPlans();
- const book=books.find(b=>String(b.id)===String(chosen.book_id));message(`${book?.title||'Book'} is now your current reading focus. Today's and future reading now follow this book.`);
+ message(`${title} is now your current reading focus. Today's and future reading now follow this book.`);
 }
 
 async function selectReadingPlan(id){
  selectedReadingPlanId=id||'';
  if(currentUser&&plansCloudReady&&selectedReadingPlanId){try{const {data,error}=await db.from('reading_plan_books').select('*').eq('user_id',currentUser.id).eq('plan_id',selectedReadingPlanId).order('sequence_number',{ascending:true});if(error)throw error;readingPlanBooks=data||[];}catch(err){message('Could not load that plan: '+err.message,true);return;}}
  else if(!selectedReadingPlanId)readingPlanBooks=[];
+ if(currentUser&&plansCloudReady){loadedPlanBookIds.clear();if(selectedReadingPlanId)loadedPlanBookIds.add(String(selectedReadingPlanId));}
  planLocalSave();renderReadingPlans();
 }
 function planDayPickerHTML(cls,selected){
@@ -2545,18 +2587,12 @@ async function submitPlanSetup(mode){
    if(rows.length){const {data,error}=await db.from('reading_plan_books').insert(rows).select('*');if(error){message('Plan created, but its books could not be added: '+error.message,true);readingPlans.unshift(plan);selectedReadingPlanId=plan.id;planLocalSave();renderReadingPlans();return;}items=data||[];}
   }else items=chosenUnread.map((b,i)=>({id:`local-plan-book-${Date.now()}-${i}`,plan_id:plan.id,book_id:b.id,user_id:null,sequence_number:i+1,schedule_mode:Number(b.totalPages)>0?'pages':'manual',chapter_count:null,current_chapter:0,chapters_per_day:1,manual_assignment:null}));
  }
- readingPlans.unshift(plan);selectedReadingPlanId=plan.id;readingPlanBooks=items;planLocalSave();renderReadingPlans();
+ readingPlans.unshift(plan);selectedReadingPlanId=plan.id;readingPlanBooks=items;loadedPlanBookIds.add(String(plan.id));planLocalSave();renderReadingPlans();
  message(isEmpty?'Empty reading plan created.':`Created a plan with ${items.length} book${items.length===1?'':'s'}.`);
 }
 function createEmptyReadingPlan(){renderPlanSetupPanel('empty');}
 function createPlanFromUnread(){renderPlanSetupPanel('unread');}
 function addBooksToPlan(planId){renderPlanSetupPanel('add',planId||selectedReadingPlanId);}
-function showExistingPlansPicker(){
- const picker=$('existingPlansPicker');
- const select=$('readingPlanSelect');
- if(picker)picker.hidden=false;
- if(select)select.focus();
-}
 function setDefaultReadingPlan(planId){
  const plan=readingPlans.find(p=>String(p.id)===String(planId));if(!plan)return;
  // One scalar ID enforces exactly one default; choosing another replaces the previous default.
@@ -2573,9 +2609,13 @@ async function saveReadingPlanSettings(){
  if(target_end_date&&target_end_date<start_date){message('Finish by date cannot be before the start date.',true);return;}
  const reading_days=readPlanDayPicker('plan-settings-day-check');
  if(!reading_days.length){message('Choose at least one reading day.',true);return;}
+ const oldGoal=Math.max(1,Number(plan.daily_page_goal)||25);
  const patch={name,start_date,target_end_date,daily_page_goal,reading_days};
  if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').update(patch).eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not save plan settings: '+error.message,true);return;}}
- Object.assign(plan,patch);planLocalSave();renderReadingPlans();message('Plan settings saved.');
+ Object.assign(plan,patch);planLocalSave();
+ let rebuilt=false;
+ if(daily_page_goal!==oldGoal)rebuilt=await offerTodayRebuildAfterPaceChange(plan,oldGoal,daily_page_goal);
+ renderReadingPlans();message(rebuilt?"Plan settings saved. Today's not-yet-started pages were rebuilt at the new pace.":'Plan settings saved.');
 }
 async function configurePlanBook(id){
  const item=readingPlanBooks.find(i=>String(i.id)===String(id));if(!item)return;
@@ -2618,7 +2658,7 @@ async function removePlanBook(id){
  readingPlanBooks=readingPlanBooks.filter(i=>String(i.id)!==String(id));planLocalSave();renderReadingPlans();
 }
 async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Mark plan completed?','Mark this reading plan as completed? Your books will not change.','Mark completed')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').update({status:'completed'}).eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not update plan: '+error.message,true);return;}}plan.status='completed';planLocalSave();renderReadingPlans();message('Plan marked completed.');}
-async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its assignments? Your books and reading history will remain.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
+async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its assignments? Your books and reading history will remain.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';delete planBookCountCache[String(plan.id)];loadedPlanBookIds.delete(String(plan.id));planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
 Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
