@@ -1798,7 +1798,7 @@ function bookCardHTML(b){
  const st=statusKey(b.status);
  const action=st==='completed'?`<button class="mini" onclick="startBook('${b.id}')">Read again</button>`:st==='reading'?`<button class="mini" onclick="editBook('${b.id}')">Update</button>`:`<button class="mini" onclick="startBook('${b.id}')">Start reading</button>`;
  const progress=b.totalPages?`<div class="progress"><div style="width:${pct(b)}%"></div></div><p style="margin-top:5px">Page ${b.currentPage||0} of ${b.totalPages} · ${pct(b)}% complete</p>`:`<p style="margin-top:5px">Page ${b.currentPage||0} · total pages not set</p>`;
- return `<article class="book">${coverHTML(b)}<div class="book-details" style="min-width:0;flex:1"><h4>${esc(b.title)}</h4><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p>${ratingStaticHTML(b.rating)}${progress}<div class="book-actions">${action}</div></div></article>`;
+ return `<article class="book">${coverHTML(b)}<div class="book-details" style="min-width:0;flex:1"><h4>${esc(b.title)}</h4><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p>${ratingStaticHTML(b.rating)}${progress}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button></div></div></article>`;
 }
 function renderGoalProgress(){
  const el=$('goalProgress');if(!el)return;
