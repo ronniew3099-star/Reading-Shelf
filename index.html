@@ -1128,7 +1128,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <div class="analytics-grid">
       <div class="analytics-card"><small>Pages this month</small><strong id="monthPages">0</strong><span id="monthPagesHint">Current month</span></div>
       <div class="analytics-card"><small>Pages this year</small><strong id="yearPages">0</strong><span id="yearPagesHint">Calendar year</span></div>
-      <div class="analytics-card"><small>Average pages / active day</small><strong id="avgActivePages">0</strong><span>Based on recorded reading days</span></div>
+      <div class="analytics-card"><small>Average pages / active day</small><strong id="avgActivePages">0</strong><span>This year · based on recorded reading days</span></div>
       <div class="analytics-card"><small>Books completed this year</small><strong id="yearBooksCompleted">0</strong><span>Books marked completed</span></div>
     </div>
   </section>
@@ -1154,7 +1154,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <section class="analytics-panel">
       <h4>Reading by category</h4>
       <div class="category-stats" id="categoryAnalytics"></div>
-      <div class="analytics-note">Pages are counted in every category a book belongs to.</div>
+      <div class="analytics-note">All time · pages are counted in every category a book belongs to.</div>
     </section>
     <section class="analytics-panel">
       <h4>Completion estimates</h4>
@@ -1734,7 +1734,8 @@ function goToCurrentCalendarDate(){const now=new Date();calendarMonth=new Date(n
 function setCalendarMonthYear(){const month=Number($('calendarMonthSelect').value),year=Number($('calendarYearSelect').value);if(Number.isFinite(month)&&Number.isFinite(year)){calendarMonth=new Date(year,month,1);renderCalendar();}}
 function changeCalendarMonth(delta){calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+delta,1);renderCalendar();}
 function readingDayTotals(){const totals=new Map();readingSessions.forEach(s=>{const d=s.sessionDate;if(!d)return;totals.set(d,(totals.get(d)||0)+(Number(s.pagesRead)||0));});return totals;}
-function calculateStreaks(){const totals=readingDayTotals(),dates=[...totals.keys()].filter(d=>totals.get(d)>0).sort();if(!dates.length)return {current:0,best:0};const dayMs=86400000;const toUTC=d=>{const [y,m,day]=d.split('-').map(Number);return Date.UTC(y,m-1,day)};let best=0,run=0,previous=null;for(const d of dates){const stamp=toUTC(d);run=previous!==null&&stamp-previous===dayMs?run+1:1;best=Math.max(best,run);previous=stamp;}const today=localDateString(),yesterday=localDateString(new Date(Date.now()-dayMs));let cursor=totals.has(today)?today:(totals.has(yesterday)?yesterday:null),current=0;if(cursor){while(totals.has(cursor)){current++;const [y,m,d]=cursor.split('-').map(Number);cursor=localDateString(new Date(y,m-1,d-1));}}return {current,best};}
+function readingActiveDaySet(totalsMap){const t=totalsMap||readingDayTotals();return new Set([...t.entries()].filter(([,pages])=>pages>0).map(([date])=>date));}
+function calculateStreaks(){const active=readingActiveDaySet(),dates=[...active].sort();if(!dates.length)return {current:0,best:0};const dayMs=86400000;const toUTC=d=>{const [y,m,day]=d.split('-').map(Number);return Date.UTC(y,m-1,day)};let best=0,run=0,previous=null;for(const d of dates){const stamp=toUTC(d);run=previous!==null&&stamp-previous===dayMs?run+1:1;best=Math.max(best,run);previous=stamp;}const today=localDateString(),yesterday=localDateString(new Date(Date.now()-dayMs));let cursor=active.has(today)?today:(active.has(yesterday)?yesterday:null),current=0;if(cursor){while(active.has(cursor)){current++;const [y,m,d]=cursor.split('-').map(Number);cursor=localDateString(new Date(y,m-1,d-1));}}return {current,best};}
 
 function updateCalendarMonthOptionLabels(){
  const shortMonths=window.matchMedia('(max-width: 560px)').matches;
@@ -1752,7 +1753,7 @@ function updateCalendarMonthOptionLabels(){
 window.addEventListener('resize',updateCalendarMonthOptionLabels,{passive:true});
 
 function renderCalendar(){const totals=readingDayTotals(),year=calendarMonth.getFullYear(),month=calendarMonth.getMonth(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,daysInMonth=new Date(year,month+1,0).getDate(),cells=Math.ceil((offset+daysInMonth)/7)*7;const monthSelect=$('calendarMonthSelect'),yearSelect=$('calendarYearSelect');if(monthSelect&&!monthSelect.options.length){monthSelect.innerHTML=Array.from({length:12},(_,m)=>`<option value="${m}">${new Date(2000,m,1).toLocaleDateString(undefined,{month:'long'})}</option>`).join('');}if(yearSelect){const sessionYears=readingSessions.map(x=>Number(String(x.sessionDate||'').slice(0,4))).filter(Number.isFinite),currentYear=new Date().getFullYear(),minYear=Math.min(currentYear-10,...sessionYears),maxYear=Math.max(currentYear+10,...sessionYears);const years=Array.from({length:maxYear-minYear+1},(_,i)=>minYear+i);yearSelect.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join('');yearSelect.value=String(year);}if(monthSelect)monthSelect.value=String(month);updateCalendarMonthOptionLabels();let out='';for(let i=0;i<cells;i++){const day=i-offset+1;if(day<1||day>daysInMonth){out+='<div class="calendar-day muted" aria-hidden="true"></div>';continue;}const date=localDateString(new Date(year,month,day)),pages=totals.get(date)||0,level=pages>=25?3:pages>=10?2:pages>0?1:0,today=date===localDateString();out+=`<div class="calendar-day level-${level} ${today?'today':''}" title="${date}: ${pages} pages"><span class="day-number">${day}</span><span class="day-pages">${pages?pages+' pages':''}</span></div>`;}$('calendarGrid').innerHTML=out;}
-function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.sessions>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');renderCalendar();renderAdvancedAnalytics();}
+function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.pages>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');renderCalendar();renderAdvancedAnalytics();}
 
 function renderAdvancedAnalytics(){
  const now=new Date(),year=now.getFullYear(),month=now.getMonth(),totals=readingDayTotals();
@@ -1761,7 +1762,7 @@ function renderAdvancedAnalytics(){
  const monthSessions=yearSessions.filter(s=>(s.sessionDate||'').startsWith(monthPrefix));
  const yearPages=yearSessions.reduce((n,s)=>n+(Number(s.pagesRead)||0),0);
  const monthPages=monthSessions.reduce((n,s)=>n+(Number(s.pagesRead)||0),0);
- const activeDateSet=new Set(yearSessions.filter(s=>(Number(s.pagesRead)||0)>0).map(s=>s.sessionDate));
+ const activeDateSet=new Set([...readingActiveDaySet(totals)].filter(d=>d.startsWith(yearPrefix)));
  const activeDays=activeDateSet.size;
  const avg=activeDays?Math.round(yearPages/activeDays):0;
  const completedThisYear=books.filter(b=>b.status==='completed' && (b.completedAt||'').startsWith(yearPrefix)).length;
@@ -1800,7 +1801,7 @@ function renderAdvancedAnalytics(){
  const recentStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()-29);
  const recentSessions=readingSessions.filter(s=>{if(!s.sessionDate)return false;const [y,m,d]=s.sessionDate.split('-').map(Number);const dt=new Date(y,m-1,d);return dt>=recentStart&&dt<=now;});
  const recentPages=recentSessions.reduce((n,s)=>n+(Number(s.pagesRead)||0),0);
- const recentActiveDays=new Set(recentSessions.filter(s=>(Number(s.pagesRead)||0)>0).map(s=>s.sessionDate)).size;
+ const recentActiveDays=[...readingActiveDaySet(totals)].filter(d=>d>=localDateString(recentStart)&&d<=localDateString()).length;
  const dailyPace=recentActiveDays?recentPages/recentActiveDays:0;
  const readingBooks=books.filter(b=>b.status==='reading');
  $('completionEstimates').innerHTML=readingBooks.length?readingBooks.map(b=>{
@@ -2270,9 +2271,14 @@ async function exportExcel(){
    {'Metric':'Books Rated','Value':books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).length},
    {'Metric':'Average Rating','Value':books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).length?Number((books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).reduce((sum,b)=>sum+Number(b.rating),0)/books.filter(b=>Number(b.rating)>=1&&Number(b.rating)<=5).length).toFixed(2)):''},
   {'Metric':'Pages Reached','Value':books.reduce((sum,b)=>sum+(Number(b.currentPage)||0),0)},
+  {'Metric':'Pages Read (logged sessions)','Value':readingSessions.reduce((sum,s)=>sum+(Number(s.pagesRead)||0),0)},
   {'Metric':'Annual Book Target','Value':annualBookGoal},
   {'Metric':'Known Total Pages','Value':books.reduce((sum,b)=>sum+(Number(b.totalPages)||0),0)},
-  {'Metric':'Pages Remaining (where total pages are known)','Value':books.reduce((sum,b)=>sum+Math.max(0,(Number(b.totalPages)||0)-(Number(b.currentPage)||0)),0)}
+  {'Metric':'Pages Remaining (where total pages are known)','Value':books.reduce((sum,b)=>sum+Math.max(0,(Number(b.totalPages)||0)-(Number(b.currentPage)||0)),0)},
+  {'Metric':'','Value':''},
+  {'Metric':'About these numbers','Value':''},
+  {'Metric':'What "Pages Reached" means','Value':'How far you have got in your books. Each book counts once, at its furthest page.'},
+  {'Metric':'What "Pages Read (logged sessions)" means','Value':'Every page you logged, session by session. Reading a book again counts its pages again.'}
  ];
  const summarySheet=XLSX.utils.json_to_sheet(summary);
  summarySheet['!cols']=[{wch:48},{wch:18}];
