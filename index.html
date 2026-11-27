@@ -132,6 +132,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .target-control input{width:82px;padding:8px;border:1px solid var(--line);border-radius:5px;background:white}
 .target-control button{padding:8px 11px}
 .analytics-note{font:11px/1.5 Arial;color:var(--muted);margin-top:10px}
+.chart-summary{font:12px/1.5 Arial;color:var(--green);margin:10px 2px 0}
 .completion-list{display:grid;gap:10px}
 .completion-item{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font:12px Arial}
 .completion-item:last-child{border-bottom:0}
@@ -305,6 +306,8 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .plan-calendar-day.today{outline:2px solid #b18a4e;outline-offset:-2px}
 .plan-calendar-day.future{opacity:.6}
 .plan-calendar-day .dot{display:block;font-size:13px;line-height:1.25;margin-top:4px}
+.plan-calendar-day .day-pages{display:block;font:10px Arial;color:var(--green);font-weight:bold;margin-top:2px}
+.plan-calendar-day.selected .day-pages{color:#fff}
 .plan-assignment-group{margin:13px 0}
 .plan-assignment-group h4{font:normal 16px Georgia,serif;color:var(--green);margin:0 0 8px}
 .plan-assignment{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 11px;margin:7px 0;background:#f7f1e6;border:1px solid var(--line);border-radius:6px}
@@ -1113,7 +1116,9 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   </div>
   <section class="calendar-panel">
     <div class="calendar-head"><div><h3>Reading calendar</h3><p>Pages recorded on each day</p></div><div class="calendar-controls" aria-label="Choose calendar month and year">
+      <button class="secondary calendar-today-button plan-calendar-nav-button" type="button" aria-label="Previous month" onclick="changeCalendarMonth(-1)">‹</button>
       <button class="secondary calendar-today-button" type="button" onclick="goToCurrentCalendarDate()">Today</button>
+      <button class="secondary calendar-today-button plan-calendar-nav-button" type="button" aria-label="Next month" onclick="changeCalendarMonth(1)">›</button>
       <label class="calendar-select-wrap"><span class="calendar-short-label">M</span><select id="calendarMonthSelect" aria-label="Select month" onchange="setCalendarMonthYear()"></select></label>
       <label class="calendar-select-wrap"><span class="calendar-short-label">Y</span><select id="calendarYearSelect" aria-label="Select year" onchange="setCalendarMonthYear()"></select></label>
     </div></div>
@@ -1121,7 +1126,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <div class="calendar-grid" id="calendarGrid"></div>
     <div class="calendar-legend"><span><i class="level-0"></i>No recorded pages</span><span><i class="level-1"></i>1–9</span><span><i class="level-2"></i>10–24</span><span><i class="level-3"></i>25+</span></div>
   </section>
-  <section class="history-panel"><div class="section-head" style="margin:0 0 8px"><h3>Last 7 days</h3><span>Rolling 7-day window</span></div><div class="history-summary"><div class="history-metric"><small>Pages in last 7 days</small><strong id="insightWeekPages">0</strong></div><div class="history-metric"><small>Sessions</small><strong id="insightWeekSessions">0</strong></div><div class="history-metric"><small>Active days</small><strong id="insightActiveDays">0/7</strong></div></div><div class="week-chart" id="insightWeekChart"></div></section>
+  <section class="history-panel"><div class="section-head" style="margin:0 0 8px"><h3>Last 7 days</h3><span>Rolling 7-day window</span></div><div class="history-summary"><div class="history-metric"><small>Pages in last 7 days</small><strong id="insightWeekPages">0</strong></div><div class="history-metric"><small>Sessions</small><strong id="insightWeekSessions">0</strong></div><div class="history-metric"><small>Active days</small><strong id="insightActiveDays">0/7</strong></div></div><div class="week-chart" id="insightWeekChart"></div><p class="chart-summary" id="insightWeekSummary"></p></section>
 
   <section class="analytics-section">
     <div class="section-head"><h3>Reading at a glance</h3><span id="analyticsYearLabel"></span></div>
@@ -1136,6 +1141,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <section class="analytics-panel">
       <h4>Pages read by month</h4>
       <div class="month-bars" id="monthlyChart" aria-label="Pages read by month for the current year"></div>
+      <p class="chart-summary" id="monthlySummary"></p>
       <div class="analytics-note">Monthly totals come from your recorded sessions.</div>
     </section>
     <section class="analytics-panel">
@@ -1753,7 +1759,7 @@ function updateCalendarMonthOptionLabels(){
 window.addEventListener('resize',updateCalendarMonthOptionLabels,{passive:true});
 
 function renderCalendar(){const totals=readingDayTotals(),year=calendarMonth.getFullYear(),month=calendarMonth.getMonth(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,daysInMonth=new Date(year,month+1,0).getDate(),cells=Math.ceil((offset+daysInMonth)/7)*7;const monthSelect=$('calendarMonthSelect'),yearSelect=$('calendarYearSelect');if(monthSelect&&!monthSelect.options.length){monthSelect.innerHTML=Array.from({length:12},(_,m)=>`<option value="${m}">${new Date(2000,m,1).toLocaleDateString(undefined,{month:'long'})}</option>`).join('');}if(yearSelect){const sessionYears=readingSessions.map(x=>Number(String(x.sessionDate||'').slice(0,4))).filter(Number.isFinite),currentYear=new Date().getFullYear(),minYear=Math.min(currentYear-10,...sessionYears),maxYear=Math.max(currentYear+10,...sessionYears);const years=Array.from({length:maxYear-minYear+1},(_,i)=>minYear+i);yearSelect.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join('');yearSelect.value=String(year);}if(monthSelect)monthSelect.value=String(month);updateCalendarMonthOptionLabels();let out='';for(let i=0;i<cells;i++){const day=i-offset+1;if(day<1||day>daysInMonth){out+='<div class="calendar-day muted" aria-hidden="true"></div>';continue;}const date=localDateString(new Date(year,month,day)),pages=totals.get(date)||0,level=pages>=25?3:pages>=10?2:pages>0?1:0,today=date===localDateString();out+=`<div class="calendar-day level-${level} ${today?'today':''}" title="${date}: ${pages} pages"><span class="day-number">${day}</span><span class="day-pages">${pages?pages+' pages':''}</span></div>`;}$('calendarGrid').innerHTML=out;}
-function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.pages>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');renderCalendar();renderAdvancedAnalytics();}
+function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),fullLabel:d.toLocaleDateString(undefined,{weekday:'long'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.pages>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" role="img" aria-label="${d.fullLabel}: ${d.pages} pages" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap" aria-hidden="true"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');const bestWeekDay=week.reduce((best,d)=>d.pages>best.pages?d:best,week[0]);$('insightWeekSummary').textContent=pages.toLocaleString()+' pages this week. Most in one day: '+bestWeekDay.fullLabel+', '+bestWeekDay.pages.toLocaleString()+' pages.';renderCalendar();renderAdvancedAnalytics();}
 
 function renderAdvancedAnalytics(){
  const now=new Date(),year=now.getFullYear(),month=now.getMonth(),totals=readingDayTotals();
@@ -1776,10 +1782,12 @@ function renderAdvancedAnalytics(){
  const monthly=Array.from({length:12},(_,i)=>{
   const prefix=yearPrefix+String(i+1).padStart(2,'0');
   const value=yearSessions.filter(s=>(s.sessionDate||'').startsWith(prefix)).reduce((n,s)=>n+(Number(s.pagesRead)||0),0);
-  return {label:new Date(year,i,1).toLocaleDateString(undefined,{month:'short'}),value};
+  return {label:new Date(year,i,1).toLocaleDateString(undefined,{month:'short'}),fullLabel:new Date(year,i,1).toLocaleDateString(undefined,{month:'long'}),value};
  });
  const maxMonthly=Math.max(1,...monthly.map(m=>m.value));
- $('monthlyChart').innerHTML=monthly.map(m=>`<div class="month-column" title="${m.label}: ${m.value.toLocaleString()} pages"><div class="bar-wrap"><div class="bar" style="height:${m.value?Math.max(3,Math.round(m.value/maxMonthly*100)):2}%"></div></div><small>${m.label}</small></div>`).join('');
+ $('monthlyChart').innerHTML=monthly.map(m=>`<div class="month-column" role="img" aria-label="${m.fullLabel}: ${m.value.toLocaleString()} pages" title="${m.label}: ${m.value.toLocaleString()} pages"><div class="bar-wrap" aria-hidden="true"><div class="bar" style="height:${m.value?Math.max(3,Math.round(m.value/maxMonthly*100)):2}%"></div></div><small>${m.label}</small></div>`).join('');
+ const bestMonth=monthly.reduce((best,m)=>m.value>best.value?m:best,monthly[0]);
+ $('monthlySummary').textContent='Most reading: '+bestMonth.fullLabel+', '+bestMonth.value.toLocaleString()+' pages. Total this year: '+yearPages.toLocaleString()+' pages.';
  const goalCount=Math.max(1,Number(annualBookGoal)||12);
  const goalPct=Math.min(100,Math.round(completedThisYear/goalCount*100));
  $('annualProgress').textContent=completedThisYear+' / '+goalCount;
@@ -2534,9 +2542,10 @@ function renderGeneralPlanCalendar(date){
  const month=planCalendarMonth.getMonth(),year=planCalendarMonth.getFullYear(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,days=new Date(year,month+1,0).getDate();
  const labels=[['Mo','Mon'],['Tu','Tue'],['We','Wed'],['Th','Thu'],['Fr','Fri'],['Sa','Sat'],['Su','Sun']];let html=labels.map(x=>`<div class="plan-calendar-label"><span class="cal-day-two">${x[0]}</span><span class="cal-day-short">${x[1]}</span></div>`).join('');
  for(let i=0;i<offset;i++)html+='<div></div>';
+ const totals=readingDayTotals();
  for(let day=1;day<=days;day++){
-  const key=planDateValue(new Date(year,month,day)),today=key===localDateString(),selected=key===date;
-  html+=`<button type="button" class="plan-calendar-day ${selected?'selected':''} ${today?'today':''}" onclick="selectGeneralPlanDay('${key}')">${day}</button>`;
+  const key=planDateValue(new Date(year,month,day)),today=key===localDateString(),selected=key===date,pages=totals.get(key)||0;
+  html+=`<button type="button" class="plan-calendar-day ${selected?'selected':''} ${today?'today':''}" onclick="selectGeneralPlanDay('${key}')">${day}<span class="day-pages">${pages?pages+' pages':''}</span></button>`;
  }
  return `<div class="plan-calendar">${html}</div>`;
 }
