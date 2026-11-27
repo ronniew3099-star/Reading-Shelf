@@ -188,6 +188,15 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .quote-item button{border:0;background:transparent;color:#8a514b;font:11px Arial,sans-serif}
 .knowledge-empty{font:12px/1.5 Arial,sans-serif;color:var(--muted);padding:12px 0}
 .knowledge-status{font:11px Arial,sans-serif;color:var(--muted)}
+.knowledge-result mark{background:#f6e3a1;color:inherit;padding:0 1px;border-radius:2px}
+.knowledge-section.knowledge-match-highlight{outline:3px solid var(--gold);outline-offset:2px}
+.quote-item.quote-highlight{outline:3px solid var(--gold);outline-offset:2px;background:#fff6da}
+.quote-item:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.knowledge-preview-item{margin:10px 0}
+.knowledge-preview-item strong{display:block;font:600 10px Arial,sans-serif;letter-spacing:.6px;color:var(--muted);margin-bottom:3px}
+.knowledge-preview-item p{font:12px/1.55 Arial,sans-serif;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.knowledge-preview-quote{font:italic 12px/1.55 Georgia,serif;color:var(--ink);margin:8px 0;padding-left:10px;border-left:3px solid var(--line)}
+.knowledge-preview-more{font:11px Arial,sans-serif;color:var(--muted);margin:4px 0 0}
 @media(max-width:760px){.knowledge-layout{grid-template-columns:1fr}.knowledge-toolbar{grid-template-columns:1fr}.knowledge-book-list{position:static;max-height:42vh}}
 
 
@@ -1174,6 +1183,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
       </section>
       <section class="knowledge-editor">
         <div class="section-head" style="margin:0 0 12px"><h3 id="knowledgeEditorTitle">Choose a book</h3><span id="knowledgeSaveStatus" class="knowledge-status">Saved on this device</span></div>
+        <div class="book-actions" id="knowledgeDetailsRow" hidden style="margin:0 0 6px"><button class="mini" type="button" onclick="viewSelectedBookDetails()">View book details</button></div>
         <div id="knowledgeEditorFields" class="knowledge-empty">Select a book to start capturing what you learn.</div>
       </section>
     </div>
@@ -1776,9 +1786,10 @@ function renderKnowledge(){
  $('knowledgeBookSelect').value=selectedKnowledgeBook;
  $('knowledgeBookList').innerHTML=sorted.length?sorted.map(b=>`<button type="button" class="knowledge-book-choice ${String(b.id)===selectedKnowledgeBook?'active':''}" onclick="selectKnowledgeBook('${esc(b.id)}')"><strong>${esc(b.title)}</strong><span>${esc(b.author||'Author not added')} · ${knowledgeHasContent(b.id)?'Notes saved':'No notes yet'}</span></button>`).join(''):'<div class="knowledge-empty">Add books to My Library first. Your knowledge pages will appear here.</div>';
  const book=sorted.find(b=>String(b.id)===selectedKnowledgeBook);
- if(!book){$('knowledgeEditorTitle').textContent='Choose a book';$('knowledgeEditorFields').innerHTML='<div class="knowledge-empty">Select a book to start capturing what you learn.</div>';$('knowledgeSaveStatus').textContent='';$('quoteComposer').hidden=true;$('quoteList').innerHTML='Choose a book to view its saved quotations.';$('quoteCount').textContent='0 saved';return;}
+ if(!book){$('knowledgeEditorTitle').textContent='Choose a book';$('knowledgeEditorFields').innerHTML='<div class="knowledge-empty">Select a book to start capturing what you learn.</div>';$('knowledgeSaveStatus').textContent='';$('knowledgeDetailsRow').hidden=true;$('quoteComposer').hidden=true;$('quoteList').innerHTML='Choose a book to view its saved quotations.';$('quoteCount').textContent='0 saved';return;}
  const k=knowledgeFor(book.id);
  $('knowledgeEditorTitle').textContent=book.title;
+ $('knowledgeDetailsRow').hidden=false;
  $('knowledgeSaveStatus').textContent=k.updatedAt?'Last saved '+new Date(k.updatedAt).toLocaleDateString():'Not saved yet';
  const knowledgeSections=[
   {key:'summary',id:'knowledgeSummary',name:'BOOK SUMMARY',aria:'Book summary',cls:'tall',placeholder:'Summarize the book in your own words…'},
@@ -1787,7 +1798,7 @@ function renderKnowledge(){
   {key:'applications',id:'knowledgeApplications',name:'PRACTICAL APPLICATIONS — WHAT WILL YOU DO DIFFERENTLY?',aria:'Practical applications',placeholder:'Turn the ideas into actions, habits, or decisions…'},
   {key:'reflectionQuestions',id:'knowledgeQuestions',name:'REFLECTION QUESTIONS',aria:'Reflection questions',placeholder:'Questions to revisit, discuss, or think through…'}
  ];
- $('knowledgeEditorFields').innerHTML=knowledgeSections.map(s=>{const has=!!String(k[s.key]||'').trim();return `<details class="knowledge-section"${has?' open':''}><summary><span class="knowledge-section-state">${has?'Has notes':'Empty'}</span><span class="knowledge-section-name">${s.name}</span></summary><label class="field"><textarea id="${s.id}"${s.cls?` class="${s.cls}"`:''} placeholder="${s.placeholder}" aria-label="${s.aria}">${esc(k[s.key])}</textarea></label></details>`;}).join('')+`
+ $('knowledgeEditorFields').innerHTML=knowledgeSections.map(s=>{const has=!!String(k[s.key]||'').trim();return `<details class="knowledge-section" data-section="${s.key}"${has?' open':''}><summary tabindex="-1"><span class="knowledge-section-state">${has?'Has notes':'Empty'}</span><span class="knowledge-section-name">${s.name}</span></summary><label class="field"><textarea id="${s.id}"${s.cls?` class="${s.cls}"`:''} placeholder="${s.placeholder}" aria-label="${s.aria}">${esc(k[s.key])}</textarea></label></details>`;}).join('')+`
  <div class="save-row"><span class="knowledge-hint">Changes save automatically after you pause typing.</span><button class="primary" type="button" onclick="saveBookKnowledge(true)">Save knowledge page</button></div>`;
  ['knowledgeSummary','knowledgeConcepts','knowledgeTakeaways','knowledgeApplications','knowledgeQuestions'].forEach(id=>$(id).addEventListener('input',scheduleKnowledgeSave));
  const quotes=knowledgeQuotes.filter(q=>String(q.bookId)===String(book.id)).sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
@@ -1876,19 +1887,52 @@ async function deleteKnowledgeQuote(id){
  knowledgeQuotes=knowledgeQuotes.filter(x=>String(x.id)!==String(id));localStorage.setItem('readingShelfQuotesV1',JSON.stringify(knowledgeQuotes));
  renderKnowledge();renderKnowledgeSearch();message('Quote deleted.');
 }
+function knowledgeSnippet(text,query){
+ // A short excerpt around the first match: about 60 characters on each side,
+ // with the matched words wrapped in <mark>. Returns plain text too, so the
+ // result button can announce the snippet to a screen reader.
+ const value=String(text||'').replace(/\s+/g,' ').trim();
+ const idx=value.toLowerCase().indexOf(query);
+ if(idx<0){const cut=value.length>140?value.slice(0,140).trimEnd()+'…':value;return {text:cut,html:esc(cut)};}
+ const start=Math.max(0,idx-60),end=Math.min(value.length,idx+query.length+60);
+ const plain=(start>0?'…':'')+value.slice(start,end)+(end<value.length?'…':'');
+ const html=(start>0?'…':'')+esc(value.slice(start,idx))+'<mark>'+esc(value.slice(idx,idx+query.length))+'</mark>'+esc(value.slice(idx+query.length,end))+(end<value.length?'…':'');
+ return {text:plain,html};
+}
 function renderKnowledgeSearch(){
  const query=$('knowledgeSearch').value.trim().toLowerCase(),panel=$('knowledgeSearchResults');
  if(!query){panel.hidden=true;$('knowledgeResultList').innerHTML='';return;}
  const results=[];
  books.forEach(book=>{
   const k=knowledgeFor(book.id);
-  if((book.title+' '+(book.author||'')).toLowerCase().includes(query))results.push({book,label:'Book',text:book.title+(book.author?' — '+book.author:'')});
-  [['Summary',k.summary],['Key concepts',k.keyConcepts],['Takeaways',k.takeaways],['Applications',k.applications],['Reflection questions',k.reflectionQuestions]].forEach(([label,value])=>{if(value&&value.toLowerCase().includes(query))results.push({book,label,text:value});});
-  knowledgeQuotes.filter(q=>String(q.bookId)===String(book.id)).forEach(q=>{if([q.quoteText,q.pageReference,q.personalNote].join(' ').toLowerCase().includes(query))results.push({book,label:'Quote'+(q.pageReference?' · p. '+q.pageReference:''),text:q.quoteText+(q.personalNote?' — '+q.personalNote:'')});});
+  if((book.title+' '+(book.author||'')).toLowerCase().includes(query)){const t=book.title+(book.author?' — '+book.author:'');results.push({book,label:'Book',kind:'book',target:'',snippet:{text:t,html:esc(t)}});}
+  [['Summary','summary',k.summary],['Key concepts','keyConcepts',k.keyConcepts],['Takeaways','takeaways',k.takeaways],['Applications','applications',k.applications],['Reflection questions','reflectionQuestions',k.reflectionQuestions]].forEach(([label,key,value])=>{if(value&&value.toLowerCase().includes(query))results.push({book,label,kind:'note',target:key,snippet:knowledgeSnippet(value,query)});});
+  knowledgeQuotes.filter(q=>String(q.bookId)===String(book.id)).forEach(q=>{if([q.quoteText,q.pageReference,q.personalNote].join(' ').toLowerCase().includes(query)){const source=String(q.quoteText||'').toLowerCase().includes(query)?q.quoteText:(String(q.personalNote||'').toLowerCase().includes(query)?q.personalNote:q.quoteText);results.push({book,label:'Quote'+(q.pageReference?' · p. '+q.pageReference:''),kind:'quote',target:String(q.id),snippet:knowledgeSnippet(source,query)});}});
  });
  panel.hidden=false;$('knowledgeResultCount').textContent=results.length+' match'+(results.length===1?'':'es');
- $('knowledgeResultList').innerHTML=results.length?results.map(r=>`<article class="knowledge-result"><button type="button" onclick="selectKnowledgeBook('${esc(r.book.id)}')">${esc(r.book.title)} · ${esc(r.label)}</button><p>${esc(r.text)}</p></article>`).join(''):'<div class="knowledge-empty">No matches found. Try another word or phrase.</div>';
+ $('knowledgeResultList').innerHTML=results.length?results.map(r=>`<article class="knowledge-result"><button type="button" onclick="openKnowledgeMatch('${esc(r.book.id)}','${r.kind}','${esc(r.target)}')" aria-label="${esc(r.book.title+', '+r.label+': '+r.snippet.text)}">${esc(r.book.title)} · ${esc(r.label)}</button><p>${r.snippet.html}</p></article>`).join(''):'<div class="knowledge-empty">No matches found. Try another word or phrase.</div>';
 }
+function openKnowledgeMatch(bookId,kind,target){
+ selectKnowledgeBook(bookId);
+ if(kind==='note'){
+  const section=document.querySelector('#knowledgeEditorFields details[data-section="'+target+'"]');
+  if(!section)return;
+  section.open=true;section.classList.add('knowledge-match-highlight');
+  const summary=section.querySelector('summary');
+  requestAnimationFrame(()=>{section.scrollIntoView({block:'center',behavior:'smooth'});if(summary)summary.focus({preventScroll:true});});
+  setTimeout(()=>section.classList.remove('knowledge-match-highlight'),3200);
+ }else if(kind==='quote'){
+  const quotes=knowledgeQuotes.filter(q=>String(q.bookId)===String(bookId)).sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+  const idx=quotes.findIndex(q=>String(q.id)===String(target));
+  const items=$('quoteList').querySelectorAll('.quote-item');
+  const el=idx>=0?items[idx]:null;
+  if(!el)return;
+  el.classList.add('quote-highlight');el.setAttribute('tabindex','-1');
+  requestAnimationFrame(()=>{el.scrollIntoView({block:'center',behavior:'smooth'});el.focus({preventScroll:true});});
+  setTimeout(()=>el.classList.remove('quote-highlight'),3200);
+ }
+}
+function viewSelectedBookDetails(){if(selectedKnowledgeBook)openBookDetails(selectedKnowledgeBook);}
 
 function renderReadingHistory(){
  const recent=readingSessions.slice().sort((a,b)=>(b.sessionDate||'').localeCompare(a.sessionDate||'')||(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,6);
@@ -1933,7 +1977,12 @@ function renderBookDetails(){
  const planNames=[...new Set(readingPlanBooks.filter(i=>String(i.book_id)===String(b.id)).map(i=>{const p=readingPlans.find(p=>String(p.id)===String(i.plan_id));return p?(p.name||'Untitled plan'):null}).filter(Boolean))];
  const plansLine=planNames.length?esc(planNames.join(' · ')):'Not in a reading plan.';
  const hasKnowledge=knowledgeHasContent(b.id);
- wrap.innerHTML=`<div class="book-details-panel"><div class="book-details-main">${coverHTML(b)}<div class="book-details-info"><h3 id="bookDetailsTitle" tabindex="-1">${esc(b.title)}</h3><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p><p>Status: ${esc(statusLabel(b.status))}</p>${ratingStaticHTML(b.rating)}${progress}${dates}${quickBox}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button></div></div></div><div class="book-details-section"><h4>Reading sessions</h4>${sessionRows}</div><div class="book-details-section"><h4>Reading plan</h4><p>${plansLine}</p></div><div class="book-details-section"><h4>Knowledge</h4><p>${hasKnowledge?'You have notes or quotes saved for this book.':'No notes or quotes saved for this book yet.'}</p><div class="book-actions"><button class="mini" onclick="openBookInKnowledge('${b.id}')">Open in Knowledge</button></div><h4 style="margin-top:16px">Add a quote</h4><div class="quote-form"><textarea id="detailsQuoteText" placeholder="Write or paste the quotation…" aria-label="Quotation"></textarea><input id="detailsQuotePage" type="text" placeholder="Page / location" aria-label="Page reference"><input id="detailsQuoteNote" type="text" placeholder="Your note about this quote" aria-label="Personal note" style="grid-column:1/-1"></div><button class="primary" type="button" onclick="addDetailsQuote()">Save quote</button></div></div>`;
+ const dk=knowledgeFor(b.id);
+ const previewSections=[['Summary',dk.summary],['Key concepts',dk.keyConcepts],['Takeaways',dk.takeaways],['Applications',dk.applications],['Reflection questions',dk.reflectionQuestions]].filter(([,v])=>String(v||'').trim()).map(([label,v])=>{const t=String(v).trim().replace(/\s+/g,' ');return `<div class="knowledge-preview-item"><strong>${label}</strong><p>${esc(t.length>160?t.slice(0,160).trimEnd()+'…':t)}</p></div>`}).join('');
+ const detailsQuotes=knowledgeQuotes.filter(q=>String(q.bookId)===String(b.id)).sort((a,c)=>String(c.createdAt||'').localeCompare(String(a.createdAt||'')));
+ const previewQuotes=detailsQuotes.slice(0,3).map(q=>`<blockquote class="knowledge-preview-quote">“${esc(q.quoteText)}”${q.pageReference?' · p. '+esc(q.pageReference):''}</blockquote>`).join('')+(detailsQuotes.length>3?`<p class="knowledge-preview-more">And ${detailsQuotes.length-3} more saved quote${detailsQuotes.length-3===1?'':'s'} — open Knowledge to see them all.</p>`:'');
+ const knowledgePreview=hasKnowledge?`<div class="knowledge-preview">${previewSections}${previewQuotes}</div>`:'<p>No notes or quotes saved for this book yet.</p>';
+ wrap.innerHTML=`<div class="book-details-panel"><div class="book-details-main">${coverHTML(b)}<div class="book-details-info"><h3 id="bookDetailsTitle" tabindex="-1">${esc(b.title)}</h3><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p><p>Status: ${esc(statusLabel(b.status))}</p>${ratingStaticHTML(b.rating)}${progress}${dates}${quickBox}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button></div></div></div><div class="book-details-section"><h4>Reading sessions</h4>${sessionRows}</div><div class="book-details-section"><h4>Reading plan</h4><p>${plansLine}</p></div><div class="book-details-section"><h4>Knowledge</h4>${knowledgePreview}<div class="book-actions"><button class="mini" onclick="openBookInKnowledge('${b.id}')">Open in Knowledge</button></div><h4 style="margin-top:16px">Add a quote</h4><div class="quote-form"><textarea id="detailsQuoteText" placeholder="Write or paste the quotation…" aria-label="Quotation"></textarea><input id="detailsQuotePage" type="text" placeholder="Page / location" aria-label="Page reference"><input id="detailsQuoteNote" type="text" placeholder="Your note about this quote" aria-label="Personal note" style="grid-column:1/-1"></div><button class="primary" type="button" onclick="addDetailsQuote()">Save quote</button></div></div>`;
 }
 function renderGoalProgress(){
  const el=$('goalProgress');if(!el)return;
@@ -2750,7 +2799,7 @@ async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)retur
 async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its assignments? Your books and reading history will remain.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';delete planBookCountCache[String(plan.id)];loadedPlanBookIds.delete(String(plan.id));planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,saveBookKnowledge,addKnowledgeQuote,editKnowledgeQuote,addDetailsQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
+Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,openKnowledgeMatch,viewSelectedBookDetails,saveBookKnowledge,addKnowledgeQuote,editKnowledgeQuote,addDetailsQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
 async function init(){
  // Show the locally saved shelf immediately, before waiting on the session,
  // so the page never sits on hardcoded zeros.
