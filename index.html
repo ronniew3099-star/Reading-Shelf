@@ -417,6 +417,11 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   cursor:pointer;
 }
 .calendar-controls select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Year picker for the year-scoped Insights sections (Phase 5 Group 5) */
+.insights-year-label{display:inline-flex;align-items:center;gap:7px;font:12px Arial;color:var(--muted)}
+.insights-year-label select{appearance:auto;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--green);padding:9px 30px 9px 10px;min-height:38px;font:600 13px Arial,sans-serif;cursor:pointer}
+.insights-year-label select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 @media(max-width:440px){
   .calendar-controls{width:100%;gap:6px}
   .calendar-controls select{padding:8px 24px 8px 8px;min-height:36px;font-size:12px}
@@ -1118,7 +1123,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   <div class="insight-grid">
     <div class="insight-card"><small>Current reading streak</small><strong id="currentStreak">0 days</strong><span id="streakHint">Start with one reading session.</span></div>
     <div class="insight-card"><small>Best reading streak</small><strong id="bestStreak">0 days</strong><span>Based on your reading history</span></div>
-    <div class="insight-card"><small>Active days this year</small><strong id="yearActiveDays">0 days</strong><span>Days with reading logged this year</span></div>
+    <div class="insight-card"><small id="yearActiveDaysLabel">Active days this year</small><strong id="yearActiveDays">0 days</strong><span id="yearActiveDaysHint">Days with reading logged this year</span></div>
   </div>
   <section class="calendar-panel">
     <div class="calendar-head"><div><h3>Reading calendar</h3><p>Pages recorded on each day</p></div><div class="calendar-controls" aria-label="Choose calendar month and year">
@@ -1136,12 +1141,13 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   <section class="history-panel"><div class="section-head" style="margin:0 0 8px"><h3>Trends</h3><span>In plain words</span></div><div id="trendsBody"></div></section>
 
   <section class="analytics-section">
-    <div class="section-head"><h3>Reading at a glance</h3><span id="analyticsYearLabel"></span></div>
+    <div class="section-head"><h3>Reading at a glance</h3><label class="insights-year-label">Viewing year <select id="insightsYearSelect" aria-label="Choose the year to view" onchange="setInsightsYear(this.value)"></select></label></div>
     <div class="analytics-grid">
-      <div class="analytics-card"><small>Pages this month</small><strong id="monthPages">0</strong><span id="monthPagesHint">Current month</span></div>
-      <div class="analytics-card"><small>Pages this year</small><strong id="yearPages">0</strong><span id="yearPagesHint">Calendar year</span></div>
-      <div class="analytics-card"><small>Average pages / active day</small><strong id="avgActivePages">0</strong><span>This year · based on recorded reading days</span></div>
-      <div class="analytics-card"><small>Sessions this year</small><strong id="yearSessions">0</strong><span>Reading sessions recorded</span></div>
+      <div class="analytics-card"><small id="monthPagesLabel">Pages this month</small><strong id="monthPages">0</strong><span id="monthPagesHint">Current month</span></div>
+      <div class="analytics-card"><small id="yearPagesLabel">Pages this year</small><strong id="yearPages">0</strong><span id="yearPagesHint">Calendar year</span></div>
+      <div class="analytics-card"><small>Average pages / active day</small><strong id="avgActivePages">0</strong><span id="avgActiveHint">This year · based on recorded reading days</span></div>
+      <div class="analytics-card"><small id="yearSessionsLabel">Sessions this year</small><strong id="yearSessions">0</strong><span>Reading sessions recorded</span></div>
+      <div class="analytics-card" id="viewYearBooksCard" hidden><small>Books completed</small><strong id="viewYearBooksCompleted">0</strong><span id="viewYearBooksHint">Finished in the year shown</span></div>
     </div>
   </section>
   <div class="analytics-two">
@@ -1153,6 +1159,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     </section>
     <section class="analytics-panel">
       <h4>Annual reading target</h4>
+      <div class="analytics-note" id="annualYearNote" hidden style="margin:0 0 10px"></div>
       <div class="analytics-card" style="box-shadow:none;padding:12px;background:#f3ecdf">
         <small>Books completed this year</small>
         <strong id="annualProgress">0 / 12</strong>
@@ -1167,7 +1174,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <section class="analytics-panel">
       <h4>Reading by category</h4>
       <div class="category-stats" id="categoryAnalytics"></div>
-      <div class="analytics-note">All time · pages are counted in every category a book belongs to.</div>
+      <div class="analytics-note" id="categoryNote">All time · pages are counted in every category a book belongs to.</div>
     </section>
     <section class="analytics-panel">
       <h4>Completion estimates</h4>
@@ -1823,9 +1830,18 @@ function renderTrends(){
  }
  body.innerHTML=lines.map(line=>'<p class="trend-line">'+line+'</p>').join('');
 }
+let insightsViewYear=null;
+function setInsightsYear(value){const y=Number(value);if(y)insightsViewYear=y;renderAdvancedAnalytics();}
 function renderAdvancedAnalytics(){
- const now=new Date(),year=now.getFullYear(),month=now.getMonth(),totals=readingDayTotals();
- const yearPrefix=String(year)+'-',monthPrefix=yearPrefix+String(month+1).padStart(2,'0');
+ const now=new Date(),currentYear=now.getFullYear(),month=now.getMonth(),totals=readingDayTotals();
+ const sessionYears=[...new Set(readingSessions.map(s=>(s.sessionDate||'').slice(0,4)).filter(y=>/^\d{4}$/.test(y)).map(Number))];
+ const pickerYears=[...new Set([currentYear,...sessionYears.filter(y=>y<currentYear)])].sort((a,b)=>b-a);
+ if(!pickerYears.includes(insightsViewYear))insightsViewYear=currentYear;
+ const year=insightsViewYear,isCurrentYear=year===currentYear;
+ const yearSelect=$('insightsYearSelect');
+ if(yearSelect){const options=pickerYears.map(y=>`<option value="${y}"${y===year?' selected':''}>${y}</option>`).join('');if(yearSelect.innerHTML!==options)yearSelect.innerHTML=options;if(yearSelect.value!==String(year))yearSelect.value=String(year);}
+ const yearPrefix=String(year)+'-',monthPrefix=yearPrefix+String(month+1).padStart(2,'0'),currentYearPrefix=String(currentYear)+'-';
+ const monthName=new Date(year,month,1).toLocaleDateString(undefined,{month:'long'});
  const yearSessions=readingSessions.filter(s=>(s.sessionDate||'').startsWith(yearPrefix));
  const monthSessions=yearSessions.filter(s=>(s.sessionDate||'').startsWith(monthPrefix));
  const yearPages=yearSessions.reduce((n,s)=>n+(Number(s.pagesRead)||0),0);
@@ -1833,33 +1849,46 @@ function renderAdvancedAnalytics(){
  const activeDateSet=new Set([...readingActiveDaySet(totals)].filter(d=>d.startsWith(yearPrefix)));
  const activeDays=activeDateSet.size;
  const avg=activeDays?Math.round(yearPages/activeDays):0;
- const completedThisYear=books.filter(b=>b.status==='completed' && (b.completedAt||'').startsWith(yearPrefix)).length;
- $('analyticsYearLabel').textContent=String(year);
+ const completedThisYear=books.filter(b=>b.status==='completed' && (b.completedAt||'').startsWith(currentYearPrefix)).length;
+ const completedInViewYear=books.filter(b=>b.status==='completed' && (b.completedAt||'').startsWith(yearPrefix)).length;
+ $('monthPagesLabel').textContent=isCurrentYear?'Pages this month':'Pages in '+monthName;
  $('monthPages').textContent=monthPages.toLocaleString();
- $('monthPagesHint').textContent=now.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+ $('monthPagesHint').textContent=new Date(year,month,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});
+ $('yearPagesLabel').textContent=isCurrentYear?'Pages this year':'Pages in '+year;
  $('yearPages').textContent=yearPages.toLocaleString();
  $('yearPagesHint').textContent='Since January 1, '+year;
  $('avgActivePages').textContent=avg.toLocaleString();
+ $('avgActiveHint').textContent=isCurrentYear?'This year · based on recorded reading days':year+' · based on recorded reading days';
+ $('yearSessionsLabel').textContent=isCurrentYear?'Sessions this year':'Sessions in '+year;
  $('yearSessions').textContent=yearSessions.length.toLocaleString();
+ $('yearActiveDaysLabel').textContent=isCurrentYear?'Active days this year':'Active days in '+year;
+ $('yearActiveDaysHint').textContent=isCurrentYear?'Days with reading logged this year':'Days with reading logged in '+year;
  $('yearActiveDays').textContent=activeDays.toLocaleString()+' day'+(activeDays===1?'':'s');
+ $('viewYearBooksCard').hidden=isCurrentYear;
+ $('viewYearBooksCompleted').textContent=completedInViewYear.toLocaleString();
+ $('viewYearBooksHint').textContent='Finished in '+year;
  const monthly=Array.from({length:12},(_,i)=>{
   const prefix=yearPrefix+String(i+1).padStart(2,'0');
   const value=yearSessions.filter(s=>(s.sessionDate||'').startsWith(prefix)).reduce((n,s)=>n+(Number(s.pagesRead)||0),0);
   return {label:new Date(year,i,1).toLocaleDateString(undefined,{month:'short'}),fullLabel:new Date(year,i,1).toLocaleDateString(undefined,{month:'long'}),value};
  });
  const maxMonthly=Math.max(1,...monthly.map(m=>m.value));
+ $('monthlyChart').setAttribute('aria-label',isCurrentYear?'Pages read by month for the current year':'Pages read by month for '+year);
  $('monthlyChart').innerHTML=monthly.map(m=>`<div class="month-column" role="img" aria-label="${m.fullLabel}: ${m.value.toLocaleString()} pages" title="${m.label}: ${m.value.toLocaleString()} pages"><div class="bar-wrap" aria-hidden="true"><div class="bar" style="height:${m.value?Math.max(3,Math.round(m.value/maxMonthly*100)):2}%"></div></div><small>${m.label}</small></div>`).join('');
  const bestMonth=monthly.reduce((best,m)=>m.value>best.value?m:best,monthly[0]);
- $('monthlySummary').textContent='Most reading: '+bestMonth.fullLabel+', '+bestMonth.value.toLocaleString()+' pages. Total this year: '+yearPages.toLocaleString()+' pages.';
+ $('monthlySummary').textContent='Most reading: '+bestMonth.fullLabel+', '+bestMonth.value.toLocaleString()+' pages. '+(isCurrentYear?'Total this year: ':'Total in '+year+': ')+yearPages.toLocaleString()+' pages.';
  const goalCount=Math.max(1,Number(annualBookGoal)||12);
  const goalPct=Math.min(100,Math.round(completedThisYear/goalCount*100));
  $('annualProgress').textContent=completedThisYear+' / '+goalCount;
  $('annualProgressHint').textContent=goalPct+'% of your annual target';
  $('annualProgressBar').style.width=goalPct+'%';
+ const annualYearNote=$('annualYearNote');
+ if(annualYearNote){annualYearNote.hidden=isCurrentYear;annualYearNote.textContent=isCurrentYear?'':'This target is always for the current year, '+currentYear+'. It does not follow the year picker above.';}
  if($('annualBookGoal'))$('annualBookGoal').value=goalCount;
 
  const categoryTotals=new Map();
  for(const s of readingSessions){
+  if(!(s.sessionDate||'').startsWith(yearPrefix))continue;
   const book=books.find(b=>String(b.id)===String(s.bookId));
   if(!book)continue;
   const cats=parseCategories(book.categories??book.category);
@@ -1867,7 +1896,8 @@ function renderAdvancedAnalytics(){
  }
  const categoryRows=[...categoryTotals.entries()].filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,8);
  const maxCat=Math.max(1,...categoryRows.map(x=>x[1]));
- $('categoryAnalytics').innerHTML=categoryRows.length?categoryRows.map(([name,value])=>`<div class="category-stat-row"><span>${esc(name)}</span><div class="category-track"><span style="width:${Math.round(value/maxCat*100)}%"></span></div><strong>${value.toLocaleString()} pages</strong></div>`).join(''):'<div class="history-empty">Category reading insights will appear after you record reading sessions.</div>';
+ $('categoryAnalytics').innerHTML=categoryRows.length?categoryRows.map(([name,value])=>`<div class="category-stat-row"><span>${esc(name)}</span><div class="category-track"><span style="width:${Math.round(value/maxCat*100)}%"></span></div><strong>${value.toLocaleString()} pages</strong></div>`).join(''):'<div class="history-empty">'+(isCurrentYear?'Category reading insights will appear after you record reading sessions.':'No category reading was recorded in '+year+'.')+'</div>';
+ $('categoryNote').textContent=year+' · pages are counted in every category a book belongs to.';
 
  const recentStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()-29);
  const recentSessions=readingSessions.filter(s=>{if(!s.sessionDate)return false;const [y,m,d]=s.sessionDate.split('-').map(Number);const dt=new Date(y,m-1,d);return dt>=recentStart&&dt<=now;});
@@ -2950,7 +2980,7 @@ async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)retur
 async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its assignments? Your books and reading history will remain.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';delete planBookCountCache[String(plan.id)];loadedPlanBookIds.delete(String(plan.id));planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,logPastReadingSession,editReadingSession,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,openKnowledgeMatch,viewSelectedBookDetails,saveBookKnowledge,addKnowledgeQuote,editKnowledgeQuote,addDetailsQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
+Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,setInsightsYear,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,logPastReadingSession,editReadingSession,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,openKnowledgeMatch,viewSelectedBookDetails,saveBookKnowledge,addKnowledgeQuote,editKnowledgeQuote,addDetailsQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
 async function init(){
  // Show the locally saved shelf immediately, before waiting on the session,
  // so the page never sits on hardcoded zeros.
