@@ -164,6 +164,13 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .knowledge-editor textarea{min-height:92px;resize:vertical;line-height:1.5}
 .knowledge-editor textarea.tall{min-height:125px}
 .knowledge-editor .save-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
+.knowledge-main>.knowledge-quotes{margin-top:0}
+.knowledge-main>.knowledge-editor{margin-top:16px}
+.knowledge-section{margin:13px 0;border:1px solid var(--line);border-radius:8px;background:#fffdf8}
+.knowledge-section>summary{cursor:pointer;padding:11px 13px;font:600 11px Arial,sans-serif;letter-spacing:.7px;color:var(--green)}
+.knowledge-section>summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:8px}
+.knowledge-section-state{float:right;margin-left:10px;font:600 10px Arial,sans-serif;letter-spacing:.4px;color:var(--muted)}
+.knowledge-section .field{margin:0;padding:0 13px 13px}
 .knowledge-hint{font:11px/1.5 Arial,sans-serif;color:var(--muted);margin:8px 0}
 .knowledge-results{margin-top:16px}
 .knowledge-result{padding:11px 0;border-bottom:1px solid var(--line)}
@@ -1148,11 +1155,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   <div class="knowledge-layout">
     <aside class="knowledge-book-list"><h4>Your books</h4><div id="knowledgeBookList"></div><p class="knowledge-hint">Choose a title to open its knowledge page.</p></aside>
     <div class="knowledge-main">
-      <section class="knowledge-editor">
-        <div class="section-head" style="margin:0 0 12px"><h3 id="knowledgeEditorTitle">Choose a book</h3><span id="knowledgeSaveStatus" class="knowledge-status">Saved on this device</span></div>
-        <div id="knowledgeEditorFields" class="knowledge-empty">Select a book to start capturing what you learn.</div>
-      </section>
-      <section class="knowledge-results">
+      <section class="knowledge-results knowledge-quotes">
         <div class="section-head" style="margin:0 0 8px"><h4>Quotes and highlights</h4><span id="quoteCount">0 saved</span></div>
         <div id="quoteList" class="knowledge-empty">Choose a book to view its saved quotations.</div>
         <div id="quoteComposer" hidden>
@@ -1164,6 +1167,10 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
           </div>
           <button class="primary" type="button" onclick="addKnowledgeQuote()">Save quote</button>
         </div>
+      </section>
+      <section class="knowledge-editor">
+        <div class="section-head" style="margin:0 0 12px"><h3 id="knowledgeEditorTitle">Choose a book</h3><span id="knowledgeSaveStatus" class="knowledge-status">Saved on this device</span></div>
+        <div id="knowledgeEditorFields" class="knowledge-empty">Select a book to start capturing what you learn.</div>
       </section>
     </div>
   </div>
@@ -1749,12 +1756,14 @@ function renderKnowledge(){
  const k=knowledgeFor(book.id);
  $('knowledgeEditorTitle').textContent=book.title;
  $('knowledgeSaveStatus').textContent=k.updatedAt?'Last saved '+new Date(k.updatedAt).toLocaleDateString():'Not saved yet';
- $('knowledgeEditorFields').innerHTML=`
- <label class="field"><span>BOOK SUMMARY</span><textarea id="knowledgeSummary" class="tall" placeholder="Summarize the book in your own words…">${esc(k.summary)}</textarea></label>
- <label class="field"><span>KEY CONCEPTS AND INSIGHTS</span><textarea id="knowledgeConcepts" placeholder="Important ideas and frameworks. One idea per line…">${esc(k.keyConcepts)}</textarea></label>
- <label class="field"><span>TAKEAWAYS — WHAT DO YOU WANT TO REMEMBER?</span><textarea id="knowledgeTakeaways" placeholder="What changed your thinking? What do you want to remember?">${esc(k.takeaways)}</textarea></label>
- <label class="field"><span>PRACTICAL APPLICATIONS — WHAT WILL YOU DO DIFFERENTLY?</span><textarea id="knowledgeApplications" placeholder="Turn the ideas into actions, habits, or decisions…">${esc(k.applications)}</textarea></label>
- <label class="field"><span>REFLECTION QUESTIONS</span><textarea id="knowledgeQuestions" placeholder="Questions to revisit, discuss, or think through…">${esc(k.reflectionQuestions)}</textarea></label>
+ const knowledgeSections=[
+  {key:'summary',id:'knowledgeSummary',name:'BOOK SUMMARY',aria:'Book summary',cls:'tall',placeholder:'Summarize the book in your own words…'},
+  {key:'keyConcepts',id:'knowledgeConcepts',name:'KEY CONCEPTS AND INSIGHTS',aria:'Key concepts and insights',placeholder:'Important ideas and frameworks. One idea per line…'},
+  {key:'takeaways',id:'knowledgeTakeaways',name:'TAKEAWAYS — WHAT DO YOU WANT TO REMEMBER?',aria:'Takeaways',placeholder:'What changed your thinking? What do you want to remember?'},
+  {key:'applications',id:'knowledgeApplications',name:'PRACTICAL APPLICATIONS — WHAT WILL YOU DO DIFFERENTLY?',aria:'Practical applications',placeholder:'Turn the ideas into actions, habits, or decisions…'},
+  {key:'reflectionQuestions',id:'knowledgeQuestions',name:'REFLECTION QUESTIONS',aria:'Reflection questions',placeholder:'Questions to revisit, discuss, or think through…'}
+ ];
+ $('knowledgeEditorFields').innerHTML=knowledgeSections.map(s=>{const has=!!String(k[s.key]||'').trim();return `<details class="knowledge-section"${has?' open':''}><summary><span class="knowledge-section-state">${has?'Has notes':'Empty'}</span><span class="knowledge-section-name">${s.name}</span></summary><label class="field"><textarea id="${s.id}"${s.cls?` class="${s.cls}"`:''} placeholder="${s.placeholder}" aria-label="${s.aria}">${esc(k[s.key])}</textarea></label></details>`;}).join('')+`
  <div class="save-row"><span class="knowledge-hint">Changes save automatically after you pause typing.</span><button class="primary" type="button" onclick="saveBookKnowledge(true)">Save knowledge page</button></div>`;
  ['knowledgeSummary','knowledgeConcepts','knowledgeTakeaways','knowledgeApplications','knowledgeQuestions'].forEach(id=>$(id).addEventListener('input',scheduleKnowledgeSave));
  const quotes=knowledgeQuotes.filter(q=>String(q.bookId)===String(book.id)).sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
