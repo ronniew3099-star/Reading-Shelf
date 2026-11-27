@@ -138,6 +138,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .target-control button{padding:8px 11px}
 .analytics-note{font:11px/1.5 Arial;color:var(--muted);margin-top:10px}
 .chart-summary{font:12px/1.5 Arial;color:var(--green);margin:10px 2px 0}
+.trend-line{font:13px/1.6 Arial;margin:6px 0}
 .completion-list{display:grid;gap:10px}
 .completion-item{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font:12px Arial}
 .completion-item:last-child{border-bottom:0}
@@ -1132,6 +1133,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <div class="calendar-legend"><span><i class="level-0"></i>No recorded pages</span><span><i class="level-1"></i>1–9</span><span><i class="level-2"></i>10–24</span><span><i class="level-3"></i>25+</span></div>
   </section>
   <section class="history-panel"><div class="section-head" style="margin:0 0 8px"><h3>Last 7 days</h3><span>Rolling 7-day window</span></div><div class="history-summary"><div class="history-metric"><small>Pages in last 7 days</small><strong id="insightWeekPages">0</strong></div><div class="history-metric"><small>Sessions</small><strong id="insightWeekSessions">0</strong></div><div class="history-metric"><small>Active days</small><strong id="insightActiveDays">0/7</strong></div></div><div class="history-goal"><div class="history-goal-line"><small>7-day reading goal</small><strong id="weeklyGoalProgress">0 / 35 pages</strong><span id="weeklyGoalHint">Daily goal × 7 days</span></div><div class="goal-track"><div id="weeklyGoalBar"></div></div></div><div class="week-chart" id="insightWeekChart"></div><p class="chart-summary" id="insightWeekSummary"></p></section>
+  <section class="history-panel"><div class="section-head" style="margin:0 0 8px"><h3>Trends</h3><span>In plain words</span></div><div id="trendsBody"></div></section>
 
   <section class="analytics-section">
     <div class="section-head"><h3>Reading at a glance</h3><span id="analyticsYearLabel"></span></div>
@@ -1764,8 +1766,63 @@ function updateCalendarMonthOptionLabels(){
 window.addEventListener('resize',updateCalendarMonthOptionLabels,{passive:true});
 
 function renderCalendar(){const totals=readingDayTotals(),year=calendarMonth.getFullYear(),month=calendarMonth.getMonth(),first=new Date(year,month,1),offset=(first.getDay()+6)%7,daysInMonth=new Date(year,month+1,0).getDate(),cells=Math.ceil((offset+daysInMonth)/7)*7;const monthSelect=$('calendarMonthSelect'),yearSelect=$('calendarYearSelect');if(monthSelect&&!monthSelect.options.length){monthSelect.innerHTML=Array.from({length:12},(_,m)=>`<option value="${m}">${new Date(2000,m,1).toLocaleDateString(undefined,{month:'long'})}</option>`).join('');}if(yearSelect){const sessionYears=readingSessions.map(x=>Number(String(x.sessionDate||'').slice(0,4))).filter(Number.isFinite),currentYear=new Date().getFullYear(),minYear=Math.min(currentYear-10,...sessionYears),maxYear=Math.max(currentYear+10,...sessionYears);const years=Array.from({length:maxYear-minYear+1},(_,i)=>minYear+i);yearSelect.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join('');yearSelect.value=String(year);}if(monthSelect)monthSelect.value=String(month);updateCalendarMonthOptionLabels();let out='';for(let i=0;i<cells;i++){const day=i-offset+1;if(day<1||day>daysInMonth){out+='<div class="calendar-day muted" aria-hidden="true"></div>';continue;}const date=localDateString(new Date(year,month,day)),pages=totals.get(date)||0,level=pages>=25?3:pages>=10?2:pages>0?1:0,today=date===localDateString();out+=`<div class="calendar-day level-${level} ${today?'today':''}" title="${date}: ${pages} pages"><span class="day-number">${day}</span><span class="day-pages">${pages?pages+' pages':''}</span></div>`;}$('calendarGrid').innerHTML=out;}
-function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),fullLabel:d.toLocaleDateString(undefined,{weekday:'long'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.pages>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" role="img" aria-label="${d.fullLabel}: ${d.pages} pages" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap" aria-hidden="true"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');const bestWeekDay=week.reduce((best,d)=>d.pages>best.pages?d:best,week[0]);$('insightWeekSummary').textContent=pages.toLocaleString()+' pages this week. Most in one day: '+bestWeekDay.fullLabel+', '+bestWeekDay.pages.toLocaleString()+' pages.';renderCalendar();renderAdvancedAnalytics();}
+function renderInsights(){if(!$('calendarGrid'))return;const totals=readingDayTotals(),streak=calculateStreaks(),now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-6),week=[];for(let i=0;i<7;i++){const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),key=localDateString(d);week.push({date:key,label:d.toLocaleDateString(undefined,{weekday:'short'}),fullLabel:d.toLocaleDateString(undefined,{weekday:'long'}),pages:totals.get(key)||0,sessions:readingSessions.filter(s=>s.sessionDate===key).length});}const pages=week.reduce((n,d)=>n+d.pages,0),sessions=week.reduce((n,d)=>n+d.sessions,0),active=week.filter(d=>d.pages>0).length,weeklyGoal=goal*7,percent=Math.round(pages/Math.max(1,weeklyGoal)*100),max=Math.max(1,...week.map(d=>d.pages));$('currentStreak').textContent=streak.current+' day'+(streak.current===1?'':'s');$('bestStreak').textContent=streak.best+' day'+(streak.best===1?'':'s');$('streakHint').textContent=streak.current?'Keep the rhythm going.':'A new streak can start today.';$('weeklyGoalProgress').textContent=pages.toLocaleString()+' / '+weeklyGoal.toLocaleString()+' pages';$('weeklyGoalHint').textContent=percent+'% of your weekly target'+(percent>100?' · Goal exceeded':'');$('weeklyGoalBar').style.width=Math.min(100,percent)+'%';$('insightWeekPages').textContent=pages.toLocaleString();$('insightWeekSessions').textContent=sessions.toLocaleString();$('insightActiveDays').textContent=active+'/7';$('insightWeekChart').innerHTML=week.map(d=>`<div class="week-day" role="img" aria-label="${d.fullLabel}: ${d.pages} pages" title="${d.date}: ${d.pages} pages"><div class="week-bar-wrap" aria-hidden="true"><div class="week-bar" style="height:${d.pages?Math.max(5,Math.round(d.pages/max*100)):3}%"></div></div><small>${d.label}</small></div>`).join('');const bestWeekDay=week.reduce((best,d)=>d.pages>best.pages?d:best,week[0]);$('insightWeekSummary').textContent=pages.toLocaleString()+' pages this week. Most in one day: '+bestWeekDay.fullLabel+', '+bestWeekDay.pages.toLocaleString()+' pages.';renderTrends();renderCalendar();renderAdvancedAnalytics();}
 
+function renderTrends(){
+ const body=$('trendsBody');if(!body)return;
+ const totals=readingDayTotals(),activeDays=readingActiveDaySet(totals);
+ const now=new Date();
+ const dateAt=n=>new Date(now.getFullYear(),now.getMonth(),now.getDate()-n);
+ const keyAt=n=>localDateString(dateAt(n));
+ const pagesWord=n=>n.toLocaleString()+' page'+(n===1?'':'s');
+ const daysWord=n=>n+' reading day'+(n===1?'':'s');
+ const lines=[];
+ if(!readingSessions.length){
+  body.innerHTML='<p class="trend-line">Not enough reading logged yet to see trends.</p>';
+  return;
+ }
+ const windowPages=(from,to)=>{let sum=0;for(let i=from;i<=to;i++)sum+=totals.get(keyAt(i))||0;return sum;};
+ const windowActive=(from,to)=>{let count=0;for(let i=from;i<=to;i++)if(activeDays.has(keyAt(i)))count++;return count;};
+ const thisPages=windowPages(0,6),lastPages=windowPages(7,13);
+ if(lastPages>0){
+  const direction=thisPages>lastPages?'You read more this week.':(thisPages<lastPages?'You read less this week.':'You read the same amount both weeks.');
+  lines.push('This week: '+pagesWord(thisPages)+' on '+daysWord(windowActive(0,6))+'. Last week: '+pagesWord(lastPages)+' on '+daysWord(windowActive(7,13))+'. '+direction);
+ }else{
+  lines.push('Not enough reading logged yet to compare weeks.');
+ }
+ const blockHasSessions=b=>readingSessions.some(s=>{const k=s.sessionDate;return k&&k>=keyAt(b*7+6)&&k<=keyAt(b*7);});
+ let oldestBlock=-1;for(let b=0;b<4;b++)if(blockHasSessions(b))oldestBlock=b;
+ if(oldestBlock<0){
+  lines.push('No reading logged in the last 4 weeks.');
+ }else{
+  for(let b=0;b<=oldestBlock;b++){
+   const label=dateAt(b*7+6).toLocaleDateString(undefined,{month:'long',day:'numeric'});
+   lines.push('Week of '+label+': '+daysWord(windowActive(b*7,b*7+6))+'.');
+  }
+  if(oldestBlock<3)lines.push('Earlier weeks have no reading logged yet.');
+ }
+ const startKey=keyAt(29),todayKey=keyAt(0);
+ let bestDate='',bestPages=0;
+ totals.forEach((pages,date)=>{if(date>=startKey&&date<=todayKey&&pages>0&&(pages>bestPages||(pages===bestPages&&(!bestDate||date<bestDate)))){bestPages=pages;bestDate=date;}});
+ if(bestDate){
+  const d=new Date(bestDate+'T12:00:00');
+  lines.push('Your biggest reading day in the last 30 days was '+d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})+', '+pagesWord(bestPages)+'.');
+ }else{
+  lines.push('Not enough reading logged in the last 30 days to name a biggest day.');
+ }
+ const bookTotals=new Map();
+ readingSessions.forEach(s=>{const k=s.sessionDate;if(!k||k<startKey||k>todayKey)return;const pages=Number(s.pagesRead)||0;if(pages<=0)return;const entry=bookTotals.get(s.bookId)||{pages:0,latest:'',title:''};entry.pages+=pages;if(k>entry.latest)entry.latest=k;if(s.bookTitle)entry.title=s.bookTitle;bookTotals.set(s.bookId,entry);});
+ let top=null;
+ bookTotals.forEach((entry,id)=>{if(!top||entry.pages>top.pages||(entry.pages===top.pages&&entry.latest>top.latest))top={id:id,pages:entry.pages,latest:entry.latest,title:entry.title};});
+ if(top){
+  let title=top.title;
+  if(!title){const book=books.find(b=>b.id===top.id);title=book?book.title:'Unknown book';}
+  lines.push('Most pages logged in the last 30 days: '+esc(title)+', '+pagesWord(top.pages)+'.');
+ }else{
+  lines.push('Not enough reading logged in the last 30 days to name a most-read book.');
+ }
+ body.innerHTML=lines.map(line=>'<p class="trend-line">'+line+'</p>').join('');
+}
 function renderAdvancedAnalytics(){
  const now=new Date(),year=now.getFullYear(),month=now.getMonth(),totals=readingDayTotals();
  const yearPrefix=String(year)+'-',monthPrefix=yearPrefix+String(month+1).padStart(2,'0');
