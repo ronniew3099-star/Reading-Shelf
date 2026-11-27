@@ -18,6 +18,11 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .history-metric{background:var(--tile);border:1px solid var(--line);border-radius:var(--radius);padding:12px}
 .history-metric small{display:block;font:12px Arial;color:var(--muted)}
 .history-metric strong{display:block;font:24px Georgia,serif;color:var(--green);margin-top:5px}
+.history-goal{background:var(--tile);border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin:0 0 18px}
+.history-goal-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.history-goal-line small{font:12px Arial;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.history-goal-line strong{font:20px Georgia,serif;color:var(--green)}
+.history-goal-line span{font:11px/1.4 Arial;color:var(--muted)}
 .week-chart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;align-items:end;height:132px;padding:12px 4px 0;border-bottom:1px solid var(--line)}
 .week-day{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;min-width:0}
 .week-bar-wrap{height:92px;width:100%;display:flex;align-items:flex-end;justify-content:center}
@@ -1112,7 +1117,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
   <div class="insight-grid">
     <div class="insight-card"><small>Current reading streak</small><strong id="currentStreak">0 days</strong><span id="streakHint">Start with one reading session.</span></div>
     <div class="insight-card"><small>Best reading streak</small><strong id="bestStreak">0 days</strong><span>Based on your reading history</span></div>
-    <div class="insight-card"><small>7-day reading goal</small><strong id="weeklyGoalProgress">0 / 35 pages</strong><span id="weeklyGoalHint">Daily goal × 7 days</span><div class="goal-track"><div id="weeklyGoalBar"></div></div></div>
+    <div class="insight-card"><small>Active days this year</small><strong id="yearActiveDays">0 days</strong><span>Days with reading logged this year</span></div>
   </div>
   <section class="calendar-panel">
     <div class="calendar-head"><div><h3>Reading calendar</h3><p>Pages recorded on each day</p></div><div class="calendar-controls" aria-label="Choose calendar month and year">
@@ -1126,7 +1131,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
     <div class="calendar-grid" id="calendarGrid"></div>
     <div class="calendar-legend"><span><i class="level-0"></i>No recorded pages</span><span><i class="level-1"></i>1–9</span><span><i class="level-2"></i>10–24</span><span><i class="level-3"></i>25+</span></div>
   </section>
-  <section class="history-panel"><div class="section-head" style="margin:0 0 8px"><h3>Last 7 days</h3><span>Rolling 7-day window</span></div><div class="history-summary"><div class="history-metric"><small>Pages in last 7 days</small><strong id="insightWeekPages">0</strong></div><div class="history-metric"><small>Sessions</small><strong id="insightWeekSessions">0</strong></div><div class="history-metric"><small>Active days</small><strong id="insightActiveDays">0/7</strong></div></div><div class="week-chart" id="insightWeekChart"></div><p class="chart-summary" id="insightWeekSummary"></p></section>
+  <section class="history-panel"><div class="section-head" style="margin:0 0 8px"><h3>Last 7 days</h3><span>Rolling 7-day window</span></div><div class="history-summary"><div class="history-metric"><small>Pages in last 7 days</small><strong id="insightWeekPages">0</strong></div><div class="history-metric"><small>Sessions</small><strong id="insightWeekSessions">0</strong></div><div class="history-metric"><small>Active days</small><strong id="insightActiveDays">0/7</strong></div></div><div class="history-goal"><div class="history-goal-line"><small>7-day reading goal</small><strong id="weeklyGoalProgress">0 / 35 pages</strong><span id="weeklyGoalHint">Daily goal × 7 days</span></div><div class="goal-track"><div id="weeklyGoalBar"></div></div></div><div class="week-chart" id="insightWeekChart"></div><p class="chart-summary" id="insightWeekSummary"></p></section>
 
   <section class="analytics-section">
     <div class="section-head"><h3>Reading at a glance</h3><span id="analyticsYearLabel"></span></div>
@@ -1134,7 +1139,7 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
       <div class="analytics-card"><small>Pages this month</small><strong id="monthPages">0</strong><span id="monthPagesHint">Current month</span></div>
       <div class="analytics-card"><small>Pages this year</small><strong id="yearPages">0</strong><span id="yearPagesHint">Calendar year</span></div>
       <div class="analytics-card"><small>Average pages / active day</small><strong id="avgActivePages">0</strong><span>This year · based on recorded reading days</span></div>
-      <div class="analytics-card"><small>Books completed this year</small><strong id="yearBooksCompleted">0</strong><span>Books marked completed</span></div>
+      <div class="analytics-card"><small>Sessions this year</small><strong id="yearSessions">0</strong><span>Reading sessions recorded</span></div>
     </div>
   </section>
   <div class="analytics-two">
@@ -1778,7 +1783,8 @@ function renderAdvancedAnalytics(){
  $('yearPages').textContent=yearPages.toLocaleString();
  $('yearPagesHint').textContent='Since January 1, '+year;
  $('avgActivePages').textContent=avg.toLocaleString();
- $('yearBooksCompleted').textContent=completedThisYear.toLocaleString();
+ $('yearSessions').textContent=yearSessions.length.toLocaleString();
+ $('yearActiveDays').textContent=activeDays.toLocaleString()+' day'+(activeDays===1?'':'s');
  const monthly=Array.from({length:12},(_,i)=>{
   const prefix=yearPrefix+String(i+1).padStart(2,'0');
   const value=yearSessions.filter(s=>(s.sessionDate||'').startsWith(prefix)).reduce((n,s)=>n+(Number(s.pagesRead)||0),0);
