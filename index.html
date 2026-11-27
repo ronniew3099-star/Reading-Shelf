@@ -349,6 +349,11 @@ body{margin:0;min-height:100vh;background:#d9d3c8 url('reading-shelf-modern-libr
 .confirm-fields label{display:grid;gap:4px;font:11px Arial,sans-serif;color:var(--muted)}
 .confirm-fields input,.confirm-fields textarea{width:100%;border:1px solid var(--line);border-radius:6px;background:#fffdf8;padding:10px 11px;color:var(--ink);font:13px Arial,sans-serif}
 .confirm-fields textarea{min-height:80px;resize:vertical}
+.past-reading-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:10px 0}
+.past-reading-form label{display:grid;gap:4px;font:11px Arial,sans-serif;color:var(--muted)}
+.past-reading-form input{width:100%;border:1px solid var(--line);border-radius:6px;background:#fffdf8;padding:10px 11px;color:var(--ink);font:13px Arial,sans-serif}
+.session-row{align-items:center}
+@media(max-width:560px){.past-reading-form{grid-template-columns:1fr}}
 .undo-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#203d30;color:#fff;border-radius:8px;padding:12px 16px;font:13px Arial;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:9;display:flex;gap:12px;align-items:center}
 .undo-toast[hidden]{display:none}
 .undo-toast button{border:0;background:#fff;color:#203d30;border-radius:5px;padding:6px 10px;font:600 12px Arial;cursor:pointer}
@@ -1358,10 +1363,10 @@ function renderCategoryOptions(selected=[]){
 }
 function selectedCategories(){return [...document.querySelectorAll('input[name="bookCategory"]:checked')].map(x=>x.value)}
 function localDateString(date=new Date()){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');return `${y}-${m}-${d}`}
-async function recordReadingSession(book,fromPage,toPage){
+async function recordReadingSession(book,fromPage,toPage,sessionDate=localDateString()){
  const start=Math.max(0,Number(fromPage)||0),end=Math.max(0,Number(toPage)||0),pages=end-start;
  if(pages<=0)return;
- const session={id:`local-${Date.now()}-${Math.random().toString(16).slice(2)}`,bookId:book.id,pagesRead:pages,startPage:start,endPage:end,sessionDate:localDateString(),createdAt:new Date().toISOString(),bookTitle:book.title||''};
+ const session={id:`local-${Date.now()}-${Math.random().toString(16).slice(2)}`,bookId:book.id,pagesRead:pages,startPage:start,endPage:end,sessionDate:sessionDate||localDateString(),createdAt:new Date().toISOString(),bookTitle:book.title||''};
  readingSessions.unshift(session);
  localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
  renderReadingHistory();
@@ -1373,6 +1378,73 @@ async function recordReadingSession(book,fromPage,toPage){
   localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));
   renderReadingHistory();
  }
+}
+function saveReadingSessions(){localStorage.setItem('readingShelfSessionsV1',JSON.stringify(readingSessions));}
+function isValidSessionDate(value){return /^\d{4}-\d{2}-\d{2}$/.test(String(value||''))&&!isNaN(new Date(String(value)+'T12:00:00'));}
+function validateSessionValues(book,date,pagesRead,endPage){
+ if(!isValidSessionDate(date))return 'Choose a valid date for this reading session.';
+ if(date>localDateString())return 'You cannot log reading for a future date.';
+ if(!Number.isFinite(pagesRead)||pagesRead<=0)return 'Pages read must be more than zero.';
+ if(!Number.isFinite(endPage)||endPage<=0)return 'End page must be more than zero.';
+ if(book&&Number(book.totalPages)&&endPage>Number(book.totalPages))return 'End page cannot be beyond this book\u2019s total of '+Number(book.totalPages)+' pages.';
+ if(endPage-pagesRead<0)return 'Pages read cannot be more than the end page, because page counting starts at page 0.';
+ return '';
+}
+async function applySessionEndToBook(book,endPage,sessionDate){
+ if(!book||Number(endPage)<=Number(book.currentPage)||0)return false;
+ book.currentPage=Number(endPage);
+ if(Number(book.totalPages)&&Number(endPage)>=Number(book.totalPages)){
+  if(statusKey(book.status)!=='completed')book.completedAt=sessionDate?String(sessionDate)+'T12:00:00.000Z':new Date().toISOString();
+  book.status='completed';
+ }
+ await persist();
+ return true;
+}
+async function logPastReadingSession(bookId){
+ const book=books.find(b=>String(b.id)===String(bookId));if(!book)return;
+ const date=String($('pastSessionDate')?.value||''),pagesRead=Number($('pastSessionPages')?.value),endPage=Number($('pastSessionEnd')?.value);
+ const error=validateSessionValues(book,date,pagesRead,endPage);
+ if(error){await showNotice('Check the past reading details',error);return;}
+ const startPage=endPage-pagesRead;
+ await applySessionEndToBook(book,endPage,date);
+ await recordReadingSession(book,startPage,endPage,date);
+ render();renderBookDetails();
+ message('Past reading saved for '+fmtDate(date)+'.');
+}
+async function syncEditedReadingSession(session){
+ if(!currentUser)return;
+ const payload={pages_read:session.pagesRead,start_page:session.startPage,end_page:session.endPage,session_date:session.sessionDate,book_title:session.bookTitle||null};
+ try{
+  if(String(session.id).startsWith('local-')){
+   const {data,error}=await db.from('reading_sessions').insert({user_id:currentUser.id,book_id:session.bookId,...payload}).select('*').single();
+   if(error)throw error;
+   session.id=data.id;session.createdAt=data.created_at||session.createdAt;
+  }else{
+   const {error}=await db.from('reading_sessions').update(payload).eq('id',session.id);
+   if(error)throw error;
+  }
+  saveReadingSessions();
+ }catch(err){message('Reading session updated on this device, but cloud sync failed: '+err.message,true);}
+}
+async function editReadingSession(sessionId){
+ const session=readingSessions.find(s=>String(s.id)===String(sessionId));if(!session)return;
+ const book=books.find(b=>String(b.id)===String(session.bookId));
+ const values=await askFields('Edit reading session','Change the date or page numbers for this session.',[
+  {key:'sessionDate',label:'Date',type:'date',value:session.sessionDate||''},
+  {key:'pagesRead',label:'Pages read',type:'number',value:Number(session.pagesRead)||0},
+  {key:'endPage',label:'End page',type:'number',value:Number(session.endPage)||0}
+ ],'Save changes');
+ if(!values)return;
+ const date=String(values.sessionDate||''),pagesRead=Number(values.pagesRead),endPage=Number(values.endPage);
+ const error=validateSessionValues(book,date,pagesRead,endPage);
+ if(error){await showNotice('Check the session details',error);return;}
+ session.sessionDate=date;session.pagesRead=pagesRead;session.startPage=endPage-pagesRead;session.endPage=endPage;
+ if(book)session.bookTitle=book.title||session.bookTitle||'';
+ saveReadingSessions();renderReadingHistory();renderInsights();renderBookDetails();
+ await applySessionEndToBook(book,endPage,date);
+ await syncEditedReadingSession(session);
+ renderReadingHistory();renderInsights();renderBookDetails();
+ message('Reading session updated.');
 }
 // A corrupt or unexpected saved value must never kill the whole app
 // (it used to throw here, before the sign-in form was wired up, so the
@@ -1447,7 +1519,7 @@ function showConfirmDialog(opts){
     const label=document.createElement('label');
     label.appendChild(document.createTextNode(f.label||''));
     const el=document.createElement(f.textarea?'textarea':'input');
-    if(!f.textarea)el.type='text';
+    if(!f.textarea)el.type=f.type||'text';
     el.placeholder=f.placeholder||'';
     el.value=f.value||'';
     el.setAttribute('aria-label',f.label||f.placeholder||'');
@@ -1973,7 +2045,8 @@ function renderBookDetails(){
  const progress=b.totalPages?`<div class="progress"><div style="width:${pct(b)}%"></div></div><p>Page ${b.currentPage||0} of ${b.totalPages} · ${pct(b)}% complete</p>`:`<p>Page ${b.currentPage||0} · total pages not set</p>`;
  const dates=bookDatesHTML(b)||'<p class="book-dates">No dates recorded yet.</p>';
  const sessions=readingSessions.filter(s=>String(s.bookId)===String(b.id)).slice().sort((a,c)=>String(c.sessionDate||'').localeCompare(String(a.sessionDate||''))||String(c.createdAt||'').localeCompare(String(a.createdAt||'')));
- const sessionRows=sessions.length?sessions.map(s=>`<div class="session-row"><span><strong>${esc(fmtDate(s.sessionDate))}</strong></span><span>Pages ${Number(s.startPage)||0}–${Number(s.endPage)||0} · ${Number(s.pagesRead)||0} pages read</span></div>`).join(''):'<p class="empty">No reading sessions recorded for this book yet.</p>';
+ const sessionRows=sessions.length?sessions.map(s=>`<div class="session-row"><span><strong>${esc(fmtDate(s.sessionDate))}</strong></span><span>Pages ${Number(s.startPage)||0}–${Number(s.endPage)||0} · ${Number(s.pagesRead)||0} pages read <button class="mini" type="button" onclick="editReadingSession('${s.id}')">Edit</button></span></div>`).join(''):'<p class="empty">No reading sessions recorded for this book yet.</p>';
+ const pastLogForm=st==='reading'?`<h4 style="margin-top:16px">Log reading for a past day</h4><p>Use this when you read earlier but forgot to update the book that day.</p><div class="past-reading-form"><label>Date<input id="pastSessionDate" type="date" value="${localDateString()}" max="${localDateString()}" aria-label="Reading date"></label><label>Pages read<input id="pastSessionPages" type="number" min="1" placeholder="10" aria-label="Pages read"></label><label>End page<input id="pastSessionEnd" type="number" min="1" max="${b.totalPages||999999}" value="${b.currentPage||''}" aria-label="End page"></label></div><button class="primary" type="button" onclick="logPastReadingSession('${b.id}')">Save past reading</button>`:'';
  const planNames=[...new Set(readingPlanBooks.filter(i=>String(i.book_id)===String(b.id)).map(i=>{const p=readingPlans.find(p=>String(p.id)===String(i.plan_id));return p?(p.name||'Untitled plan'):null}).filter(Boolean))];
  const plansLine=planNames.length?esc(planNames.join(' · ')):'Not in a reading plan.';
  const hasKnowledge=knowledgeHasContent(b.id);
@@ -1982,7 +2055,7 @@ function renderBookDetails(){
  const detailsQuotes=knowledgeQuotes.filter(q=>String(q.bookId)===String(b.id)).sort((a,c)=>String(c.createdAt||'').localeCompare(String(a.createdAt||'')));
  const previewQuotes=detailsQuotes.slice(0,3).map(q=>`<blockquote class="knowledge-preview-quote">“${esc(q.quoteText)}”${q.pageReference?' · p. '+esc(q.pageReference):''}</blockquote>`).join('')+(detailsQuotes.length>3?`<p class="knowledge-preview-more">And ${detailsQuotes.length-3} more saved quote${detailsQuotes.length-3===1?'':'s'} — open Knowledge to see them all.</p>`:'');
  const knowledgePreview=hasKnowledge?`<div class="knowledge-preview">${previewSections}${previewQuotes}</div>`:'<p>No notes or quotes saved for this book yet.</p>';
- wrap.innerHTML=`<div class="book-details-panel"><div class="book-details-main">${coverHTML(b)}<div class="book-details-info"><h3 id="bookDetailsTitle" tabindex="-1">${esc(b.title)}</h3><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p><p>Status: ${esc(statusLabel(b.status))}</p>${ratingStaticHTML(b.rating)}${progress}${dates}${quickBox}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button></div></div></div><div class="book-details-section"><h4>Reading sessions</h4>${sessionRows}</div><div class="book-details-section"><h4>Reading plan</h4><p>${plansLine}</p></div><div class="book-details-section"><h4>Knowledge</h4>${knowledgePreview}<div class="book-actions"><button class="mini" onclick="openBookInKnowledge('${b.id}')">Open in Knowledge</button></div><h4 style="margin-top:16px">Add a quote</h4><div class="quote-form"><textarea id="detailsQuoteText" placeholder="Write or paste the quotation…" aria-label="Quotation"></textarea><input id="detailsQuotePage" type="text" placeholder="Page / location" aria-label="Page reference"><input id="detailsQuoteNote" type="text" placeholder="Your note about this quote" aria-label="Personal note" style="grid-column:1/-1"></div><button class="primary" type="button" onclick="addDetailsQuote()">Save quote</button></div></div>`;
+ wrap.innerHTML=`<div class="book-details-panel"><div class="book-details-main">${coverHTML(b)}<div class="book-details-info"><h3 id="bookDetailsTitle" tabindex="-1">${esc(b.title)}</h3><p>${esc(b.author||'Author not added')} · ${esc(categoryText(b))}</p><p>Status: ${esc(statusLabel(b.status))}</p>${ratingStaticHTML(b.rating)}${progress}${dates}${quickBox}<div class="book-actions">${action}<button class="mini" onclick="editBook('${b.id}')">Edit</button></div></div></div><div class="book-details-section"><h4>Reading sessions</h4>${sessionRows}${pastLogForm}</div><div class="book-details-section"><h4>Reading plan</h4><p>${plansLine}</p></div><div class="book-details-section"><h4>Knowledge</h4>${knowledgePreview}<div class="book-actions"><button class="mini" onclick="openBookInKnowledge('${b.id}')">Open in Knowledge</button></div><h4 style="margin-top:16px">Add a quote</h4><div class="quote-form"><textarea id="detailsQuoteText" placeholder="Write or paste the quotation…" aria-label="Quotation"></textarea><input id="detailsQuotePage" type="text" placeholder="Page / location" aria-label="Page reference"><input id="detailsQuoteNote" type="text" placeholder="Your note about this quote" aria-label="Personal note" style="grid-column:1/-1"></div><button class="primary" type="button" onclick="addDetailsQuote()">Save quote</button></div></div>`;
 }
 function renderGoalProgress(){
  const el=$('goalProgress');if(!el)return;
@@ -2799,7 +2872,7 @@ async function markPlanCompleted(){const plan=activeReadingPlan();if(!plan)retur
 async function deleteReadingPlan(){const plan=activeReadingPlan();if(!plan)return;if(!(await askConfirm('Delete this plan?','Delete this reading plan and its assignments? Your books and reading history will remain.','Delete')))return;if(currentUser&&plansCloudReady&&planIsUuid(plan.id)){const {error}=await db.from('reading_plans').delete().eq('id',plan.id).eq('user_id',currentUser.id);if(error){message('Could not delete plan: '+error.message,true);return;}}readingPlans=readingPlans.filter(p=>String(p.id)!==String(plan.id));readingPlanBooks=readingPlanBooks.filter(i=>String(i.plan_id)!==String(plan.id));selectedReadingPlanId='';delete planBookCountCache[String(plan.id)];loadedPlanBookIds.delete(String(plan.id));planLocalSave();renderReadingPlans();message('Reading plan deleted. Your bookshelf was not changed.');}
 
 // Keep existing inline HTML button handlers working.
-Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,openKnowledgeMatch,viewSelectedBookDetails,saveBookKnowledge,addKnowledgeQuote,editKnowledgeQuote,addDetailsQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
+Object.assign(window,{openAdd,closeModal,saveBook,openBookDetails,closeBookDetails,openBookInKnowledge,lookupBookCovers,forgotPassword,setLibrarySearch,undoRemoveBook,saveGoal,saveGoalFromSettings,setView,changeCalendarMonth,saveAnnualGoal,editBook,startBook,setFocusBook,toggleFocusFromForm,removeBook,removeBookFromForm,selectStatusFilter,selectAllStatuses,exportExcel,quickSaveProgress,quickAddProgress,quickStepProgress,logPastReadingSession,editReadingSession,renderKnowledge,selectKnowledgeBook,renderKnowledgeSearch,openKnowledgeMatch,viewSelectedBookDetails,saveBookKnowledge,addKnowledgeQuote,editKnowledgeQuote,addDetailsQuote,deleteKnowledgeQuote,createPlanFromUnread,createEmptyReadingPlan,selectReadingPlan,addBooksToPlan,renderPlanSetupPanel,setPlanSetupSelection,submitPlanSetup,planSetupContinue,planSetupBack,selectPlanFromCascade,renderPlanCascadeMenus,closeReadingPlanMenus,setDefaultReadingPlan,saveReadingPlanSettings,configurePlanBook,advancePlanChapters,movePlanBook,makePlanBookCurrent,removePlanBook,markPlanCompleted,deleteReadingPlan,renderReadingPlans,selectPlanDay,changePlanCalendarMonth,completePlanAssignment,unablePlanAssignment});
 async function init(){
  // Show the locally saved shelf immediately, before waiting on the session,
  // so the page never sits on hardcoded zeros.
